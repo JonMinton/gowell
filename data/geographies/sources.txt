@@ -6,3 +6,7 @@ greater_glasgow_definitions
 extracted from sns website - advanced reporter - using chcp codes given by ade
 [accessed 11/2/2015]
 NOTE: Could not find the Cambuslang & Rutherglen CHCP partnership
+
+
+latestpcinfowithlinkspc.csv
+http://www.isdscotland.org/Products-and-Services/GPD-Support/Geography/Postcode-Reference-File/

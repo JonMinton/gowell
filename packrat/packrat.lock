@@ -123,6 +123,12 @@ Version: 1.0.0
 Hash: c8bff66238347472f08b6a35608539ff
 Requires: digest, gtable, plyr, proto, reshape2, scales
 
+Package: ggtern
+Source: CRAN
+Version: 1.0.3.2
+Hash: f2b39c5b07832ac4a77a0c1d235bd01e
+Requires: ggplot2, gtable, plyr, proto, reshape2, scales, sp
+
 Package: gtable
 Source: CRAN
 Version: 0.1.2
@@ -232,6 +238,11 @@ Source: CRAN
 Version: 0.2.4
 Hash: b8b1af97bd07818605223060386b00dd
 Requires: RColorBrewer, dichromat, labeling, munsell, plyr
+
+Package: sp
+Source: CRAN
+Version: 1.0-17
+Hash: 29bd0f1fc6cba0edf00eafe2b5b8e9d0
 
 Package: stringi
 Source: CRAN

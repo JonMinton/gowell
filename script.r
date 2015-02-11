@@ -20,20 +20,24 @@ require(tidyr)
 require(dplyr)
 require(rmarkdown)
 require(ggplot2)
+require(ggtern)
 
 
 
 # Linking chps to dzs -----------------------------------------------------
 
 
-# find dzs referred to
-
+# # find dzs referred to
+# 
 # chps_of_interest <- read.csv("data/geographies/greater_glasgow_definitions_simplified.csv") %>% tbl_df()
-# chps_of_interest <- chps_of_interest %>% slice(1:11)
+# chps_of_interest <- chps_of_interest %>% slice(1:12)
 # 
-# chps_to_dzs <- read.csv("data/geographies/2011_dz_to_other_lookup.csv") %>% tbl_df()
-# chps_to_dzs <- chps_to_dzs %>% select(datazone=DataZone, chp=CHP) 
+# chps_to_dzs <- read.csv("data/geographies/latestpcinfowithlinkpc.csv") %>% tbl_df()
+# chps_to_dzs <- chps_to_dzs %>% 
+#     select(dz_2001=Datazone, chp=CHP) %>% 
+#     distinct(dz_2001)
 # 
+# # n.b. need the 2001 not 2011 dz codes 
 # chps_of_interest <- chps_of_interest %>% rename(chp=chcp_code) 
 # 
 # dzs_in_greater_glasgow <- chps_to_dzs %>% 
@@ -41,19 +45,18 @@ require(ggplot2)
 #     select(-chcp_name)
 # 
 # write.csv(dzs_in_greater_glasgow, file="data/geographies/dzs_in_greater_glasgow.csv", row.names=F)
-
+# # 
 
 # Main Analysis -----------------------------------------------------------
 
-greater_glasgow_dzs <- read.csv("data/geographies//dzs_in_greater_glasgow.csv") %>% tbl_df()
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% tbl_df()
 
 #Tenure
 
-tenure_households <- source_DropboxData(
-    file="tenure_households.csv",
-    key="kng5wc40le9kapj"    
-) %>% tbl_df() %>% select(
-    datazone, year, 
+tenure_households <- read.csv(
+    "data/sns/tenure_households.csv"
+    ) %>% tbl_df() %>% select(
+    dz_2001=datazone, year, 
     all_households=HO.allhouseholds,
     council_houses=HO.council,
     rented_from_employer=HO.employ,
@@ -81,99 +84,69 @@ tenure_households <- source_DropboxData(
         social = social/all_households,
         rented = rented/all_households,
         owned=owned/all_households
+    ) 
+
+tenure_households <- greater_glasgow_dzs %>% left_join(tenure_households)
+tenure_households <- tenure_households %>% mutate(
+    mix=(social * rented * owned) / (1/3)^3)
+    # this should be the maximum possible mix value
+
+tenure_households %>% group_by(year) %>% summarise()
+# unfortunately this is only available for 2001
+
+# 
+qplot(
+    x=mix, data=tenure_households
     )
 
+# a lot of excess 0s - no mix
 
-# then to pollution
+# arrange households by mix, then plot proportions of each tenure type along this linke
 
+tenure_households <- tenure_households %>% arrange(mix)
 
-# If pop weighted we should also include population counts
+ggplot(tenure_households) + geom_line(aes(x=mix, y=social))
+ggplot(tenure_households) + geom_line(aes(x=mix, y=owned))
+ggplot(tenure_households) + geom_line(aes(x=mix, y=rented))
 
-populations <- source_DropboxData(
-    file="persons.csv",
-    key="vcz7qngb44vbynq"
-) %>% tbl_df() %>% select(
-    datazone, year,
-    GR.hspeop,
-    GR.sapepeop
-)
+# want social, owned, and rented to be gathered 
 
-populations <- populations %>% mutate(
-    population_count=ifelse(is.na(GR.sapepeop), GR.hspeop, GR.sapepeop)
-) %>% select(datazone, year, population_count)
+tmp <- tenure_households %>% 
+    select(dz_2001, mix, social, owned, rented) %>%
+    gather(key = tenure_type, value=tenure_proportion, -dz_2001, -mix) 
 
+ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
+    geom_line() + facet_grid(tenure_type ~ .)
 
-
-##############################################################################################################
-# To do now:
+# ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
+#     geom_line(aes(group=tenure_type, colour=tenure_type)) # this crashes rstudio in the office -try at home?
 
 
-mod_01 <- lm(
-    pm10 ~ inc_deprivation,
-    data=joined)
-summary(mod_01)
-
-mod_02 <- mod_01 %>% update(
-    . ~ . + social
-)
-summary(mod_02)
-
-mod_03 <- lm(pm10 ~ inc_deprivation * social, 
-             data=joined)
-summary(mod_03)
-
-mod_social <- lm(
-    pm10 ~ inc_deprivation * social, 
-    data=joined
-)
-summary(mod_social)
-
-mod_rental <- lm(
-    pm10 ~ inc_deprivation * rented,
-    data=joined
-)
-summary(mod_rental)
-
-mod_owner <- lm(
-    pm10 ~ inc_deprivation * owned,
-    data=joined
-)
-summary(mod_owner)
-
-joined$social_quartile <- joined$social %>% ntile(4)
-qplot(
-    y=pm10,
-    x=inc_deprivation,
-    colour=social,
-    data=joined
-) + scale_colour_gradient(limits=c(0,1)) + 
-    geom_smooth(data=subset(joined, subset=social_quartile==4), method="lm")
 
 
-# now to normalise deprivation levels on a 0-1 scale
+ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
+    geom_line() + facet_grid(. ~ tenure_type)
 
-j2 <- joined %>% mutate(inc_deprivation=(inc_deprivation - min(inc_deprivation))/(max(inc_deprivation)-min(inc_deprivation)))
 
-# This *might* be helpful for understanding the relative importance of the interaction
-# between household type proportions and income deprivation
+ggtern(data=tenure_households, mapping=aes(x=social, y=rented, z=owned)) +geom_point()
 
-norm_social <- lm(
-    pm10 ~ inc_deprivation * social, 
-    data=j2
-)
-summary(norm_social)
+# mix and dependancy ratios
 
-norm_rental <- lm(
-    pm10 ~ inc_deprivation * rented,
-    data=j2
-)
-summary(norm_rental)
+populations <- read.csv(
+    "data/sns/persons_by_gender_year_and_age.csv"
+    ) %>% tbl_df() %>% rename(
+    dz_2001=datazone
+    )
 
-norm_owner <- lm(
-    pm10 ~ inc_deprivation * owned,
-    data=j2
-)
-summary(norm_owner)
+# let's estimate dependency ratios
+
+prop_working_age <- populations %>% 
+    mutate(working_age = ifelse(upper_age >=16 & lower_age <=60, 1, 0)) %>%
+    group_by(dz_2001, year, gender) %>% 
+    summarise(proportion_working_age=sum(count[working_age==1])/sum(count))
+
+# write.csv(prop_working_age, file="data/derived/prop_working_age.csv", row.names=F)
+
 ###################################################################################
 
 # As a crude measure of mix, let's use the produce of the three proportions 
