@@ -1,0 +1,8 @@
+2011 dz lookup
+http://www.scotland.gov.uk/Topics/Statistics/sns/SNSRef/DZ2011Lookups
+[accessed 11/2/2015]
+
+greater_glasgow_definitions
+extracted from sns website - advanced reporter - using chcp codes given by ade
+[accessed 11/2/2015]
+NOTE: Could not find the Cambuslang & Rutherglen CHCP partnership
