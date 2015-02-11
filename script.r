@@ -53,8 +53,9 @@ greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %
 
 #Tenure
 
-tenure_households <- read.csv(
-    "data/sns/tenure_households.csv"
+tenure_households <- source_DropboxData(
+    file="tenure_households.csv",
+    key="kng5wc40le9kapj"
     ) %>% tbl_df() %>% select(
     dz_2001=datazone, year, 
     all_households=HO.allhouseholds,
@@ -118,11 +119,29 @@ tmp <- tenure_households %>%
 ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
     geom_line() + facet_grid(tenure_type ~ .)
 
-# ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
-#     geom_line(aes(group=tenure_type, colour=tenure_type)) # this crashes rstudio in the office -try at home?
+ggplot(tmp, 
+       aes(x=mix, y=tenure_proportion, group=tenure_type, colour=tenure_type)) + 
+     geom_bar(stat="identity")
 
+# mix deciles 
 
-
+decile_summaries <- tenure_households %>% 
+    mutate(m10=ntile(mix, 10)) %>% 
+    group_by(m10) %>% 
+    summarise(
+        avg_social=mean(social),
+        sd_social=sd(social),
+        avg_rented=mean(rented),
+        sd_rented=sd(rented),
+        avg_owned=mean(owned),
+        sd_owned=sd(owned)
+        )
+    
+g1 <- ggplot(decile_summaries, aes(x=factor(m10)))
+g1 + geom_pointrange(aes(y=avg_social, 
+                         ymin=avg_social - 2*sd_social,
+                         ymax=avg_social + 2*sd_social)
+) + labs(y="proportion_social_housing")
 
 ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
     geom_line() + facet_grid(. ~ tenure_type)
