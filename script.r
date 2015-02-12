@@ -187,7 +187,7 @@ populations <- populations %>% right_join(greater_glasgow_dzs)
 
 # now 1.21 million
 populations %>% 
-    group_by(year, age_range) %>%
+    group_by(year, age_range, sex) %>%
     summarise(
         cells=n(),
         sum=sum(count)
@@ -196,8 +196,9 @@ populations %>%
 populations <- populations %>% arrange(year, sex, lower_age)
 
 populations <- populations %>% 
+    arrange(year,sex, lower_age) %>%
     mutate(
-        working_age = ifelse(lower_age > 16 & upper_age < 60, 1, 0)
+        working_age = ifelse(lower_age > 16 & ((upper_age < 60 & sex=="female") | (upper_age < 65 & sex=="male")), 1, 0)
     ) 
 
 populations %>% 
