@@ -180,11 +180,8 @@ tenure_deciles %>%
 # mix and dependancy ratios
 
 populations <- read.csv("data/sns/populations_by_age_year_sex.csv") %>% 
-<<<<<<< HEAD
-    tbl_df() 
-=======
     tbl_df()
->>>>>>> ea49b35ea7d145eff726bff78ef63affa0a1d80d
+
 
 # reduce to just Greater Glasgow
 populations <- populations %>% rename(dz_2001=datazone)
@@ -238,5 +235,4 @@ prop_working_age %>% group_by(year, sex) %>%
     labs(x="Year", y="Proportions of datazone over 16 and under 60 years old")
 
 
-#############################################
 
