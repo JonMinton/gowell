@@ -179,16 +179,9 @@ tenure_deciles %>%
 
 # mix and dependancy ratios
 
-# This only works for years from 1996 to 2000
-# need to fix original code
+populations <- read.csv("data/sns/populations_by_age_year_sex.csv") %>% 
+    tbl_df()
 
-populations <- read.csv(
-    "data/sns/persons_by_gender_year_and_age.csv"
-    ) %>% tbl_df() %>% rename(
-    dz_2001=datazone
-    )
-
-# 5.8 million entries!
 # reduce to just Greater Glasgow
 
 populations <- populations %>% right_join(greater_glasgow_dzs)
