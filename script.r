@@ -21,7 +21,7 @@ require(dplyr)
 require(rmarkdown)
 require(ggplot2)
 require(ggtern)
-
+require(corrplot)
 
 
 # Linking chps to dzs -----------------------------------------------------
@@ -87,7 +87,16 @@ tenure_households <- source_DropboxData(
         owned=owned/all_households
     ) 
 
+# 6505 observations - whole of Scotland
+# left join to just Greater Glasgow
 tenure_households <- greater_glasgow_dzs %>% left_join(tenure_households)
+# now 2200 observations
+# this is 34% of total, dzs are approx equal population
+# if Scot population is 5.3 million this implies 
+# Pop of Greater Glasgow is about 1.8 Million - 
+# does this seem reasonable?
+
+
 tenure_households <- tenure_households %>% mutate(
     mix=(social * rented * owned) / (1/3)^3)
     # this should be the maximum possible mix value
@@ -112,50 +121,87 @@ ggplot(tenure_households) + geom_line(aes(x=mix, y=rented))
 
 # want social, owned, and rented to be gathered 
 
-tmp <- tenure_households %>% 
+tenure_households %>% 
     select(dz_2001, mix, social, owned, rented) %>%
-    gather(key = tenure_type, value=tenure_proportion, -dz_2001, -mix) 
+    gather(key = tenure_type, value=tenure_proportion, -dz_2001, -mix) %>%
+    ggplot( aes(x=mix, y=tenure_proportion)) +
+    geom_line() + 
+    facet_grid(tenure_type ~ . ) + 
+    labs(y="proportion", x="mix")
 
-ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
-    geom_line() + facet_grid(tenure_type ~ .)
 
-ggplot(tmp, 
-       aes(x=mix, y=tenure_proportion, group=tenure_type, colour=tenure_type)) + 
-     geom_bar(stat="identity")
 
 # mix deciles 
 
-decile_summaries <- tenure_households %>% 
+tenure_deciles <- tenure_households %>%
+    select(dz_2001, mix, social, owned, rented, all_households) %>%
+    gather(key = tenure_type, value=tenure_proportion, -dz_2001, -mix, -all_households) %>%
     mutate(m10=ntile(mix, 10)) %>% 
-    group_by(m10) %>% 
+    group_by(m10, tenure_type) %>% 
     summarise(
-        avg_social=mean(social),
-        sd_social=sd(social),
-        avg_rented=mean(rented),
-        sd_rented=sd(rented),
-        avg_owned=mean(owned),
-        sd_owned=sd(owned)
-        )
+        tenure_mean=mean(tenure_proportion),
+        tenure_sd=sd(tenure_proportion),
+        n=sum(all_households)
+    ) %>%
+    mutate(
+        ci = tenure_sd / n^(1/2),
+        lower=tenure_mean - 2 * ci,
+        upper=tenure_mean + 2 * ci
+    ) 
+
+tenure_deciles %>% ggplot(aes(
+        x=factor(m10), group=tenure_type, 
+        colour=tenure_type, y=tenure_mean
+        )) +
+    geom_line(
+        ) +
+    geom_pointrange(
+        aes(
+            ymax=upper,
+            ymin=lower
+            )
+        ) + labs(
+            y="mean proportion",
+            x="Decile of mix\n(1=lowest)"
+            )
+
+# what's the correlation between the tenure types over the deciles?
+
+tenure_deciles %>% 
+    select(m10, tenure_type, tenure_mean) %>%
+    spread(key=tenure_type, value=tenure_mean) %>% 
+    select(-m10) %>% 
+    cor() %>% 
+    corrplot.mixed()
     
-g1 <- ggplot(decile_summaries, aes(x=factor(m10)))
-g1 + geom_pointrange(aes(y=avg_social, 
-                         ymin=avg_social - 2*sd_social,
-                         ymax=avg_social + 2*sd_social)
-) + labs(y="proportion_social_housing")
-
-ggplot(tmp, aes(x=mix, y=tenure_proportion)) + 
-    geom_line() + facet_grid(. ~ tenure_type)
 
 
-ggtern(data=tenure_households, mapping=aes(x=social, y=rented, z=owned)) +geom_point()
 
 # mix and dependancy ratios
+
+# This only works for years from 1996 to 2000
+# need to fix original code
 
 populations <- read.csv(
     "data/sns/persons_by_gender_year_and_age.csv"
     ) %>% tbl_df() %>% rename(
     dz_2001=datazone
     )
+
+# 5.8 million entries!
+# reduce to just Greater Glasgow
+
+populations <- populations %>% right_join(greater_glasgow_dzs)
+
+# now 1.98 million
+populations %>% 
+    group_by(year, age_group) %>%
+    summarise(
+        cells=n(),
+        na_count=length(which(is.na(count)))
+        ) %>% 
+    View()
+
 
 # let's estimate dependency ratios
 

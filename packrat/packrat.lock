@@ -84,6 +84,11 @@ Source: CRAN
 Version: 1.2-4
 Hash: b775bd08a10f968fef582304b7c3ab9c
 
+Package: corrplot
+Source: CRAN
+Version: 0.73
+Hash: c844da5abc88620ce8c79d035ca8bf22
+
 Package: data.table
 Source: CRAN
 Version: 1.9.4
