@@ -9,19 +9,18 @@
 # 4) add packrat to see if this solves markdown issue [done - seems to ]
 # 5) add existing script and adapt where relevant
 
-
-
 rm(list=ls())
 
-
+require(rmarkdown)
 require(repmis)
 require(plyr)
-require(tidyr)
 require(dplyr)
-require(rmarkdown)
+require(tidyr)
+
 require(ggplot2)
 require(ggtern)
 require(corrplot)
+
 
 
 # Linking chps to dzs -----------------------------------------------------
@@ -67,8 +66,7 @@ tenure_households <- source_DropboxData(
     rented_from_relative=HO.relative,
     shared_ownership=HO.sharedown,
     other_social_rented=HO.social
-) %>% 
-    mutate(
+) %>% mutate(
         social=council_houses + other_social_rented,
         rented=rented_from_employer + private_rented+ rented_from_relative,
         owned=owned_with_mortgage + owned_outright + shared_ownership
@@ -236,3 +234,12 @@ prop_working_age %>% group_by(year, sex) %>%
 
 
 
+# Correlation between mix and proportion_working_age at datazone level
+
+prop_working_age %>% 
+    spread(key=sex, value=p_wage) %>%
+    inner_join(tenure_households) 
+
+%>% 
+    select(year, datazone=dz_2001, mix
+tenure_households %>% left_join(prop)

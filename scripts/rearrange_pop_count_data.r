@@ -8,7 +8,6 @@ require(tidyr)
 require(stringr)
 require(dplyr)
 require(ggplot2)
-require(car)
 
 # Females
 
@@ -40,17 +39,6 @@ combined_raw <- males_raw %>%
 
 rm(females_raw, males_raw)
 gc()
-# take 1000 rows at a time, re-arrange, save to file
-
-for (i in )
-fn <- function(x){
-    out <- x %>% 
-        select(datazone=datazone, year=year, matches["0-9"]) %>%
-        gather(key=var_name)
-    
-    
-    write.table(out, file=XXX, append=T, sep=",")
-}
 
 combined_raw <- combined_raw %>% 
     select(datazone=datazone, year=year, matches("[0-9]")) %>%
@@ -64,7 +52,10 @@ combined_raw %>% sample_n(50)
 
 # Want to remove rows wehere variable name ends with 
 # an uppercase F or M
-
+combined_raw_census <- combined_raw %>% 
+    filter(
+        str_detect(combined_raw$var_name, "[M|F]$")
+        )
 combined_raw <- combined_raw %>%
     filter(
         !str_detect(combined_raw$var_name, "[M|F]$")
@@ -92,24 +83,52 @@ combined_raw <- combined_raw %>% mutate(
                ifelse(
                    str_detect(combined_raw$numeric_part, "over$"),
                    str_c(str_sub(combined_raw$numeric_part, 1, 2), "_", "101"), 
-                   combined_raw$numeric_part
+                   ifelse(
+                       combined_raw$numeric_part=="0",
+                       "0_0",
+                       combined_raw$numeric_part
+                        )
                    )
                )
             )
         ) 
     )
-# forgot about this
-combined_raw$n2[combined_raw$n2=="0"] <- "0_0"
-
-# can now drop var_name and numeric_part
 combined_raw <- combined_raw %>% 
     select(datazone, year, sex, age_range=n2, count) %>%
     separate(col=age_range, into=c("lower_age", "upper_age"), "_", remove=F)
+
+# Now to do the same with the Census based variables 
+
+
+combined_raw_census$sex <- NA
+combined_raw_census$sex[str_detect(combined_raw_census$var_name, "F$")] <- "female"
+combined_raw_census$sex[str_detect(combined_raw_census$var_name, "M$")] <- "male"
+combined_raw_census
+
+combined_raw_census$num_part <- str_extract(combined_raw_census$var_name, "[0-9]{1,}")
+combined_raw_census$var_name <- NULL
+
+combined_raw_census$age_range <- combined_raw_census$num_part %>% 
+    mapvalues(
+        from=as.character(1:19),
+        to=c(
+            "0_4", "5_9", "10_14", "15_19","20_24",
+            "25_29","30_34","35_39","40_44","45_49",
+            "50_54","55_59","60_64","65_69","70_74",
+            "75_79","80_84","85_89","90_101"
+            )
+        )
+
+combined_raw_census$num_part <- NULL
+
+combined_raw_census <- combined_raw_census %>% separate(
+    age_range, "_", into=c("lower_age", "upper_age"),
+    remove=FALSE
+    ) %>% 
+    select(
+        datazone, year, sex, age_range, lower_age, upper_age, count    
+        )
+
+combined_raw <- combined_raw %>% bind_rows(combined_raw_census)
+
 write.csv(combined_raw, file="data/derived/populations_by_age_year_sex.csv", row.names=F)
-# Now want to write this out
-
-
-# key terms to look out for are peop, mal, and fe
-# also anything numeric
-
-
