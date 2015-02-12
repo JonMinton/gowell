@@ -179,78 +179,60 @@ tenure_deciles %>%
 
 # mix and dependancy ratios
 
-# This only works for years from 1996 to 2000
-# need to fix original code
+populations <- read.csv("data/sns/populations_by_age_year_sex.csv") %>% 
+    tbl_df() 
 
-populations <- read.csv(
-    "data/sns/persons_by_gender_year_and_age.csv"
-    ) %>% tbl_df() %>% rename(
-    dz_2001=datazone
-    )
-
-# 5.8 million entries!
 # reduce to just Greater Glasgow
-
+populations <- populations %>% rename(dz_2001=datazone)
 populations <- populations %>% right_join(greater_glasgow_dzs)
 
-# now 1.98 million
+# now 1.21 million
 populations %>% 
-    group_by(year, age_group) %>%
+    group_by(year, age_range) %>%
     summarise(
         cells=n(),
-        na_count=length(which(is.na(count)))
-        ) %>% 
-    View()
+        sum=sum(count)
+        ) 
 
+populations <- populations %>% arrange(year, sex, lower_age)
 
-# let's estimate dependency ratios
+populations <- populations %>% 
+    mutate(
+        working_age = ifelse(lower_age > 16 & upper_age < 60, 1, 0)
+    ) 
+
+populations %>% 
+    group_by(year, dz_2001, sex, working_age) %>%
+    summarise(count=sum(count))
 
 prop_working_age <- populations %>% 
-    mutate(working_age = ifelse(upper_age >=16 & lower_age <=60, 1, 0)) %>%
-    group_by(dz_2001, year, gender) %>% 
-    summarise(proportion_working_age=sum(count[working_age==1])/sum(count))
+    group_by(year, dz_2001, sex) %>%
+    summarise(p_wage=sum(count[working_age==1])/sum(count))
 
-# write.csv(prop_working_age, file="data/derived/prop_working_age.csv", row.names=F)
+prop_working_age <- prop_working_age[!is.nan(prop_working_age$p_wage),] 
 
-###################################################################################
-
-# As a crude measure of mix, let's use the produce of the three proportions 
-# of household type, then normalised to a 0-1 scale
-
-j3 <- joined %>% mutate(mix=owned *rented * social) %>% mutate(mix =mix/max(mix))
-
-qplot(x=mix, data=j3)
-
-qplot(x=inc_deprivation, y=mix, data=j3) + stat_smooth()
-qplot(y=inc_deprivation, x=mix, data=j3) + stat_smooth()
-
-
-mix_social <- lm(
-    pm10 ~ inc_deprivation * social *mix, 
-    data=j3
-)
-summary(mix_social)
-
-mix_rental <- lm(
-    pm10 ~ inc_deprivation * rented * mix,
-    data=j3
-)
-summary(mix_rental)
-
-mix_owner <- lm(
-    pm10 ~ inc_deprivation * owned * mix,
-    data=j3
-)
-summary(mix_owner)
-
-# Renove 3 way interaction to make interpretation simpler
-summary(lm(pm10 ~ inc_deprivation*social + mix, data=j3))
-summary(lm(pm10 ~ inc_deprivation*owned + mix, data=j3))
-summary(lm(pm10 ~ inc_deprivation*rented + mix, data=j3))
+prop_working_age %>% group_by(year, sex) %>%
+    summarise( 
+              q_025=quantile(p_wage, 0.025), 
+              q_050=quantile(p_wage, 0.050),
+              q_100=quantile(p_wage, 0.100),
+              q_250=quantile(p_wage, 0.250),
+              q_500=quantile(p_wage, 0.500),
+              q_750=quantile(p_wage, 0.750),
+              q_900=quantile(p_wage, 0.900),
+              q_950=quantile(p_wage, 0.950),
+              q_975=quantile(p_wage, 0.975)
+              ) %>%
+    ggplot(aes(x=year, y=q_500)) +
+    facet_grid(. ~ sex) +
+    geom_ribbon(aes(ymin=q_025, ymax=q_975), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_050, ymax=q_950), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_100, ymax=q_900), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_250, ymax=q_750), alpha=0.2) +
+    geom_line(size=1.1) + 
+    coord_cartesian(ylim=c(0,1)) + 
+    labs(x="Year", y="Proportions of datazone over 16 and under 60 years old")
 
 
-### One additional thing: what if we encode proportion social housing as a colour with 
-# y: pm10 
-# x: income deprivation
+#############################################
 
-joined <- income_deprivation %>% inner_join(tenure_households) %>% inner_join(pollution) 
