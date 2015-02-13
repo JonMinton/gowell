@@ -21,6 +21,8 @@ require(ggplot2)
 require(ggtern)
 require(corrplot)
 
+require(vegan)
+
 
 
 # Linking chps to dzs -----------------------------------------------------
@@ -117,6 +119,10 @@ ggplot(tenure_households) + geom_line(aes(x=mix, y=social))
 ggplot(tenure_households) + geom_line(aes(x=mix, y=owned))
 ggplot(tenure_households) + geom_line(aes(x=mix, y=rented))
 
+# ternery plot
+
+ggtern(data=tenure_households, aes(x=social, y=owned, z=rented, colour=mix)) + geom_point()
+
 # want social, owned, and rented to be gathered 
 
 tenure_households %>% 
@@ -177,7 +183,7 @@ tenure_deciles %>%
 
 # mix and dependancy ratios
 
-populations <- read.csv("data/sns/populations_by_age_year_sex.csv") %>% 
+populations <- read.csv("data/derived/populations_by_age_year_sex.csv") %>% 
     tbl_df()
 
 
@@ -210,6 +216,7 @@ prop_working_age <- populations %>%
     summarise(p_wage=sum(count[working_age==1])/sum(count))
 
 prop_working_age <- prop_working_age[!is.nan(prop_working_age$p_wage),] 
+prop_working_age <- prop_working_age %>% mutate(dep_r = (1 - p_wage) / p_wage)
 
 prop_working_age %>% group_by(year, sex) %>%
     summarise( 
@@ -233,14 +240,111 @@ prop_working_age %>% group_by(year, sex) %>%
     coord_cartesian(ylim=c(0,1)) + 
     labs(x="Year", y="Proportions of datazone over 16 and under 60 years old")
 
+# equivalently, dependency ratio
+
+prop_working_age %>% group_by(year, sex) %>%
+    summarise( 
+        q_025=quantile(dep_r, 0.025), 
+        q_050=quantile(dep_r, 0.050),
+        q_100=quantile(dep_r, 0.100),
+        q_250=quantile(dep_r, 0.250),
+        q_500=quantile(dep_r, 0.500),
+        q_750=quantile(dep_r, 0.750),
+        q_900=quantile(dep_r, 0.900),
+        q_950=quantile(dep_r, 0.950),
+        q_975=quantile(dep_r, 0.975)
+    ) %>%
+    ggplot(aes(x=year, y=q_500)) +
+    facet_grid(. ~ sex) +
+    geom_ribbon(aes(ymin=q_025, ymax=q_975), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_050, ymax=q_950), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_100, ymax=q_900), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_250, ymax=q_750), alpha=0.2) +
+    geom_line(size=1.1) + geom_hline(yintercept=1, linetype="dashed") +
+    labs(x="Year", y="Dependency Ratio")
 
 
 # Correlation between mix and proportion_working_age at datazone level
 
-prop_working_age %>% 
+tenure_wage <- prop_working_age %>% 
+    select(-dep_r) %>%
     spread(key=sex, value=p_wage) %>%
-    inner_join(tenure_households) 
+    inner_join(tenure_households)
 
-%>% 
-    select(year, datazone=dz_2001, mix
-tenure_households %>% left_join(prop)
+tenure_wage %>% 
+    ggplot(aes(x=female, y=mix)) + 
+    geom_point() + 
+    stat_smooth(method="lm") + stat_smooth(colour="green")
+
+    
+
+
+# Diversity Index ---------------------------------------------------------
+
+
+#########################################################################################
+# Instead of my own measure, how about using the diversity index?
+# Available in the vegan package
+# http://cc.oulu.fi/~jarioksa/softhelp/vegan/html/diversity.html
+
+# Trying out examples:
+# data(BCI)
+# H <- diversity(BCI)
+# simp <- diversity(BCI, "simpson")
+# invsimp <- diversity(BCI, "inv")
+# r.2 <- rarefy(BCI, 2)
+# alpha <- fisher.alpha(BCI)
+# pairs(cbind(H, simp, invsimp, r.2, alpha), pch="+", col="blue")
+# ## Species richness (S) and Pielou's evenness (J):
+# S <- specnumber(BCI) ## rowSums(BCI > 0) does the same...
+# J <- H/log(S)
+
+# So, the counts are needed
+
+
+tenure_diversity <- tenure_households %>% 
+    filter(year==2001) %>% 
+    select(all_households, social, rented, owned) %>% 
+    mutate(
+        social=social * all_households,
+        rented=rented * all_households,
+        owned=owned * all_households
+           ) %>% 
+    select(-all_households) %>% 
+    diversity() %>% 
+    as.data.frame() %>% tbl_df() 
+names(tenure_diversity) = "diversity"
+
+tenure_diversity <- tenure_diversity %>% 
+    mutate(dz_2001 = tenure_households$dz_2001) %>% 
+    tbl_df() %>% 
+    select(dz_2001, diversity)
+
+tenure_diversity <- tenure_households %>% 
+    filter(year==2001) %>% 
+    select(dz_2001, all_households, social, rented, owned) %>% 
+    mutate(
+        social=social ,
+        rented=rented ,
+        owned=owned 
+        ) %>% 
+    inner_join(tenure_diversity)
+
+# Create 100 bins based on diversity 
+
+tenure_diversity %>% 
+    mutate(d_bin=ntile(diversity, 100)) %>%
+    select(-all_households) %>% 
+    gather(key=type, value=proportion, social, rented, owned) %>%
+    arrange(d_bin) %>% 
+    ggplot(aes(x=d_bin, y=proportion, fill=type, colour=type)) + geom_point(alpha=0.3) +
+    facet_wrap(~ type) +
+    labs(
+        x="Diversity centile",
+        y="Proportion of homes in datazones of this housing type")
+
+
+# Other types of mix to look at:
+# social class mix
+# 
+
