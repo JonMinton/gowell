@@ -348,3 +348,20 @@ tenure_diversity %>%
 # social class mix
 # 
 
+################################################################################################################
+
+
+# Now to look at other kinds of mix
+
+# mix types:
+# 
+# # 1) qualifications mix
+# 
+# 
+# 
+# ES-degr-lev-all
+# # number of people with a degree
+# es-noquals 
+# # number of people with no qualifications
+
+
