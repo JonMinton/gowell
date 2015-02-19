@@ -354,8 +354,73 @@ tenure_diversity %>%
 # Now to look at other kinds of mix
 
 # mix types:
-# 
-# # 1) qualifications mix
+
+# Dwelling type mix
+
+# dwellings, in by_year
+
+require(plyr)
+require(stringr)
+require(tidyr)
+require(dplyr)
+require(ggplot2)
+require(repmis)
+
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% 
+    tbl_df %>%
+    rename(datazone=dz_2001)
+
+
+dwellings <- source_DropboxData(
+    file="dwellings.csv", 
+    key="4hgjz7k5fiu8l3c"
+    ) %>% tbl_df
+
+
+dwellings_bands <- dwellings %>%
+    select(datazone, year, matches("_[A-Z]_")) %>%
+    inner_join(greater_glasgow_dzs) %>%
+    select(-chp)
+    
+names(dwellings_bands) <- names(dwellings_bands) %>% 
+    str_replace_all("HO.Band_", "") %>% 
+    str_replace_all("_dwellings", "")
+
+dwelling_bands <- dwellings_bands %>%
+    gather("band", "count", -datazone, -year)
+
+
+dwellings_sizes <- dwellings %>%
+    select(datazone, year, matches("HO.Rooms[0123456789]{1,2}"), HO.Roomsge10)
+    
+names(dwellings_sizes) <- names(dwellings_sizes) %>% 
+    str_replace_all("HO.Rooms", "") %>% 
+    str_replace_all("ge", "")
+
+dwellings_sizes <- dwellings_sizes  %>% 
+    gather(num_of_rooms, count, -datazone, -year) %>%
+    filter(!is.na(count))
+    
+
+# Dwellings_type
+dwellings_types <- dwellings %>%
+    select(datazone, year, HO.Flat, HO.Terraced, HO.Semidetached, HO.Detached)
+
+names(dwellings_types) <- names(dwellings_types)  %>% str_replace_all("HO.", "") 
+
+dwellings_types <- dwellings_types %>% 
+    gather(type, count, -datazone, -year) %>%
+    filter(!is.na(count))
+
+dwellings_types$type <- dwellings_types$type %>% tolower
+
+
+write.csv(dwellings_bands, file="data/derived/dwellings_by_band.csv", row.names=FALSE)
+write.csv(dwellings_sizes, file="data/derived/dwellings_by_size.csv", row.names=FALSE)
+write.csv(dwellings_types, file="data/derived/dwellings_by_type.csv", row.names=FALSE)
+
+
+#1) qualifications mix
 # 
 # 
 # 
