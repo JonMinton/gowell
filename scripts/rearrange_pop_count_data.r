@@ -10,27 +10,23 @@ require(dplyr)
 require(ggplot2)
 
 # Females
+# Now to use 2015 SNS release data
 
 females_raw <- source_DropboxData(
     file="females.csv",
-    key="qq083qk9iah5txz"
-    )
+    key="pa8az5zb5eoi1jh"
+    ) %>% 
+    tbl_df
 
 # males
 
 males_raw <- source_DropboxData(
     file="males.csv",
-    key="n77e4r376gz368e"
-    )
+    key="ea6ceuaza009xjx"
+    ) %>%
+    tbl_df
 
-# people (to check against)
-# persons_raw <- source_DropboxData(
-#     file="persons.csv",
-#     key="vcz7qngb44vbynq"
-#     )
 
-females_raw <- females_raw %>% tbl_df()
-males_raw <- males_raw %>% tbl_df()
 
 # let's combine
 
@@ -42,10 +38,9 @@ gc()
 
 combined_raw <- combined_raw %>% 
     select(datazone=datazone, year=year, matches("[0-9]")) %>%
-    gather(key=var_name, value=count, -datazone, -year)
-
-combined_raw <- combined_raw %>% 
+    gather(key=var_name, value=count, -datazone, -year) %>%
     filter(!is.na(count))
+
 
 
 combined_raw %>% sample_n(50)

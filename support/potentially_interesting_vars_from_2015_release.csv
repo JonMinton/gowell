@@ -1,0 +1,1073 @@
+interest,var_name,description,min_year,max_year,file_name,dir_name
+,HS.a89,Admissions for Accidents - females - all ages - number,2002,2012,accidents_females,by_year
+,HS.r89,"Admissions for Accidents - females - all ages - rate/100,000",2002,2012,accidents_females,by_year
+,HS.a85,Admissions for Accidents - males - all ages - number,2002,2012,accidents_males,by_year
+,HS.r85,"Admissions for Accidents - males - all ages - rate/100,000",2002,2012,accidents_males,by_year
+,CS.alldeaths,Deaths registered in year,2001,2014,all_deaths,by_year
+,CS.deathsmidyear,Deaths occurring mid-previous to mid-specified year,2001,2014,all_deaths,by_year
+,ED.SQAsNS5T1pAL6p,S5: No pupils with 1 award at SCQF level 6 and above,2002,2008,all_pupils,by_year
+,ED.SQAsNS5T3pAL6p,S5: No pupils with 3 awards at SCQF level 6 and above,2002,2008,all_pupils,by_year
+,ED.SQAsPS5T1pAL6p,S5: Percentage of pupils with 1 award at SCQF level 6 and above,2002,2008,all_pupils,by_year
+,ED.SQAsTotalS5Roll,S5: No pupils,2002,2008,all_pupils,by_year
+,CS.allbirths,births registered in year,2001,2014,births,by_year
+,CS.femalebirths,Female live births registered in year,2001,2014,births,by_year
+,CS.femalebirthsmid,Female live births occurring mid-previous to mid-specified year,2001,2014,births,by_year
+,CS.malebirths,Male live births registered in year,2001,2014,births,by_year
+,CS.malebirthsmid,Male live births occurring mid-previous to mid-specified year,2001,2014,births,by_year
+,CS.birthsmidyear,Live births occurring mid-previous to mid-specified year,2001,2014,births,by_year
+,CS.unmarriedbirths,% births unmarried,2001,2014,births,by_year
+,HS.a57,Cancer Admissions - both sexes - all ages - number,2002,2012,cancer_malignant_neoplasms_both_sexes,by_year
+,HS.r57,"Cancer Admissions - both sexes - all ages - rate/100,000",2002,2012,cancer_malignant_neoplasms_both_sexes,by_year
+,HS.a53,Cancer Admissions - females - all ages - number,2002,2012,cancer_malignant_neoplasms_females,by_year
+,HS.r53,"Cancer Admissions - females - all ages - rate/100,000",2002,2012,cancer_malignant_neoplasms_females,by_year
+,HS.a49,Cancer Admissions - males - all ages - number,2002,2012,cancer_malignant_neoplasms_males,by_year
+,HS.r49,"Cancer Admissions - males - all ages - rate/100,000",2002,2012,cancer_malignant_neoplasms_males,by_year
+,HS.a45,Cerebrovascular Disease Admissions - both sexes - all ages - number,2002,2012,cerebrovascular_disease_both_sexes,by_year
+,HS.r45,"Cerebrovascular Disease Admissions - both sexes - all ages - rate/100,000",2002,2012,cerebrovascular_disease_both_sexes,by_year
+,HS.a41,Cerebrovascular Disease Admissions - females - all ages - number,2002,2012,cerebrovascular_disease_females,by_year
+,HS.r41,"Cerebrovascular Disease Admissions - females - all ages - rate/100,000",2002,2012,cerebrovascular_disease_females,by_year
+,HS.a37,Cerebrovascular Disease Admissions - males - all ages - number,2002,2012,cerebrovascular_disease_males,by_year
+,HS.r37,"Cerebrovascular Disease Admissions - males - all ages - rate/100,000",2002,2012,cerebrovascular_disease_males,by_year
+,CS.cb11to15,CB: children aged 11-15,2003,2011,child_benefit,by_year
+,CS.cb16plus,CB: children aged 16 and over,2003,2011,child_benefit,by_year
+1,CS.cball,All claimants of child benefit,2003,2011,child_benefit,by_year
+,CS.cbfamiles,CB: Total number of families,2003,2011,child_benefit,by_year
+,CS.cbfamiles2,CB: families with two children,2003,2011,child_benefit,by_year
+,CS.cbfamiles3plus,CB: families with 3 or more children,2003,2011,child_benefit,by_year
+,CS.cbfamilies1,CB: families with one child,2003,2011,child_benefit,by_year
+,CS.cbfemale,CB: girls,2003,2011,child_benefit,by_year
+,CS.cbmale,CB: boys,2003,2011,child_benefit,by_year
+,CS.cbnk,CB: gender not specified,2003,2011,child_benefit,by_year
+,CS.cbunder5,CB: children aged under 5,2003,2011,child_benefit,by_year
+,CS.cd5to10,CB: children aged 5-10,2003,2011,child_benefit,by_year
+,CS.cbfamiles3,CB: families with three children,2003,2011,child_benefit,by_year
+,CS.cbfamiles4,CB: families with four or more children,2003,2011,child_benefit,by_year
+,CS.CHILD_POV_R,Percentage of Children in Poverty,2009,2010,children_in_low_income_househol,by_year
+,CS.CIC_total,Comparative Illness Count,2003,2010,comparative_illness,by_year
+,CS.CICrate_total,Comparative Illness Rate per 100000 of Tot Pop,2003,2010,comparative_illness,by_year
+,HS.a33,Coronary Heart Disease Admissions - both sexes - all ages - number,2002,2012,coronary_heart_disease_both_sexes,by_year
+,HS.r33,"Coronary Heart Disease Admissions - both sexes - all ages - rate/100,000",2002,2012,coronary_heart_disease_both_sexes,by_year
+,HS.a29,Coronary Heart Disease Admissions - females - all ages - number,2002,2012,coronary_heart_disease_females,by_year
+,HS.r29,"Coronary Heart Disease Admissions - females - all ages - rate/100,000",2002,2012,coronary_heart_disease_females,by_year
+,HS.a25,Coronary Heart Disease Admissions - males - all ages - number,2002,2012,coronary_heart_disease_males,by_year
+,HS.r25,"Coronary Heart Disease Admissions - males - all ages - rate/100,000",2002,2012,coronary_heart_disease_males,by_year
+,HO.alltenantsale,Sales to sitting tenants,1980,2005,council_house_sales,by_year
+,HO.Flattenantsale,Flat sales to sitting tenants,1980,2005,council_house_sales,by_year
+,HO.Housetenantsale,House sales to sitting tenants,1980,2005,council_house_sales,by_year
+,CS.decacc1,Geographic Access to Services Deprivation Decile,2004,2012,deciles,by_year
+,CS.deceduc1,"Education, Skills and Training Deprivation Decile",2004,2012,deciles,by_year
+,CS.decemp1,Employment Deprivation Decile,2004,2012,deciles,by_year
+,CS.decheal1,Health Deprivation Decile,2004,2012,deciles,by_year
+,CS.dechous1,Housing Deprivation Decile,2004,2012,deciles,by_year
+,CS.decinc1,Current Income Deprivation Decile,2004,2012,deciles,by_year
+,CS.decsimd1,Scottish Index of Multiple Deprivation Decile,2004,2012,deciles,by_year
+,CS.decaccdt1,Drive Times Deprivation Decile,2004,2012,deciles,by_year
+,CS.decaccpt1,Public Transport Deprivation Decile,2004,2012,deciles,by_year
+,CS.deccrim1,Crime Deprivation Decile,2004,2012,deciles,by_year
+,HS.a73,Disease of the Digestive System Admissions - males - all ages - number,2002,2012,diseases_of_the_digestive_system__males,by_year
+,HS.r73,"Disease of the Digestive System Admissions - males - all ages - rate/100,000",2002,2012,diseases_of_the_digestive_system__males,by_year
+,HS.a81,Disease of the Digestive System Admissions - both sexes - all ages - number,2002,2012,diseases_of_the_digestive_system_both_sexes,by_year
+,HS.r81,"Disease of the Digestive System Admissions - both sexes - all ages - rate/100,000",2002,2012,diseases_of_the_digestive_system_both_sexes,by_year
+,HS.a77,Disease of the Digestive System Admissions - females - all ages - number,2002,2012,diseases_of_the_digestive_system_females,by_year
+,HS.r77,"Disease of the Digestive System Admissions - females - all ages - rate/100,000",2002,2012,diseases_of_the_digestive_system_females,by_year
+1,CS.drivegp1,Drive time (in minutes) to a GP,2003,2012,drive_time,by_year
+1,CS.drivepetrol1,Drive time (in minutes) to a Petrol Station,2003,2012,drive_time,by_year
+1,CS.drivepost1,Drive time (in minutes) to a Post Office,2003,2012,drive_time,by_year
+1,CS.driveprimary1,Drive time (in minutes) to a Primary School,2003,2012,drive_time,by_year
+1,CS.drivesuper1,Drive time (in minutes) to a Supermarket,2003,2012,drive_time,by_year
+1,CS.drivesecondary1,Drive time (in minutes) to a Secondary School,2003,2012,drive_time,by_year
+1,CS.driveshopping1,Drive time (in minutes) to Shopping Facilities,2003,2012,drive_time,by_year
+1,CS.driveatm1,Drive time (in minutes) to a Cash Machine,2003,2012,drive_time,by_year
+1,CS.drivebank1,Drive time (in minutes) to Banks and Building Societies,2003,2012,drive_time,by_year
+1,CS.drivecas1,Drive time (in minutes) to Citizens Advice Bureau,2003,2012,drive_time,by_year
+1,CS.drivechemist1,Drive time (in minutes) to Chemists and Pharmacies,2003,2012,drive_time,by_year
+1,CS.drivefuredu1,Drive time (in minutes) to a Further Education Establishment,2003,2012,drive_time,by_year
+1,CS.drivegenstore1,Drive time (in minutes) to a General Store,2003,2012,drive_time,by_year
+1,CS.drivehiedu1,Drive time (in minutes) to a Higher Education Establishment,2003,2012,drive_time,by_year
+1,CS.drivejcp1,Drive time (in minutes) to a JobCentre Plus,2003,2012,drive_time,by_year
+1,CS.drivelibrary1,Drive time (in minutes) to a Library,2003,2012,drive_time,by_year
+1,CS.drivenursery1,Drive time (in minutes) to a Nursery,2003,2012,drive_time,by_year
+1,CS.drivepolice1,Drive time (in minutes) to a Police Station,2003,2012,drive_time,by_year
+,HS.age2,Number in 24 month cohort,2008,2012,dtppolhib_uptake_by_24_months,by_year
+,HS.dtpph24,Number vaccinated against DTP/Pol/Hib by 24 months,2008,2012,dtppolhib_uptake_by_24_months,by_year
+,HS.pdtpph24,Percentage vaccinated against DTP/Pol/Hib by 24 months,2008,2012,dtppolhib_uptake_by_24_months,by_year
+1,HO.Band_A_dwellings,Band A dwellings,2003,2013,dwellings,by_year
+1,HO.Band_B_dwellings,Band B dwellings,2003,2013,dwellings,by_year
+1,HO.Band_C_dwellings,Band C dwellings,2003,2013,dwellings,by_year
+1,HO.Band_D_dwellings,Band D dwellings,2003,2013,dwellings,by_year
+1,HO.Band_E_dwellings,Band E dwellings,2003,2013,dwellings,by_year
+1,HO.Band_F_dwellings,Band F dwellings,2003,2013,dwellings,by_year
+1,HO.Band_G_dwellings,Band G dwellings,2003,2013,dwellings,by_year
+1,HO.Band_H_dwellings,Band H dwellings,2003,2013,dwellings,by_year
+,HO.Dwellings,Total no. dwellings,2003,2013,dwellings,by_year
+,HO.Dwellperhectare,Total no. dwellings/hectare,2003,2013,dwellings,by_year
+,HO.perbandA,% dwellings in band A,2003,2013,dwellings,by_year
+,HO.perbandAC,% dwellings in bands A-C,2003,2013,dwellings,by_year
+,HO.perbandFH,% dwellings in bands F-H,2003,2013,dwellings,by_year
+,HO.PerbandDE,% dwellings in bands D-E,2003,2013,dwellings,by_year
+,HO.AttachUnknown,Unknown attachment,2003,2013,dwellings,by_year
+,HO.Detached,Detached Dwellings,2003,2013,dwellings,by_year
+,HO.Flat,Flats,2003,2013,dwellings,by_year
+,HO.MedianRooms,Median number of rooms,2003,2013,dwellings,by_year
+,HO.PerDetached,% dwellings which are detached,2003,2013,dwellings,by_year
+,HO.PerFlat,% dwellings which are flats,2003,2013,dwellings,by_year
+,HO.PerRooms10,% dwellings with 10+ rooms,2003,2013,dwellings,by_year
+,HO.PerRooms1to3,% dwellings with 1-3 rooms,2003,2013,dwellings,by_year
+,HO.PerRooms4to6,% dwellings with 4-6 rooms,2003,2013,dwellings,by_year
+,HO.PerRooms7to9,% dwellings with 7-9 rooms,2003,2013,dwellings,by_year
+,HO.PerRoomsNotKnown,% dwellings with no. rooms unknown,2003,2013,dwellings,by_year
+,HO.PerSemidetached,% dwellings which semi-detached,2003,2013,dwellings,by_year
+,HO.PerTerraced,% dwellings which are terraced,2003,2013,dwellings,by_year
+,HO.PerTypeNotKnown,% dwellings attachment unknown,2003,2013,dwellings,by_year
+,HO.Rooms1,1 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms2,2 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms3,3 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms4,4 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms5,5 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms6,6 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms7,7 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms8,8 room Dwellings,2003,2013,dwellings,by_year
+,HO.Rooms9,9 room Dwellings,2003,2013,dwellings,by_year
+,HO.Roomsge10,10+ room Dwellings,2003,2013,dwellings,by_year
+,HO.RoomsUnknown,Unknown number of rooms,2003,2013,dwellings,by_year
+,HO.Semidetached,Semi-detached Dwellings,2003,2013,dwellings,by_year
+,HO.Terraced,Terraced Dwellings,2003,2013,dwellings,by_year
+,HO.Medianrooms,Median number of rooms,2003,2013,dwellings,by_year
+,CS.coastalpercent,% of dwellings in the coastal flood risk area.,2006,2006,dwellings_in_flood_risk_areas,by_year
+,CS.fluvialpercent,% of dwellings in the fluvial flood risk area.,2006,2006,dwellings_in_flood_risk_areas,by_year
+,CS.fluvicoastpercen,% of dwellings in the coastal or fluvial flood risk areas,2006,2006,dwellings_in_flood_risk_areas,by_year
+,HS.a21,Elective hospital admissions - both sexes - all ages - number,2002,2012,elective_planned_admissions_both_sexes,by_year
+,HS.r21,"Elective hospital admissions - both sexes - all ages - rate/100,000",2002,2012,elective_planned_admissions_both_sexes,by_year
+,HS.a17,Elective hospital admissions - females - all ages - number,2002,2012,elective_planned_admissions_females,by_year
+,HS.r17,"Elective hospital admissions - females - all ages - rate/100,000",2002,2012,elective_planned_admissions_females,by_year
+,HS.a13,Elective hospital admissions - males - all ages - number,2002,2012,elective_planned_admissions_males,by_year
+,HS.r13,"Elective hospital admissions - males - all ages - rate/100,000",2002,2012,elective_planned_admissions_males,by_year
+,HS.a12,Emergency admissions - both sexes - aged 65 and over - number,2002,2012,emergency_admissions_both_sexes_l4,by_year
+,HS.a9,Emergency admissions - both sexes - all ages - number,2002,2012,emergency_admissions_both_sexes_l4,by_year
+,HS.r12,"Emergency admissions - both sexes - aged 65 and over - rate/100,000",2002,2012,emergency_admissions_both_sexes_l4,by_year
+,HS.r9,"Emergency admissions - both sexes - all ages - rate/100,000",2002,2012,emergency_admissions_both_sexes_l4,by_year
+,HS.a5,Emergency admissions - females - all ages - number,2002,2012,emergency_admissions_females,by_year
+,HS.a8,Emergency admissions - females - aged 65 and over - number,2002,2012,emergency_admissions_females,by_year
+,HS.r5,"Emergency admissions - females - all ages - rate/100,000",2002,2012,emergency_admissions_females,by_year
+,HS.r8,"Emergency admissions - females - aged 65 and over - rate/100,000",2002,2012,emergency_admissions_females,by_year
+,HS.a1,Emergency admissions - males - all ages - number,2002,2012,emergency_admissions_males,by_year
+,HS.a4,Emergency admissions - males - aged 65 and over - number,2002,2012,emergency_admissions_males,by_year
+,HS.r1,"Emergency admissions - males - all ages - rate/100,000",2002,2012,emergency_admissions_males,by_year
+,HS.r4,"Emergency admissions - males - aged 65 and over - rate/100,000",2002,2012,emergency_admissions_males,by_year
+,CS.empdeprived,Percentage of working age population who are employment deprived,2002,2011,employment_deprivation,by_year
+,CA.CHEnsuiteLD,% of places in Care Homes for adults with Learning Disabilities which have ensuite facilities,2003,2005,ensuite_places_in_care_homes,by_year
+,CA.CHEnsuiteMHP,% of places in Care Homes for adults with Mental Health Problems which have ensuite facilities,2003,2005,ensuite_places_in_care_homes,by_year
+,CA.CHEnsuiteOLD,% places in Care Homes for Older People which have ensuite facilities,2003,2005,ensuite_places_in_care_homes,by_year
+,CA.CHEnsuiteOth,% of places in Care Homes for Other Client Groups which have ensuite facilities,2003,2005,ensuite_places_in_care_homes,by_year
+,CA.CHEnsuitePD,% of places in Care Homes for adults with Physical Disabilities which have ensuite facilities,2003,2005,ensuite_places_in_care_homes,by_year
+,CS.alldeathsf,Female deaths registered in year,2001,2014,female_deaths,by_year
+,CS.femaledeathsmid,Female deaths occurring mid-previous to mid-specified year,2001,2014,female_deaths,by_year
+,ED.SQAsFemS5Roll2,S5: No of female pupils,2008,2008,female_pupils,by_year
+,ED.SQAsNS5FEM1pAL6p,S5: No female pupils with 1 award at SCQF level 6 and above,2008,2008,female_pupils,by_year
+,ED.SQAsNS5FEM3pAL6p,S5: No female pupils with 3 awards at SCQF level 6 and above,2008,2008,female_pupils,by_year
+,ED.SQAsNS5FEM5pAL6p,S5: No female pupils with 5 awards at SCQF level 6 and above,2008,2008,female_pupils,by_year
+,ED.SQAsPS5FEM1pAL6p,S5: Percentage of female pupils with 1 award at SCQF level 6 and above,2008,2008,female_pupils,by_year
+,ED.SQAsPS5FEM3pAL6p,S5: Percentage of female pupils with 3 awards at SCQF level 6 and above,2008,2008,female_pupils,by_year
+,ED.SQAsPS5FEM5pAL6p,S5: Percentage of female pupils with 5 awards at SCQF level 6 and above,2008,2008,female_pupils,by_year
+,GR.hisfemchildperc,SAPE Population - Female Children Percentage,1996,2011,females,by_year
+,GR.hisfempensperc,SAPE Population - Pensionable Age Females Percentage,1996,2011,females,by_year
+,GR.hisfemworkperc,SAPE Population - Working Age Females Percentage,1996,2011,females,by_year
+,GR.hsfem,SAPE All Females,1996,2011,females,by_year
+,GR.hsfem0,SAPE Females &lt; 1,1996,2011,females,by_year
+,GR.hsfem1_4,SAPE Females 1-4,1996,2011,females,by_year
+,GR.hsfem10_12,SAPE Females 10-12,1996,2011,females,by_year
+,GR.hsfem13_14,SAPE Females 13-14,1996,2011,females,by_year
+,GR.hsfem15,SAPE Females 15,1996,2011,females,by_year
+,GR.hsfem1619,SAPE Females 16-19,1996,2011,females,by_year
+,GR.hsfem2024,SAPE Females 20-24,1996,2011,females,by_year
+,GR.hsfem2529,SAPE Females 25-29,1996,2011,females,by_year
+,GR.hsfem3034,SAPE Females 30-34,1996,2011,females,by_year
+,GR.hsfem3539,SAPE Females 35-39,1996,2011,females,by_year
+,GR.hsfem4044,SAPE Females 40-44,1996,2011,females,by_year
+,GR.hsfem4549,SAPE Females 45-49,1996,2011,females,by_year
+,GR.hsfem5_9,SAPE Females 5-9,1996,2011,females,by_year
+,GR.hsfem5054,SAPE Females 50-54,1996,2011,females,by_year
+,GR.hsfem5559,SAPE Females 55-59,1996,2011,females,by_year
+,GR.hsfem6064,SAPE Females 60-64,1996,2011,females,by_year
+,GR.hsfem6569,SAPE Females 65-69,1996,2011,females,by_year
+,GR.hsfem7074,SAPE Females 70-74,1996,2011,females,by_year
+,GR.hsfem7579,SAPE Females 75-79,1996,2011,females,by_year
+,GR.hsfem8084,SAPE Females 80-84,1996,2011,females,by_year
+,GR.hsfem85over,SAPE Females 85 &amp; over,1996,2011,females,by_year
+,GR.hsfemchild,SAPE Population - Female Children,1996,2011,females,by_year
+,GR.hsfempens,SAPE Population - Pensionable Age Females,1996,2011,females,by_year
+,GR.hsfemwork,SAPE Population - Working Age Females,1996,2011,females,by_year
+,GR.countind10F,Total Female Population (45-49),1996,2011,females,by_year
+,GR.countind11F,Total Female Population (50-54),1996,2011,females,by_year
+,GR.countind12F,Total Female Population (55-59),1996,2011,females,by_year
+,GR.countind13F,Total Female Population (60-64),1996,2011,females,by_year
+,GR.countind14F,Total Female Population (65-69),1996,2011,females,by_year
+,GR.countind15F,Total Female Population (70-74),1996,2011,females,by_year
+,GR.countind16F,Total Female Population (75-79),1996,2011,females,by_year
+,GR.countind17F,Total Female Population (80-84),1996,2011,females,by_year
+,GR.countind18F,Total Female Population (85-89),1996,2011,females,by_year
+,GR.countind19F,Total Female Population (90+),1996,2011,females,by_year
+,GR.countind1F,Total Female Population (0-4),1996,2011,females,by_year
+,GR.countind2F,Total Female Population (5-9),1996,2011,females,by_year
+,GR.countind3F,Total Female Population (10-14),1996,2011,females,by_year
+,GR.countind4F,Total Female Population (15-19),1996,2011,females,by_year
+,GR.countind5F,Total Female Population (20-24),1996,2011,females,by_year
+,GR.countind6F,Total Female Population (25-29),1996,2011,females,by_year
+,GR.countind7F,Total Female Population (30-34),1996,2011,females,by_year
+,GR.countind8F,Total Female Population (35-39),1996,2011,females,by_year
+,GR.countind9F,Total Female Population (40-44),1996,2011,females,by_year
+,GR.denominatorindF,Total Female Population (all ages),1996,2011,females,by_year
+,GR.percchildf,Percentage Female Children,1996,2011,females,by_year
+,GR.Percpensf,Percentage Female Pensioners,1996,2011,females,by_year
+,GR.Percworkf,Percentage Female Working Age,1996,2011,females,by_year
+,GR.sapefem,Female Population,1996,2011,females,by_year
+,GR.sapefem04,Female Population Aged 0-4,1996,2011,females,by_year
+,GR.sapefem1015,Female Population Aged 10-15,1996,2011,females,by_year
+,GR.sapefem1619,Female Population Aged 16-19,1996,2011,females,by_year
+,GR.sapefem2024,Female Population Aged 20-24,1996,2011,females,by_year
+,GR.sapefem2529,Female Population Aged 25-29,1996,2011,females,by_year
+,GR.sapefem3034,Female Population Aged 30-34,1996,2011,females,by_year
+,GR.sapefem3539,Female Population Aged 35-39,1996,2011,females,by_year
+,GR.sapefem4044,Female Population Aged 40-44,1996,2011,females,by_year
+,GR.sapefem4549,Female Population Aged 45-49,1996,2011,females,by_year
+,GR.sapefem5054,Female Population Aged 50-54,1996,2011,females,by_year
+,GR.sapefem5559,Female Population Aged 55-59,1996,2011,females,by_year
+,GR.sapefem59,Female Population Aged 5-9,1996,2011,females,by_year
+,GR.sapefem6064,Female Population Aged 60-64,1996,2011,females,by_year
+,GR.sapefem6569,Female Population Aged 65-69,1996,2011,females,by_year
+,GR.sapefem7074,Female Population Aged 70-74,1996,2011,females,by_year
+,GR.sapefem7579,Female Population Aged 75-79,1996,2011,females,by_year
+,GR.sapefem8084,Female Population Aged 80-84,1996,2011,females,by_year
+,GR.sapefem8589,Female Population Aged 85-89,1996,2011,females,by_year
+,GR.sapefem90over,Female Population Aged 90 and over,1996,2011,females,by_year
+,GR.sapefemchild,Female Population - Children,1996,2011,females,by_year
+,GR.sapefemchildperc,Female Population - Children (%),1996,2011,females,by_year
+,GR.sapefempens,Female Population - Pensionable Age,1996,2011,females,by_year
+,GR.sapefempensperc,Female Population - Pensionable Age (%),1996,2011,females,by_year
+,GR.sapefemwork,Female Population - Working Age,1996,2011,females,by_year
+,GR.sapefemworkperc,Female Population - Working Age (%),1996,2011,females,by_year
+,ED.SLDF_OTHER_P,% Other,2007,2008,follow-up_leaver_destinations,by_year
+,ED.SLDF_POSITIVE_P,% Positive,2007,2008,follow-up_leaver_destinations,by_year
+,ED.SLDF_TOT,Total Number of School leavers,2007,2008,follow-up_leaver_destinations,by_year
+,ED.PPsGMEsNP,No primary pupils receiving Gaelic Medium Education,2005,2013,gaelic_medium_education,by_year
+,ED.PPsGMEsNS,No secondary pupils receiving Gaelic Medium Education,2005,2013,gaelic_medium_education,by_year
+,CS.areaDZ,Datazone-Geographical Area,2005,2005,geographic_areas,by_year
+,CS.LAcodes,Data Zone to LA Codes,2005,2005,geographic_look-ups,by_year
+,CS.LECdcodes,Data Zone to LEC Codes,2005,2005,geographic_look-ups,by_year
+,CS.NUTS2dcodes,Data Zone to NUTS2 Codes,2005,2005,geographic_look-ups,by_year
+,CS.NUTS3dcodes,Data Zone to NUTS3 Codes,2005,2005,geographic_look-ups,by_year
+,CS.Sett2001dcodes,Data Zone to Sett2001 Codes,2005,2005,geographic_look-ups,by_year
+,CS.SPcodes,Data Zone to SP Codes,2005,2005,geographic_look-ups,by_year
+,HO.hpricelquartile,"House sales, lower quartile price",1993,2012,house_sales_and_prices,by_year
+,HO.hpricemean,"House sales, mean price",1993,2012,house_sales_and_prices,by_year
+,HO.hpricemedian,"House sales, median price",1993,2012,house_sales_and_prices,by_year
+,HO.hpriceuquartile,"House sales, upper quartile",1993,2012,house_sales_and_prices,by_year
+,HO.hsalesno,"House sales, numbers",1993,2012,house_sales_and_prices,by_year
+,HO.Per_Occ_dwells,% dwellings which are occupied,2007,2013,household_estimates,by_year
+,HO.Per_Occ_exempt,% dwellings with 'occupied exemptions',2007,2013,household_estimates,by_year
+,HO.Per_Second_homes,% dwellings which are second homes,2007,2013,household_estimates,by_year
+,HO.Per_Single_adult,% dwellings with single adult discounts,2007,2013,household_estimates,by_year
+,HO.Per_Vacantdwells,% dwellings which are vacant,2007,2013,household_estimates,by_year
+,HO.allspaces,Total Spaces,2001,2001,household_spaces,by_year
+,HO.holiday,Holiday Spaces,2001,2001,household_spaces,by_year
+,HO.occupied,Occupied Spaces,2001,2001,household_spaces,by_year
+,HO.percholiday,% of Total Spaces - Holiday,2001,2001,household_spaces,by_year
+,HO.percvacant,% of Total Spaces - Vacant,2001,2001,household_spaces,by_year
+,HO.vacant,Vacant Spaces,2001,2001,household_spaces,by_year
+,CS.incdeprived,Percentage of total population who are income deprived,2002,2011,income_deprivation,by_year
+,CS.alldeathsm,Male deaths registered in year,2001,2014,male_deaths,by_year
+,CS.maledeathsmid,Male deaths occurring mid-previous to mid-specified year,2001,2014,male_deaths,by_year
+,ED.SQAsMaleS4Roll2,S4: No of male pupils,2008,2008,male_pupils,by_year
+,ED.SQAsNSMALE5pAL3p,S4: No male pupils with 5 awards at SCQF level 3 and above,2008,2008,male_pupils,by_year
+,ED.SQAsNSMALE5pAL4p,S4: No male pupils with 5 awards at SCQF level 4 and above,2008,2008,male_pupils,by_year
+,ED.SQAsNSMALE5pAL5p,S4: No male pupils with 5 awards at SCQF level 5 and above,2008,2008,male_pupils,by_year
+,ED.SQAsNSMALEL3pEM,S4: No of male pupils with English and Maths at SCQF level 3 or above,2008,2008,male_pupils,by_year
+,ED.SQAsPSMALE5pAL3p,S4: Percentage of male pupils with 5 awards at SCQF level 3 and above,2008,2008,male_pupils,by_year
+,ED.SQAsPSMALE5pAL4p,S4: Percentage of male pupils with 5 awards at SCQF level 4 and above,2008,2008,male_pupils,by_year
+,ED.SQAsPSMALE5pAL5p,S4: Percentage of male pupils with 5 awards at SCQF level 5 and above,2008,2008,male_pupils,by_year
+,ED.SQAsPSMALEL3pEM,S4: Percentage of male pupils with English and Maths at SCQF level 3 or above,2008,2008,male_pupils,by_year
+,GR.hismalchildperc,SAPE Population - Male Children Percentage,1996,2011,males,by_year
+,GR.hismalpensperc,SAPE Population - Pensionable Age Males Percentage,1996,2011,males,by_year
+,GR.hismalworkperc,SAPE Population - Working Age Males Percentage,1996,2011,males,by_year
+,GR.hsmal,SAPE All Males,1996,2011,males,by_year
+,GR.hsmal0,SAPE Males &lt; 1,1996,2011,males,by_year
+,GR.hsmal1_4,SAPE Males 1-4,1996,2011,males,by_year
+,GR.hsmal10_12,SAPE Males 10-12,1996,2011,males,by_year
+,GR.hsmal13_14,SAPE Males 13-14,1996,2011,males,by_year
+,GR.hsmal15,SAPE Males 15,1996,2011,males,by_year
+,GR.hsmal1619,SAPE Males 16-19,1996,2011,males,by_year
+,GR.hsmal2024,SAPE Males 20-24,1996,2011,males,by_year
+,GR.hsmal2529,SAPE Males 25-29,1996,2011,males,by_year
+,GR.hsmal3034,SAPE Males 30-34,1996,2011,males,by_year
+,GR.hsmal3539,SAPE Males 35-39,1996,2011,males,by_year
+,GR.hsmal4044,SAPE Males 40-44,1996,2011,males,by_year
+,GR.hsmal4549,SAPE Males 45-49,1996,2011,males,by_year
+,GR.hsmal5_9,SAPE Males 5-9,1996,2011,males,by_year
+,GR.hsmal5054,SAPE Males 50-54,1996,2011,males,by_year
+,GR.hsmal5559,SAPE Males 55-59,1996,2011,males,by_year
+,GR.hsmal6064,SAPE Males 60-64,1996,2011,males,by_year
+,GR.hsmal6569,SAPE Males 65-69,1996,2011,males,by_year
+,GR.hsmal7074,SAPE Males 70-74,1996,2011,males,by_year
+,GR.hsmal7579,SAPE Males 75-79,1996,2011,males,by_year
+,GR.hsmal8084,SAPE Males 80-84,1996,2011,males,by_year
+,GR.hsmal85over,SAPE Males 85 &amp; over,1996,2011,males,by_year
+,GR.hsmalchild,SAPE Population - Male Children,1996,2011,males,by_year
+,GR.hsmalpens,SAPE Population - Pensionable Age Males,1996,2011,males,by_year
+,GR.hsmalwork,SAPE Population - Working Age Males,1996,2011,males,by_year
+,GR.countind10M,Total Male Population (45-49),1996,2011,males,by_year
+,GR.countind11M,Total Male Population (50-54),1996,2011,males,by_year
+,GR.countind12M,Total Male Population (55-59),1996,2011,males,by_year
+,GR.countind13M,Total Male Population (60-64),1996,2011,males,by_year
+,GR.countind14M,Total Male Population (65-69),1996,2011,males,by_year
+,GR.countind15M,Total Male Population (70-74),1996,2011,males,by_year
+,GR.countind16M,Total Male Population (75-79),1996,2011,males,by_year
+,GR.countind17M,Total Male Population (80-84),1996,2011,males,by_year
+,GR.countind18M,Total Male Population (85-89),1996,2011,males,by_year
+,GR.countind19M,Total Male Population (90+),1996,2011,males,by_year
+,GR.countind1M,Total Male Population (0-4),1996,2011,males,by_year
+,GR.countind2M,Total Male Population (5-9),1996,2011,males,by_year
+,GR.countind3M,Total Male Population (10-14),1996,2011,males,by_year
+,GR.countind4M,Total Male Population (15-19),1996,2011,males,by_year
+,GR.countind5M,Total Male Population (20-24),1996,2011,males,by_year
+,GR.countind6M,Total Male Population (25-29),1996,2011,males,by_year
+,GR.countind7M,Total Male Population (30-34),1996,2011,males,by_year
+,GR.countind8M,Total Male Population (35-39),1996,2011,males,by_year
+,GR.countind9M,Total Male Population (40-44),1996,2011,males,by_year
+,GR.denominatorindM,Total Male Population (all ages),1996,2011,males,by_year
+,GR.percchildm,Percentage Male Children,1996,2011,males,by_year
+,GR.Percpensm,Percentage Male Pensioners,1996,2011,males,by_year
+,GR.Percworkm,Percentage Male Working Age,1996,2011,males,by_year
+,GR.sapemal,Male Population,1996,2011,males,by_year
+,GR.sapemal04,Male Population Aged 0-4,1996,2011,males,by_year
+,GR.sapemal1015,Male Population Aged 10-15,1996,2011,males,by_year
+,GR.sapemal1619,Male Population Aged 16-19,1996,2011,males,by_year
+,GR.sapemal2024,Male Population Aged 20-24,1996,2011,males,by_year
+,GR.sapemal2529,Male Population Aged 25-29,1996,2011,males,by_year
+,GR.sapemal3034,Male Population Aged 30-34,1996,2011,males,by_year
+,GR.sapemal3539,Male Population Aged 35-39,1996,2011,males,by_year
+,GR.sapemal4044,Male Population Aged 40-44,1996,2011,males,by_year
+,GR.sapemal4549,Male Population Aged 45-49,1996,2011,males,by_year
+,GR.sapemal5054,Male Population Aged 50-54,1996,2011,males,by_year
+,GR.sapemal5559,Male Population Aged 55-59,1996,2011,males,by_year
+,GR.sapemal59,Male Population Aged 5-9,1996,2011,males,by_year
+,GR.sapemal6064,Male Population Aged 60-64,1996,2011,males,by_year
+,GR.sapemal6569,Male Population Aged 65-69,1996,2011,males,by_year
+,GR.sapemal7074,Male Population Aged 70-74,1996,2011,males,by_year
+,GR.sapemal7579,Male Population Aged 75-79,1996,2011,males,by_year
+,GR.sapemal8084,Male Population Aged 80-84,1996,2011,males,by_year
+,GR.sapemal8589,Male Population Aged 85-89,1996,2011,males,by_year
+,GR.sapemal90over,Male Population Aged 90 and over,1996,2011,males,by_year
+,GR.sapemalchild,Male Population - Children,1996,2011,males,by_year
+,GR.sapemalchildperc,Male Population - Children (%),1996,2011,males,by_year
+,GR.sapemalpens,Male Population - Pensionable Age,1996,2011,males,by_year
+,GR.sapemalpensperc,Male Population - Pensionable Age (%),1996,2011,males,by_year
+,GR.sapemalwork,Male Population - Working Age,1996,2011,males,by_year
+,GR.sapemalworkperc,Male Population - Working Age (%),1996,2011,males,by_year
+,HS.age5,Number in 5 year cohort,2008,2012,measles_mumps_and_rubella_mmr1_uptake_by_5_years,by_year
+,HS.mmr5,Number vaccinated against MMR by 5 years,2008,2012,measles_mumps_and_rubella_mmr1_uptake_by_5_years,by_year
+,HS.pmmr5,Percentage vaccinated against MMR by 5 years,2008,2012,measles_mumps_and_rubella_mmr1_uptake_by_5_years,by_year
+,CA.CHLD,Care Homes for Adults with Learning Disabilities,2000,2006,number_of_care_homes,by_year
+,CA.CHMHP,Care Homes for Adults with Mental Health Problems,2000,2006,number_of_care_homes,by_year
+,CA.CHOld,Care Homes for Older People,2000,2006,number_of_care_homes,by_year
+,CA.CHOTH,Care Homes for Other Client Groups,2000,2006,number_of_care_homes,by_year
+,CA.CHPD,Care Homes for Adults with Physical Disabilities,2000,2006,number_of_care_homes,by_year
+,CA.CHEnsLD,Occupancy rate in Care Homes for adults with Learning Disabilities,2003,2005,occupancy_rate_in_care_homes,by_year
+,CA.CHEnsMHP,Occupancy rate in Care Homes for adults with mental health problems,2003,2005,occupancy_rate_in_care_homes,by_year
+,CA.CHEnsOLD,Occupancy rate in Care Homes for Older People,2003,2005,occupancy_rate_in_care_homes,by_year
+,CA.CHEnsOth,Occupancy rate in Care Homes for Other Client Groups,2003,2005,occupancy_rate_in_care_homes,by_year
+,CA.CHEnsPD,Occupancy rate in Care Homes for adults with physical disabilities,2003,2005,occupancy_rate_in_care_homes,by_year
+,GR.hischildperc,SAPE Population - Children Percentage,1996,2011,persons,by_year
+,GR.hispensperc,SAPE Population - Pensionable Age Percentage,1996,2011,persons,by_year
+,GR.hisworkperc,SAPE Population - Working Age Percentage,1996,2011,persons,by_year
+,GR.hschild,SAPE Population - Children,1996,2011,persons,by_year
+,GR.hspens,SAPE Population - Pensionable Age,1996,2011,persons,by_year
+,GR.hspeop,SAPE All Persons,1996,2011,persons,by_year
+,GR.hspeop0,SAPE Persons &lt; 1,1996,2011,persons,by_year
+,GR.hspeop1_4,SAPE Persons 1-4,1996,2011,persons,by_year
+,GR.hspeop10_12,SAPE Persons 10-12,1996,2011,persons,by_year
+,GR.hspeop13_14,SAPE Persons 13-14,1996,2011,persons,by_year
+,GR.hspeop15,SAPE Persons 15,1996,2011,persons,by_year
+,GR.hspeop1619,SAPE Persons 16-19,1996,2011,persons,by_year
+,GR.hspeop2024,SAPE Persons 20-24,1996,2011,persons,by_year
+,GR.hspeop2529,SAPE Persons 25-29,1996,2011,persons,by_year
+,GR.hspeop3034,SAPE Persons 30-34,1996,2011,persons,by_year
+,GR.hspeop3539,SAPE Persons 35-39,1996,2011,persons,by_year
+,GR.hspeop4044,SAPE Persons 40-44,1996,2011,persons,by_year
+,GR.hspeop4549,SAPE Persons 45-49,1996,2011,persons,by_year
+,GR.hspeop5_9,SAPE Persons 5-9,1996,2011,persons,by_year
+,GR.hspeop5054,SAPE Persons 50-54,1996,2011,persons,by_year
+,GR.hspeop5559,SAPE Persons 55-59,1996,2011,persons,by_year
+,GR.hspeop6064,SAPE Persons 60-64,1996,2011,persons,by_year
+,GR.hspeop6569,SAPE Persons 65-69,1996,2011,persons,by_year
+,GR.hspeop7074,SAPE Persons 70-74,1996,2011,persons,by_year
+,GR.hspeop7579,SAPE Persons 75-79,1996,2011,persons,by_year
+,GR.hspeop8084,SAPE Persons 80-84,1996,2011,persons,by_year
+,GR.hspeop85over,SAPE Persons 85 &amp; over,1996,2011,persons,by_year
+,GR.hswork,SAPE Population - Working Age,1996,2011,persons,by_year
+,GR.countin11P,Total Population (50-54),1996,2011,persons,by_year
+,GR.countin12P,Total Population (55-59),1996,2011,persons,by_year
+,GR.countin13P,Total Population (60-64),1996,2011,persons,by_year
+,GR.countin14P,Total Population (65-69),1996,2011,persons,by_year
+,GR.countin15P,Total Population (70-74),1996,2011,persons,by_year
+,GR.countin16P,Total Population (75-79),1996,2011,persons,by_year
+,GR.countin17P,Total Population (80-84),1996,2011,persons,by_year
+,GR.countin18P,Total Population (85-89),1996,2011,persons,by_year
+,GR.countind10P,Total Population (45-49),1996,2011,persons,by_year
+,GR.countind19P,Total Population (90+),1996,2011,persons,by_year
+,GR.countind1P,Total Population (0-4),1996,2011,persons,by_year
+,GR.countind2P,Total Population (5-9),1996,2011,persons,by_year
+,GR.countind3P,Total Population (10-14),1996,2011,persons,by_year
+,GR.countind4P,Total Population (15-19),1996,2011,persons,by_year
+,GR.countind5P,Total Population (20-24),1996,2011,persons,by_year
+,GR.countind6P,Total Population (25-29),1996,2011,persons,by_year
+,GR.countind7P,Total Population (30-34),1996,2011,persons,by_year
+,GR.countind8P,Total Population (35-39),1996,2011,persons,by_year
+,GR.countind9P,Total Population (40-44),1996,2011,persons,by_year
+,GR.denominatorindP,Total Population (all ages),1996,2011,persons,by_year
+,GR.Percchild,Percentage Children,1996,2011,persons,by_year
+,GR.Percpens,Percentage Pensioners,1996,2011,persons,by_year
+,GR.Percwork,Percentage Working Age,1996,2011,persons,by_year
+,GR.sapechild,Total Population - Children,1996,2011,persons,by_year
+,GR.sapechildperc,Total Population - Children (%),1996,2011,persons,by_year
+,GR.sapepens,Total Population - Pensionable Age,1996,2011,persons,by_year
+,GR.sapepensperc,Total Population - Pensionable Age (%),1996,2011,persons,by_year
+,GR.sapepeop,Total Population,1996,2011,persons,by_year
+,GR.sapepeop04,Total Population Aged 0-4,1996,2011,persons,by_year
+,GR.sapepeop1015,Total Population Aged 10-15,1996,2011,persons,by_year
+,GR.sapepeop1619,Total Population Aged 16-19,1996,2011,persons,by_year
+,GR.sapepeop2024,Total Population Aged 20-24,1996,2011,persons,by_year
+,GR.sapepeop2529,Total Population Aged 25-29,1996,2011,persons,by_year
+,GR.sapepeop3034,Total Population Aged 30-34,1996,2011,persons,by_year
+,GR.sapepeop3539,Total Population Aged 35-39,1996,2011,persons,by_year
+,GR.sapepeop4044,Total Population Aged 40-44,1996,2011,persons,by_year
+,GR.sapepeop4549,Total Population Aged 45-49,1996,2011,persons,by_year
+,GR.sapepeop5054,Total Population Aged 50-54,1996,2011,persons,by_year
+,GR.sapepeop5559,Total Population Aged 55-59,1996,2011,persons,by_year
+,GR.sapepeop59,Total Population Aged 5-9,1996,2011,persons,by_year
+,GR.sapepeop6064,Total Population Aged 60-64,1996,2011,persons,by_year
+,GR.sapepeop6569,Total Population Aged 65-69,1996,2011,persons,by_year
+,GR.sapepeop7074,Total Population Aged 70-74,1996,2011,persons,by_year
+,GR.sapepeop7579,Total Population Aged 75-79,1996,2011,persons,by_year
+,GR.sapepeop8084,Total Population Aged 80-84,1996,2011,persons,by_year
+,GR.sapepeop8589,Total Population Aged 85-89,1996,2011,persons,by_year
+,GR.sapepeop90over,Total Population Aged 90 and over,1996,2011,persons,by_year
+,GR.sapework,Total Population - Working Age,1996,2011,persons,by_year
+,GR.sapeworkperc,Total Population - Working Age (%),1996,2011,persons,by_year
+,CA.CHPlacesLD,Places in Care Homes for Adults with Learning Disabilities,2000,2006,places_in_care_homes,by_year
+,CA.CHPlacesMHP,Places in Care Homes for Adults with Mental Health Problems,2000,2006,places_in_care_homes,by_year
+,CA.CHPlacesOld,Places in Care Homes for Older People,2000,2006,places_in_care_homes,by_year
+,CA.CHPlacesOTH,Places in Care Homes for Other Client Groups,2000,2006,places_in_care_homes,by_year
+,CA.CHPlacesPD,Places in Care Homes for Adults with Physical Disabilities,2000,2006,places_in_care_homes,by_year
+,CA.CHSingleLD,% of places in Care Homes for adults with Learning Disabilities in single rooms,2003,2005,places_in_single_rooms_in_care_homes,by_year
+,CA.CHSingleMHP,% of places in Care Homes for adults with Mental Health Problems in single rooms,2003,2005,places_in_single_rooms_in_care_homes,by_year
+,CA.CHSingleOLD,% places in Care Homes for Older People in single rooms,2003,2005,places_in_single_rooms_in_care_homes,by_year
+,CA.CHSingleOth,% of places in Care Homes for Other Client Groups in single rooms,2003,2005,places_in_single_rooms_in_care_homes,by_year
+,CA.CHSinglePD,% of places in Care Homes for adults with Physical Disabilities in single rooms,2003,2005,places_in_single_rooms_in_care_homes,by_year
+,HS.prescr,"Estimated number of people being prescribed drugs for anxiety, depression or psychosis",2002,2007,prescribed_drugs_for_anxiety_depression_or_psychosis,by_year
+,HS.prescr_rate,"Estimated percentage of population prescribed drugs for anxiety, depression or psychosis",2002,2007,prescribed_drugs_for_anxiety_depression_or_psychosis,by_year
+,CS.CSdSPRIdpctpop2,Population within 500m of a site on the Scottish Pollutant Release Inventory,2005,2005,proximity_to_a_spri_site,by_year
+,CS.CSdSPRIdpctpop4,Population within 1000m of a site on the Scottish Pollutant Release Inventory,2005,2005,proximity_to_a_spri_site,by_year
+,CS.CSdSPRIdpctpop6,Population within 2000m of a site on the Scottish Pollutant Release Inventory,2005,2005,proximity_to_a_spri_site,by_year
+,CS.CSdSPRIdpctpop8,Population over 2000m from a site on the Scottish Pollutant Release Inventory,2005,2005,proximity_to_a_spri_site,by_year
+,CS.DERdpctpop1,Percentage of people within 0-500 metres of a Site Derelict pre 1991,2004,2013,proximity_to_derelict_sites,by_year
+,CS.DERdpctpop2,Percentage of people within 0-500 metres of any Derelict Site,2004,2013,proximity_to_derelict_sites,by_year
+,CS.publicgp,Public Transport time (in minutes) to a GP,2006,2012,public_transport_times,by_year
+,CS.publicpost,Public Transport time (in minutes) to a Post Office,2006,2012,public_transport_times,by_year
+,CS.publicshopping,Public Transport time (in minutes) to Shopping Facilities,2006,2012,public_transport_times,by_year
+,CS.publicatm1,Public Transport time (in minutes) to a Cash Machine,2006,2012,public_transport_times,by_year
+,CS.publicbank1,Public Transport time (in minutes) to Banks and Building Societies,2006,2012,public_transport_times,by_year
+,CS.publiccas1,Public Transport time (in minutes) to Citizens Advice Bureau,2006,2012,public_transport_times,by_year
+,CS.publicchemist1,Public Transport time (in minutes) to Chemists and Pharmacies,2006,2012,public_transport_times,by_year
+,CS.publicfuredu1,Public Transport time (in minutes) to a Further Education Establishment,2006,2012,public_transport_times,by_year
+,CS.publicgenstore1,Public Transport time (in minutes) to a General Store,2006,2012,public_transport_times,by_year
+,CS.publichiedu1,Public Transport time (in minutes) to a Higher Education Establishment,2006,2012,public_transport_times,by_year
+,CS.publicjcp1,Public Transport time (in minutes) to a JobCentre Plus,2006,2012,public_transport_times,by_year
+,CS.publiclibrary1,Public Transport time (in minutes) to a Library,2006,2012,public_transport_times,by_year
+,CS.publicnursery1,Public Transport time (in minutes) to a Nursery,2006,2012,public_transport_times,by_year
+,CS.publicpolice1,Public Transport time (in minutes) to a Police Station,2006,2012,public_transport_times,by_year
+,ED.PPsPNsNFP,Primary schools: No female pupils,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNFS,Secondary schools: No female pupils,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNFS16p,Secondary schools: No female pupils 16 and over,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNMP,Primary schools: No male pupils,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNMS,Secondary schools: No male pupils,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNMS16p,Secondary schools: No male pupils 16 and over,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNTP,Primary schools: Total no pupils,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNTS,Secondary schools: Total no pupils,2003,2013,pupil_numbers,by_year
+,ED.PPsPNsNTS16p,Secondary schools: Total no pupils 16 and over,2003,2013,pupil_numbers,by_year
+,ED.SQAsASNS4Roll2,S4: No of pupils with ASN,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsNS4ASN5pAL3p,S4: No pupils with ASN with 5 awards at SCQF level 3 and above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsNS4ASN5pAL4p,S4: No pupils with ASN with 5 awards at SCQF level 4 and above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsNS4ASN5pAL5p,S4: No pupils with ASN with 5 awards at SCQF level 5 and above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsNS4ASNL3pEM,S4: No of pupils with ASN with English and Maths at SCQF level 3 or above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsPS4ASN5pAL3p,S4: Percentage of pupils with ASN with 5 awards at SCQF level 3 and above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsPS4ASN5pAL4p,S4: Percentage of pupils with ASN with 5 awards at SCQF level 4 and above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsPS4ASN5pAL5p,S4: Percentage of pupils with ASN with 5 awards at SCQF level 5 and above,2008,2008,pupils_with_additional_support_nee,by_year
+,ED.SQAsPS4ASNL3pEM,S4: Percentage of pupils with ASN with English and Maths at SCQF level 3 or above,2008,2008,pupils_with_additional_support_nee,by_year
+,CS.accrk,Geographic Access to Services Deprivation Rank,2004,2012,ranks,by_year
+,CS.educrk,"Education, Skills and Training Deprivation Rank",2004,2012,ranks,by_year
+,CS.emprk,Employment Deprivation Rank,2004,2012,ranks,by_year
+,CS.healrk,Health Deprivation Rank,2004,2012,ranks,by_year
+,CS.housrk,Housing Deprivation Rank,2004,2012,ranks,by_year
+,CS.incrk,Current Income Deprivation Rank,2004,2012,ranks,by_year
+,CS.simdrk,Scottish Index of Multiple Deprivation Rank,2004,2012,ranks,by_year
+,CS.accdtrk,Drive Times Deprivation rank,2004,2012,ranks,by_year
+,CS.accptrk,Public Transport Deprivation Rank,2004,2012,ranks,by_year
+,CS.crimrk,Crime Deprivation Rank,2004,2012,ranks,by_year
+,HS.a69,Respiratory Disease Admissions - both sexes - all ages - number,2002,2012,respiratory_disease_both_sexes,by_year
+,HS.r69,"Respiratory Disease Admissions - both sexes - all ages - rate/100,000",2002,2012,respiratory_disease_both_sexes,by_year
+,HS.a65,Respiratory Disease Admissions - females - all ages - number,2002,2012,respiratory_disease_females,by_year
+,HS.r65,"Respiratory Disease Admissions - females - all ages - rate/100,000",2002,2012,respiratory_disease_females,by_year
+,HS.a61,Respiratory Disease Admissions - males - all ages - number,2002,2012,respiratory_disease_males,by_year
+,HS.r61,"Respiratory Disease Admissions - males - all ages - rate/100,000",2002,2012,respiratory_disease_males,by_year
+,ED.SIMDwanoquals4,SIMD 2004 - Working age people with no qualifications,2001,2002,simd_2004,by_year
+,ED.SIMD16notfte04,SIMD 2004 - Pupils aged 16+ who are not in full time education,2001,2002,simd_2004,by_year
+,ED.SIMDwanoquals6,SIMD 2006 - Working age people with no qualifications,2001,2005,simd_2006,by_year
+,HS.SIMDdrugsanx06,"SIMD 2006 - Proportion of population being prescribed drugs for anxiety, depression or psychosis.",2001,2005,simd_2006,by_year
+,HS.SIMDcif06,SIMD 2006 - Comparative Illness Factor,2001,2005,simd_2006,by_year
+,ED.SIMDwanoquals9,SIMD 2009 - Working age people with no qualifications,2001,2008,simd_2009,by_year
+,HS.SIMDdrugsanx09,"SIMD 2009 - Proportion of population being prescribed drugs for anxiety, depression or psychosis.",2001,2008,simd_2009,by_year
+,HS.SIMDCIF09,SIMD 2009 - Comparative Illness Factor,2001,2008,simd_2009,by_year
+,ED.SIMDwanoquals12,Working age people with no qualifications,2001,2001,simd_2012,by_year
+,CR.SIMDCRIME_totno,Total no. of SIMD crimes,2004,2004,simd_crime_and_offences_recorded_by_the_police,by_year
+,CR.SIMDCRIME_totrat,"No. SIMD crimes per 10,000",2004,2004,simd_crime_and_offences_recorded_by_the_police,by_year
+,HO.SIMDheating,SIMD - Persons without central heating,2001,2001,simd_housing_domain,by_year
+,HO.SIMDovercrowd,SIMD - Persons in overcrowded households,2001,2001,simd_housing_domain,by_year
+,ED.SQAsASNS4Roll,S4: No pupils with ASN,2008,2008,tariff_scores_data_s4,by_year
+,ED.SQAsS4AvgTS_asn,S4: Average tariff score - pupils with ASN,2008,2008,tariff_scores_data_s4,by_year
+,ED.SQAsASNS5Roll,S5: No pupils with ASN,2008,2008,tariff_scores_data_s5,by_year
+,ED.SQAsS5AvgTS_asn,S5: Average tariff score - pupils with ASN,2008,2008,tariff_scores_data_s5,by_year
+,ED.SQAsASNS6Roll,S6: No pupils with ASN,2008,2008,tariff_scores_data_s6,by_year
+,ED.SQAsS6AvgTS_asn,S6: Average tariff score - pupils with ASN,2008,2008,tariff_scores_data_s6,by_year
+,HO.allhouseholds,All households,2001,2001,tenure_households,by_year
+,HO.council,Council Rented,2001,2001,tenure_households,by_year
+,HO.employ,Rented from Employer,2001,2001,tenure_households,by_year
+,HO.other,Other,2001,2001,tenure_households,by_year
+,HO.ownmortloan,Owned Mortgage/Loan,2001,2001,tenure_households,by_year
+,HO.ownoutright,Owned Outright,2001,2001,tenure_households,by_year
+,HO.percown,% of Households - Owned,2001,2001,tenure_households,by_year
+,HO.percpriv,% of Households - Private,2001,2001,tenure_households,by_year
+,HO.percsocial,% of Households - Social Rented,2001,2001,tenure_households,by_year
+,HO.privlet,Private Let,2001,2001,tenure_households,by_year
+,HO.relative,Rented from Relative,2001,2001,tenure_households,by_year
+,HO.sharedown,Shared Ownership,2001,2001,tenure_households,by_year
+,HO.social,Other Social,2001,2001,tenure_households,by_year
+,HO.allpeople,All people,2001,2001,tenure_people,by_year
+,HO.councilpeop,Council Rented,2001,2001,tenure_people,by_year
+,HO.employpeop,Rented from Employer,2001,2001,tenure_people,by_year
+,HO.otherpeop,Other,2001,2001,tenure_people,by_year
+,HO.ownmortpeop,Owned Mortgage/Loan,2001,2001,tenure_people,by_year
+,HO.ownoutpeop,Owned Outright,2001,2001,tenure_people,by_year
+,HO.percownpeop,% of People - Owned,2001,2001,tenure_people,by_year
+,HO.percprivpeop,% of People - Private,2001,2001,tenure_people,by_year
+,HO.percsocialpeop,% of People - Social Rented,2001,2001,tenure_people,by_year
+,HO.privletpeop,Private Let,2001,2001,tenure_people,by_year
+,HO.relativepeop,Rented from Relative,2001,2001,tenure_people,by_year
+,HO.sharedownpeop,Shared Ownership,2001,2001,tenure_people,by_year
+,HO.socialpeop,Other Social,2001,2001,tenure_people,by_year
+,CS.urclass6d04,Urban Rural Classification 2003-2004,2004,2006,urban_rural_classification,by_year
+,CS.urclass6d06,Urban Rural Classification 2005-2006,2004,2006,urban_rural_classification,by_year
+,CS.accvig,Geographic Access to Services Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.educvig,"Education, Skills and Training Deprivation Vigintile (twentieth's)",2004,2012,vigintiles,by_year
+,CS.empvig,Employment Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.healvig,Health Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.housvig,Housing Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.incvig,Current Income Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.simdvig,Scottish Index of Multiple Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.accdtvig,Drive Times Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.accptvig,Public Transport Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.crimvig,Crime Deprivation Vigintile (twentieth's),2004,2012,vigintiles,by_year
+,CS.Childcare_LP,All Lone Parents in work benefiting from Childcare Element,2005,2009,working_and_child_tax_credits,by_year
+,CS.CTC_Childcare,All families in work benefiting from Childcare Element.,2005,2009,working_and_child_tax_credits,by_year
+,CS.CTC_FEbelowc,All children in families in work receiving CTC only family element or below,2005,2009,working_and_child_tax_credits,by_year
+,CS.CTC_FEonlyc,All children in families in work receiving CTC only above family element,2005,2009,working_and_child_tax_credits,by_year
+,CS.CTC_inwrkFEbelow,"All families in work receiving CTC only, family element or below",2005,2009,working_and_child_tax_credits,by_year
+,CS.CTC_inwrkFEonly,"All families in work receiving CTC only, above family element.",2005,2009,working_and_child_tax_credits,by_year
+,CS.nwrk_benefits,All families out of work receiving out of work benefits,2005,2009,working_and_child_tax_credits,by_year
+,CS.nwrk_benefitsc,All children in out of work families receiving out of work benefits,2005,2009,working_and_child_tax_credits,by_year
+,CS.nwrk_benefitsLP,All Lone Parents out of work receiving out of work benefits,2005,2009,working_and_child_tax_credits,by_year
+,CS.nwrk_CPbenefits,All couples with children out of work receiving out of work benefits,2005,2009,working_and_child_tax_credits,by_year
+,CS.nwrk_CPbenefitsc,All children of out of work couples receiving out of work benefits,2005,2009,working_and_child_tax_credits,by_year
+,CS.nwrk_LPbenefitsc,All children of out of work Lone Parents receiving out of work benefits,2005,2009,working_and_child_tax_credits,by_year
+,CS.TC_all,Total number of families receiving TC,2005,2009,working_and_child_tax_credits,by_year
+,CS.TC_inwrkall,All children in families in work receiving TC,2005,2009,working_and_child_tax_credits,by_year
+,CS.TC_LPinwrk,All children of lone parents in work receiving TC.,2005,2009,working_and_child_tax_credits,by_year
+,CS.TC_total,All children in families receiving TC,2005,2009,working_and_child_tax_credits,by_year
+,CS.W_CTC_inwrk,All families in work receiving WTC or CTC,2005,2009,working_and_child_tax_credits,by_year
+,CS.W_CTC_Lpinwrk,All Lone Parents in work receiving WTC or CTC,2005,2009,working_and_child_tax_credits,by_year
+,CS.WCTC_inwrk,All families in work receiving WTC and CTC,2005,2009,working_and_child_tax_credits,by_year
+,CS.WCTC_inwrkc,All children in families in work receiving WTC and CTC,2005,2009,working_and_child_tax_credits,by_year
+,CS.WTC_only,All families in work receiving WTC only,2005,2009,working_and_child_tax_credits,by_year
+,ES.cc_female,"Claimant Count (Female, NSA)",2010,2014,local_area_claimant_count_not_s,by_year_month
+,ES.cc_male,"Claimant Count (Male, NSA)",2010,2014,local_area_claimant_count_not_s,by_year_month
+,ES.cc_total,"Claimant Count (Total, NSA)",2010,2014,local_area_claimant_count_not_s,by_year_month
+,ES.ccrate_female,"Claimant Count Rate (Female, NSA)",2010,2014,local_area_claimant_count_not_s,by_year_month
+,ES.ccrate_male,"Claimant Count Rate (Male, NSA)",2010,2014,local_area_claimant_count_not_s,by_year_month
+,ES.ccrate_total,"Claimant Count Rate (Total, NSA)",2010,2014,local_area_claimant_count_not_s,by_year_month
+,month,NA,2010,2014,local_area_claimant_count_not_s,by_year_month
+,CS.AA_1to2yrs,No. of people claiming AA for 1-2yrs,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_2to5yrs,No. of people claiming AA for 2-5yrs,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_5yrsandover,No. of people claiming AA for 5yrs plus,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_65to69,Number of AA claimants aged 65-69,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_70to74,Number of AA claimants aged 70-74,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_75to79,Number of AA claimants aged 75-79,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_80to84,Number of AA claimants aged 80-84,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_85to89,Number of AA claimants aged 85-89,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_90andover,Number of AA claimants aged 90plus,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_female,No. of Female AA claimants,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_highrate,Number of High Rate Attendance Allowance claimants,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_lowrate,Number of Low Rate AA claimants,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_LT1yr,No. of people claiming AA for up to 1yr,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_male,No. of Male AA claimants,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_nilrate,Number of Nil Rate AA claimants,2008,2012,attendance_allowance,by_year_quarter
+,CS.AA_total,Total number of AA claimants,2008,2012,attendance_allowance,by_year_quarter
+,HS.DLA_16to24,No.of DLA claimants aged 16 to 24,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_1yrto2yr,"No. of claimants, claiming DLA for 1 year or more and LT 2 years.",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_25to49,No. of DLA claimants aged 25 to 49,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_2yrto5yr,"No. of claimants, claiming DLA for 2 years but LT 5 years.",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_50to59,No. of DLA claimants aged 50 to 59,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_60to69,No. of DLA claimants aged 60 to 69,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_70andover,No. of DLA claimants aged 70 and over,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_carehigher,"No. of DLA claimants, High Rate of Care Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_carelower,"No. of DLA claimants, Low Rate of Care Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_caremiddle,"No. of DLA claimants, Middle Rate of Care Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_carenil,"No. of DLA claimants, Nil Rate of Care Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_Female,No. of Female DLA claimants,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_LT1yr,"No. of DLA claimants, claiming Disability Living Allowance for LT 1 year.",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_male,No.of Male DLA claimants,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_mobhigher,"No. of DLA claimants, High Rate of Mobility Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_moblower,"No. of DLA claimants, Low Rate of Mobility Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_mobnil,"No. of DLA claimants, Nil Rate of Mobility Component",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_over5yr,"No. of claimants, claiming DLA for 5 years plus",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_rate,"DLA claimants per 100,000",2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_total,Total no. of DLA claimants,2002,2012,disability_living_allowance,by_year_quarter
+,HS.DLA_under16,No. of DLA claimants under 16,2002,2012,disability_living_allowance,by_year_quarter
+,CS.ESA_16to24,Total no. of ESA claimants aged 16-24,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_1yrto2yr,Total no. people claiming ESA for 1-2 years,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_25to49,Total no. of ESA claimants aged 25-49,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_2yrto5yr,Total no. people claiming ESA for 2-5 years,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_50to59,Total no. of ESA claimants aged 50-59,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_60andover,Total no. of ESA claimants aged 60 or over,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_6mthsto1yr,Total no. people claiming ESA for 6-12 months,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_female,Total no. of female ESA claimants,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_LT6mths,Total no. people claiming ESA for less than 6 months,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_male,Total no. of male ESA claimants,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_over5yr,Total no. people claiming ESA for over 5 years,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_total,Total no. of ESA claimants,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_injury,Total no. of ESA claimants whose medical reason for entitlement to ESA is Injury or Poisoning,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_mental,Total no. of ESA claimants whose medical reason for entitlement to ESA is Mental or Behavioural,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_muscoskel,Total no. of ESA claimants whose medical reason for entitlement to ESA is Disease of Musculoskeletal System,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_nervous,Total no. of ESA claimants whose medical reason for entitlement to ESA is Disease of Nervous System,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_other,Total no. of ESA claimants whose medical reason for entitlement to ESA is Other,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_pertotal,% of population aged 16-64 claiming ESA,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.ESA_respire,Total no. of ESA claimants whose medical reason for entitlement to ESA is Disease of Respiratory System,2008,2012,employment_and_support_allowance,by_year_quarter
+,CS.IB_total,Total IB Allowance claimants.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_16to24,Total no. of IBSDA claimants aged 16-24.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_1yrto2yr,"Total no. of claimants, claiming IBSDA for 1 year or more and less than 2 years.",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_25to49,Total no. of IBSDA claimants aged 25-49.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_50to59,Total no.of IBSDA claimants aged 50-59.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_60andover,Total no. of IBSDA claimants aged 60 and over.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_6mthsto1yr,"Total no. of claimants, claiming IBSDA between 6 months and less than 12 months.",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_female,Total no. of IBSDA claimants who are female.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_injury,"Total o. of IBSDA claimants,  medical reason for entitlement to IBSDA, Injury or Poisoning",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_LT6mths,"Total no. of claimants, claiming IBSDA for under 6 months.",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_male,Total no. of IBSDA claimants who are male.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_mental,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Mental and Behavioural",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_muscoskel,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Diseases of Musculoskeletal System",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_nervous,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Diseases of Nervous System",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_other,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Other",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_respire,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Diseases of the Respiratory system",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_total,Total IBSDA claimants.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.SDA_total,Total SDA claimants.,1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_2yrto5yr,"Total no.of claimants, claiming IBSDA for 2 years but less than 5 years.",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IBSDA_over5yr,"Total no of claimants, claiming IBSDA for 5 years or more.",1999,2009,incapacity_benefit_an,by_year_quarter
+,CS.IB_total,Total IB Allowance claimants.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_16to24,Total no. of IBSDA claimants aged 16-24.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_1yrto2yr,"Total no. of claimants, claiming IBSDA for 1 year or more and less than 2 years.",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_25to49,Total no. of IBSDA claimants aged 25-49.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_50to59,Total no.of IBSDA claimants aged 50-59.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_60andover,Total no. of IBSDA claimants aged 60 and over.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_6mthsto1yr,"Total no. of claimants, claiming IBSDA between 6 months and less than 12 months.",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_female,Total no. of IBSDA claimants who are female.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_injury,"Total o. of IBSDA claimants,  medical reason for entitlement to IBSDA, Injury or Poisoning",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_LT6mths,"Total no. of claimants, claiming IBSDA for under 6 months.",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_male,Total no. of IBSDA claimants who are male.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_mental,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Mental and Behavioural",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_muscoskel,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Diseases of Musculoskeletal System",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_nervous,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Diseases of Nervous System",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_other,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Other",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_respire,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, Diseases of the Respiratory system",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_total,Total IBSDA claimants.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_unknown,"Total no. of IBSDA claimants,  medical reason for entitlement to IBSDA, unknown",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.SDA_total,Total SDA claimants.,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_2yrto5yr,"Total no.of claimants, claiming IBSDA for 2 years but less than 5 years.",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_over5yr,"Total no of claimants, claiming IBSDA for 5 years or more.",1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IB_pertotal,% of WA population plus claiming IB,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IBSDA_pertotal,% of population aged 16 plus claiming IB or SDA,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.SDA_pertot,% of 16+ population claiming SDA,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IB_pertot,% of 16-64 population claiming IB,1999,2012,incapacity_benefit_and_severe_d,by_year_quarter
+,CS.IS_16to24,Total number of Income Support claimants aged 16-24.,1999,2012,income_support,by_year_quarter
+,CS.IS_1yrto2yr,"Total number of claimants, claiming Income Support for 1 year or more and less than 2 years.",1999,2012,income_support,by_year_quarter
+,CS.IS_25to49,Total number of Income Support claimants aged 25-49.,1999,2012,income_support,by_year_quarter
+,CS.IS_2yrto5yr,"Total number of claimants, claiming Income Support for 2 years but less than 5 years.",1999,2012,income_support,by_year_quarter
+,CS.IS_50to59,Total number of Income Support claimants aged 50 to 59,1999,2012,income_support,by_year_quarter
+,CS.IS_60andover,Total number of Income Support claimants aged 60 and over.,1999,2012,income_support,by_year_quarter
+,CS.IS_6mthsto1yr,"Total number of claimants, claiming Income Support for between 6 and 12 months.",1999,2012,income_support,by_year_quarter
+,CS.IS_carerother,"Total number of Income Support claimants, in statistical group  Carers or Others on Income Related Benefits",1999,2012,income_support,by_year_quarter
+,CS.IS_female,Total number of Income Support claimants who are female.,1999,2012,income_support,by_year_quarter
+,CS.IS_IB,"Total number of Income Support claimants,  in statistical group  Incapacity Benefits.",1999,2012,income_support,by_year_quarter
+,CS.IS_LP,"Total number of Income Support claimants, in statistical group  Lone Parents",1999,2012,income_support,by_year_quarter
+,CS.IS_LT6mths,"Total number of claimants, claiming Income Support for under 6 months.",1999,2012,income_support,by_year_quarter
+,CS.IS_male,Total number of Income Support claimants who are male.,1999,2012,income_support,by_year_quarter
+,CS.IS_over5yr,"Total number of claimants, claiming Income Support for 5 years or more.",1999,2012,income_support,by_year_quarter
+,CS.IS_partner,"Total number of Income Support claimants, with a partner recorded.",1999,2012,income_support,by_year_quarter
+,CS.IS_single,"Total number of Income Support claimants, with no partner recorded or unknown.",1999,2012,income_support,by_year_quarter
+,CS.IS_total,Total Income Support claimants.,1999,2012,income_support,by_year_quarter
+,CS.IS_per16to59,Percentage of population aged 16-59 claiming income support,1999,2012,income_support,by_year_quarter
+,CS.IS_per16to64,% of population aged 16-64 claiming IS,1999,2012,income_support,by_year_quarter
+,CS.JSA_16to24,Total no. of JSA claimants aged 16-24.,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_25to49,Total no. of JSA claimants aged 25-49.,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_50plus,Total no. of JSA claimants aged 50 and over.,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_female,Total no. of JSA claimants who are female.,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_male,Total no. of JSA claimants who are male.,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_total,Total JSA claimants.,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_per16to24,% of population aged 16-24 claiming  JSA,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_per25to49,% of population aged 25-49 claiming JSA,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_per50plus,% of population aged 50 to pensionable age claiming JSA,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_pertotal,% of WA population claiming JSA,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_per50to64,% of population aged 50 to 64 claiming JSA,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.JSA_pertot,% of 16-64 population claiming JSA,1999,2012,job_seekers_allowance,by_year_quarter
+,CS.GPC_pertotal,% of population aged 60 and over claiming GC,2003,2012,pension_credits,by_year_quarter
+,CS.PC_1yrto2yr,"Total no. of claimants, claiming PC for 1 year or more and less than 2 years.",2003,2012,pension_credits,by_year_quarter
+,CS.PC_2yrto5yr,"Total no. of claimants, claiming PC for 2 years but less than 5 years.",2003,2012,pension_credits,by_year_quarter
+,CS.PC_60to69,Total no. of PC claimants aged 60-69.,2003,2012,pension_credits,by_year_quarter
+,CS.PC_70to79,Total no. of PC claimants aged 70-79.,2003,2012,pension_credits,by_year_quarter
+,CS.PC_80andover,Total no. of PC claimants aged 80 and over.,2003,2012,pension_credits,by_year_quarter
+,CS.PC_female,Total  no. of PC claimants who are female.,2003,2012,pension_credits,by_year_quarter
+,CS.PC_gands,"Total no. of PC claimants, in client group  both Guarantee and Savings Element",2003,2012,pension_credits,by_year_quarter
+,CS.PC_guarantee,"Total no. of PC claimants,  in client group  Guarantee Element only",2003,2012,pension_credits,by_year_quarter
+,CS.PC_LT1yr,"Total no. of claimants, claiming PC for under 1 year.",2003,2012,pension_credits,by_year_quarter
+,CS.PC_male,Total no. of PC claimants who are male.,2003,2012,pension_credits,by_year_quarter
+,CS.PC_over5yr,"Total no. of claimants, claiming PC for 5 years or more.",2003,2012,pension_credits,by_year_quarter
+,CS.PC_partner,"Total no. of PC claimants, with a partner recorded.",2003,2012,pension_credits,by_year_quarter
+,CS.PC_saving,"Total no. of PC claimants, in client group  Savings Element only",2003,2012,pension_credits,by_year_quarter
+,CS.PC_single,"Total number of Pension Credit claimants, with no partner recorded or unknown.",2003,2012,pension_credits,by_year_quarter
+,CS.PC_total,Total PC claimants.,2003,2012,pension_credits,by_year_quarter
+,CS.SP_F60to64,"State Pension claimants, Females, Aged 60-64",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_F65to69,"State Pension claimants, Females, Aged 65-69",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_F70to74,"State Pension claimants, Females, Aged 70-74",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_F75to79,"State Pension claimants, Females, Aged 75-79",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_F80andover,"State Pension claimants, Females, Aged 80 and over",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_M65to69,"State Pension claimants, Males, Aged 65-69",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_M70to74,"State Pension claimants, Males, Aged 70-74",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_M75to79,"State Pension claimants, Males, Aged 75-79",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_M80andover,"State Pension claimants, Males, Aged 80 and over",2002,2012,retirement_pension,by_year_quarter
+,CS.SP_total,Total State Pension claimants.,2002,2012,retirement_pension,by_year_quarter
+,CS.WA16TO24,Total no. of working age claimants aged 16-24,1999,2009,working_age_claimants,by_year_quarter
+,CS.WA25TO49,Total no. of working age claimants aged 25-49,1999,2009,working_age_claimants,by_year_quarter
+,CS.WA50ANDOVER,Total no. of working age claimants aged 50 and over,1999,2009,working_age_claimants,by_year_quarter
+,CS.WABEREAVE,Total no. of bereaved claimants of working age and not in a higher statistical group,1999,2009,working_age_claimants,by_year_quarter
+,CS.WACARERS,Total no. of claimants of carers allowance of working age and not in a higher statistical group,1999,2009,working_age_claimants,by_year_quarter
+,CS.WADIS,Total no. of disabled claimants of working age and not in a higher statistical group,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAFEMALE,Total no. of working age claimants who are female,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAIB,Total no. of people of working age claiming incapacity benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAJSA,Total no. of people of working age claiming Job Seekers Allowance,1999,2009,working_age_claimants,by_year_quarter
+,CS.WALONEP,Lone parents of working age claiming income support and not in a higher statistical group,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAMALE,Total no. of working age claimants who are male,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAOTHINC,Total no. of other income related benefit claimants of working age and not in a higher statistical group,1999,2009,working_age_claimants,by_year_quarter
+,CS.WATOTAL,Total no. of working age claimants,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAUNKNOWN,Total no. of claimants of working age with an unknown statistical group,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAper16to24,% population 16 to 24 claiming Key Benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAper25to49,% population  25 to 49 claiming Key Benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAper50andover,% working age poulation 50 and over claiming Key Benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WAperfemale,% working age females claiming Key Benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WApermale,% working age (aged 16-64) males claiming Key Benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WApertotal,% working age population claiming key benefits,1999,2009,working_age_claimants,by_year_quarter
+,CS.WA16TO24,Total no. of working age claimants aged 16-24,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WA25TO49,Total no. of working age claimants aged 25-49,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WA50ANDOVER,Total no. of working age claimants aged 50 and over,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WABEREAVE,Total no. of bereaved claimants of working age and not in a higher statistical group,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WACARERS,Total no. of claimants of carers allowance of working age and not in a higher statistical group,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WADIS,Total no. of disabled claimants of working age and not in a higher statistical group,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAFEMALE,Total no. of working age claimants who are female,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAIB,Total no. of people of working age claiming incapacity benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAJSA,Total no. of people of working age claiming Job Seekers Allowance,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WALONEP,Lone parents of working age claiming income support and not in a higher statistical group,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAMALE,Total no. of working age claimants who are male,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAOTHINC,Total no. of other income related benefit claimants of working age and not in a higher statistical group,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WATOTAL,Total no. of working age claimants,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAUNKNOWN,Total no. of claimants of working age with an unknown statistical group,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAper16to24,% population 16 to 24 claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAper25to49,% population  25 to 49 claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAper50andover,% working age poulation 50 and over claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WAperfemale,% working age females claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WApermale,% working age (aged 16-64) males claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WApertotal,% working age population claiming key benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.KB_per50to64,% population 50-64 claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.KB_perfemale,% females aged 16-64 claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.KB_pertotal,% population aged 16-64 claiming Key Benefits,1999,2012,working_age_claimants_of_benefi,by_year_quarter
+,CS.WORKCG_1to2yr,Workless Client Group: Duration 1 - 2 years,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_2to5yr,Workless Client Group: Duration 2 - 5 years,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_3to6mt,Workless Client Group: Duration 3 -  6 months,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_6to1yr,Workless Client Group: Duration 6 months - 1 year,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_FTot,Workless Client Group: Women Total Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_LT3mt,Workless Client Group: Duration LT 3 months,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_MTot,Workless Client Group: Men Total Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_over5yr,Workless Client Group: Duration over 5 years,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG_Tot,Workless Client Group: Total Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG16_19,Workless Client Group: Aged 16 - 19 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG20_24,Workless Client Group: Aged 20 - 24 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG25_49,Workless Client Group: Aged 25 - 49 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCG50topa,Workless Client Group: Aged 50 to PA Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGF16_19,Workless Client Group: Women aged 16 to 19 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGF20_24,Workless Client Group: Women aged 20 to 24 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGF25_49,Workless Client Group: Women aged 25 to 49 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGF50_59,Workless Client Group: Women aged 50 to 59 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGM16_19,Workless Client Group: Men aged 16 to 19 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGM20_24,Workless Client Group: Men aged 20 to 24 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGM25_49,Workless Client Group: Men aged 25 to 49 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGM50_64,Workless Client Group: Men aged 50 to 64 Count,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGP_Total,Workless Client Group: % of Working Age Population,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGP_16_19,Workless Client Group: % of population aged 16 - 19,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGP_25_49,Workless Client Group: % of population aged 25 - 49,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGP_50topa,Workless Client Group: % of population aged 50 to PA,1999,2007,workless_client_group,by_year_quarter
+,CS.WORKCGP_r20_24,Workless Client Group: % of population aged 20 - 24,1999,2007,workless_client_group,by_year_quarter
+,HS.bf_6to8wk,Number breastfed at the 6 to 8 week review,2001.5,2013.5,6-8_week_review,by_year_start_end
+,HS.excbf_6to8wk,Number exclusively breastfed at the 6 to 8 week review,2001.5,2013.5,6-8_week_review,by_year_start_end
+,HS.pbf_6to8wk,Percentage breastfed at the 6 to 8 week review,2001.5,2013.5,6-8_week_review,by_year_start_end
+,HS.pexcbf_6to8wk,Percentage exclusively breastfed at the 6 to 8 week review,2001.5,2013.5,6-8_week_review,by_year_start_end
+,HS.tot_6to8wk,NA,2001.5,2013.5,6-8_week_review,by_year_start_end
+,HS.fbirth19,First time mothers aged 19 and under,2001,2010,age_at_first_birth_-_under_20_and_over_35,by_year_start_end
+,HS.fbirth35,First time mothers aged 35 and over,2001,2010,age_at_first_birth_-_under_20_and_over_35,by_year_start_end
+,HS.fbirthallages,First time mothers all ages,2001,2010,age_at_first_birth_-_under_20_and_over_35,by_year_start_end
+,HS.fbirthrate19,Percentage first time mothers aged 19 and under,2001,2010,age_at_first_birth_-_under_20_and_over_35,by_year_start_end
+,HS.fbirthrate35,Percentage first time mothers aged 35 and over,2001,2010,age_at_first_birth_-_under_20_and_over_35,by_year_start_end
+,CS.AQdNO2dpopwtd1,NO2 concentration 2002-2004,2003,2003,ambient_air_quality,by_year_start_end
+,CS.AQdPM10dpopwtd1,PM10 concentration 2002-2004,2003,2003,ambient_air_quality,by_year_start_end
+,HS.c7ct,Female breast cancer registrations,1999,2007,breast_cancer,by_year_start_end
+,HS.c10ct,Colorectal cancer registrations,1999,2007,colorectal_cancer,by_year_start_end
+,FR.AccDwellFireRate,"Accidental dwelling fires per 100,000 population.",2009.5,2012.5,fire,by_year_start_end
+,FR.all_fires_count,Number of all fires,2009.5,2012.5,fire,by_year_start_end
+,FR.del_fire_rate,"Deliberate fires (excluding chimney fires) per 100,000 population.",2009.5,2012.5,fire,by_year_start_end
+,HS.bf_fv,Number breastfed at the First Visit,2001.5,2013.5,first_visit,by_year_start_end
+,HS.excbf_fv,Number exclusively breastfed at the First Visit,2001.5,2013.5,first_visit,by_year_start_end
+,HS.pbf_fv,Percentage breastfed at the First Visit,2001.5,2013.5,first_visit,by_year_start_end
+,HS.pexcbf_fv,Percentage exclusively breastfed at the First Visit,2001.5,2013.5,first_visit,by_year_start_end
+,HS.tot_fv,NA,2001.5,2013.5,first_visit,by_year_start_end
+,HS.livebirth,Live singleton births,2001,2012,low_birthweight,by_year_start_end
+,HS.lowbirth,Low weight live singleton births (under 2500g),2001,2012,low_birthweight,by_year_start_end
+,HS.percentbirth,Low weight live singleton birth percentage of live singleton births,2001,2012,low_birthweight,by_year_start_end
+,HS.c8ct,Lung cancer registrations,1999,2007,lung_cancer,by_year_start_end
+,HS.c1ct,All cancers combined-females,1999,2007,malignant_neoplasms,by_year_start_end
+,HS.c2ct,All cancers combined-males,1999,2007,malignant_neoplasms,by_year_start_end
+,HS.c3ct,All cancers combined-persons,1999,2007,malignant_neoplasms,by_year_start_end
+,HS.c9ct,Prostate cancer registrations,1999,2007,prostate_cancer,by_year_start_end
+,HS.SIMDAlcEps4,SIMD 2004 - Hospital Episodes Related to Alcohol Use,2000,2001.5,simd_2004,by_year_start_end
+,HS.SIMDCMF4,SIMD 2004 - Comparative Mortality Factor,2000,2001.5,simd_2004,by_year_start_end
+,HS.SIMDDrugEps4,SIMD 2004 - Hospital Episodes Related to Drug Use,2000,2001.5,simd_2004,by_year_start_end
+,HS.SIMDemer4,SIMD 2004 - Emergency Admissions to Hospitals,2000,2001.5,simd_2004,by_year_start_end
+,HS.SIMDlbwt4,SIMD 2004 - Proportion of live singleton births of low birth weight,2000,2001.5,simd_2004,by_year_start_end
+,ED.SIMD17plusnoHE04,SIMD 2004 - Proportion of 17+ population not successfully applying to Higher Education,2000,2001.5,simd_2004,by_year_start_end
+,ED.SIMDsecabs04,SIMD 2004 - Secondary school pupil absences,2000,2001.5,simd_2004,by_year_start_end
+,HS.SIMDAlcEps06,SIMD 2006 - Hospital Episodes Related to Alcohol Use,2002.5,2002.5,simd_2006,by_year_start_end
+,HS.SIMDDrugEps06,SIMD 2006 - Hospital Episodes Related to Drug Use,2002.5,2002.5,simd_2006,by_year_start_end
+,HS.SIMDHEemer06,SIMD 2006 - Emergency Admissions to Hospitals,2002.5,2002.5,simd_2006,by_year_start_end
+,HS.SIMDlbwt06,SIMD 2006 - Proportion of live singleton births of low birth weight,2002.5,2002.5,simd_2006,by_year_start_end
+,HS.SIMDSMR06,SIMD 2006 - Standardised Mortality Ratio,2002.5,2002.5,simd_2006,by_year_start_end
+,HS.SIMDAlcEps09,SIMD 2009 - Hospital Episodes Related to Alcohol Use,2005.5,2005.5,simd_2009,by_year_start_end
+,HS.SIMDDrugEps09,SIMD 2009 - Hospital Episodes Related to Drug Use,2005.5,2005.5,simd_2009,by_year_start_end
+,HS.SIMDHEemer09,SIMD 2009 - Emergency Admissions to Hospitals,2005.5,2005.5,simd_2009,by_year_start_end
+,HS.SIMDlbwt09,SIMD 2009 - Proportion of live singleton births of low birth weight,2005.5,2005.5,simd_2009,by_year_start_end
+,HS.SIMDSMR09,SIMD 2009 - Standardised Mortality Ratio,2005.5,2005.5,simd_2009,by_year_start_end
+,HS.formersmk,Women former smokers at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.neversmk,Women never smoked at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.nksmk,Women not known if smoking at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.rateformersmk,Percentage of women former smokers at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.rateneversmk,Percentage of women never smoked at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.ratenksmk,Percentage of women not known if smoking at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.ratesmk,Percentage of women smoking at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.smk,Women smoking at booking,2001,2012,smoking_at_booking,by_year_start_end
+,HS.totalbooked,NA,2001,2012,smoking_at_booking,by_year_start_end
+,CS.urclass6d08,Urban Rural Classification 2007-2008,2007.5,2011.5,urban_rural_classification,by_year_start_end
+,CS.urclass6d10,Urban Rural Classification 2009-2010,2007.5,2011.5,urban_rural_classification,by_year_start_end
+,CS.urclass6d12,Urban Rural Classification 2011-2012,2007.5,2011.5,urban_rural_classification,by_year_start_end
+,ED.SQAsNS4T5pAL3p,S4: No pupils with 5 awards at SCQF level 3 and above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsNS4T5pAL4p,S4: No pupils with 5 awards at SCQF level 4 and above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsNS4T5pAL5p,S4: No pupils with 5 awards at SCQF level 5 and above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsNS4TL3pEM,S4: No of pupils with English and Maths at SCQF level 3 or above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsPS4T5pAL3p,S4: Percentage of pupils with 5 awards at SCQF level 3 and above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsPS4T5pAL4p,S4: Percentage of pupils with 5 awards at SCQF level 4 and above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsPS4T5pAL5p,S4: Percentage of pupils with 5 awards at SCQF level 5 and above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsPS4TL3pEM,S4: Percentage of pupils with English and Maths at SCQF level 3 or above,2002.5,2012.5,all_pupils,by_year_startend
+,ED.SQAsTotalS4Roll,S4: No pupils,2002.5,2012.5,all_pupils,by_year_startend
+,ED.PPsARsPPA1,Primary percentage attendance rate,2003.5,2010.5,attendance_rates,by_year_startend
+,ED.PPsARsPSA1,Secondary percentage attendance rate,2003.5,2010.5,attendance_rates,by_year_startend
+,ED.SQAsFemS5Roll2,S5: No of female pupils,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SQAsNS5FEM1pAL6p,S5: No female pupils with 1 award at SCQF level 6 and above,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SQAsNS5FEM3pAL6p,S5: No female pupils with 3 awards at SCQF level 6 and above,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SQAsNS5FEM5pAL6p,S5: No female pupils with 5 awards at SCQF level 6 and above,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SQAsPS5FEM1pAL6p,S5: Percentage of female pupils with 1 award at SCQF level 6 and above,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SQAsPS5FEM3pAL6p,S5: Percentage of female pupils with 3 awards at SCQF level 6 and above,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SQAsPS5FEM5pAL6p,S5: Percentage of female pupils with 5 awards at SCQF level 6 and above,2008.5,2012.5,female_pupils,by_year_startend
+,ED.SLDF_OTHER_P,% Other,2007.5,2012.5,follow-up_leaver_destinations,by_year_startend
+,ED.SLDF_POSITIVE_P,% Positive,2007.5,2012.5,follow-up_leaver_destinations,by_year_startend
+,ED.SLDF_TOT,Total Number of School leavers,2007.5,2012.5,follow-up_leaver_destinations,by_year_startend
+,CS.cprmd25cf,Estimated percentage of familes on low income (less than 70% median) and materially deprived,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprmd4de,Estimated percentage of older households who are materially deprived (more than 3 items),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprmd4du,Estimated percentage of households materially deprived (more than 3 items),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprmd4dw,*Estimated percentage of working age households materially deprived (more than 3 items),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprneia8dc,*Estimated median net equivalent household income after housing costs (AHC) ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprneib8dc,*Estimated median net equivalent household income before housing costs (BHC) ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprneib8de,Estimated median net equivalent household income before housing costs (BHC) of older population ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprneib8df,Estimated median net equivalent household income before housing costs (BHC) of families ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprneib8dw,Estimated median net equivalent household income before housing costs (BHC) of working age ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprpova8dc,Estimated percentage of households on low income (less than 60% median) after housing costs (AHC),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprpovb8dc,*Estimated percentage of households with low income (less than 60% median) before housing costs,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprpovb8de,Estimated percentage of older households on low income (less than 60% median) before housing costs (BHC),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprpovb8df,Estimated percentage of families on low income (less than 60% median) before housing costs (BHC),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprpovb8dw,Estimated percentage of working age households on low income (less than 60% median) before housing costs (BHC),2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.cprpovmddu,Estimated percentage of households with low income (less than 70% median) and materially deprived,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prbinc3b,Estimated median 'First Benefit Unit' household income ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prginc3b,*Estimated median gross total household income ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prninc3b,Estimated median net total household income ? per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpbylt33b,Estimated percentage of households with First Benefit Unit (FBU) income of less than ?300 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpbylt43b,Estimated percentage of households with First Benefit Unit (FBU) income of less than ?400 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpbylt53b,Estimated percentage of households with First Benefit Unit (FBU) income of less than ?500 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpbylt63b,Estimated percentage of households with a First Benefit Unit income of less than ?600 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpbylt83b,Estimated percentage of households with a First Benefit Unit (FBU) income of less than ?800 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpgylt33b,Estimated percentage of households with a gross income of less than ?300 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpgylt43b,Estimated percentage of households with a gross income of less than ?400 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpgylt53b,Estimated percentage of households with a gross income of less than ?500 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpgylt63b,Estimated percentage of households with a gross income of less than ?600 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.prpgylt83b,Estimated percentage of households with a gross income of less than ?800 per week,2008.5,2008.5,income_and_poverty_-_modelled_estimates,by_year_startend
+,CS.incdeprived,Percentage of total population who are income deprived,2008.5,2009.5,income_deprivation,by_year_startend
+,ED.SLD_EMP_N,n Employment,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_EMP_P,% Employment,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_FE_N,n Further Education,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_FE_P,% Further Education,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_HE_N,n Higher Education,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_HE_P,% Higher Education,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_OK_N,n Other Known (1997 to 2001),2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_OK_P,% Other Known (1997 to 2001),2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_TOT,Total Number of School leavers,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_TRA_N,n Training,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_TRA_P,% Training,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_UNK_N,n Unknown,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_UNK_P,% Unknown,2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_UNS_N,n Unemployed and not seeking employment or training (2002 onwards),2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_UNS_P,% Unemployed and not seeking employment or training (2002 onwards),2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_US_N,n Unemployed and seeking employment or training (2002 onwards),2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_US_P,% Unemployed and seeking employment or training (2002 onwards),2007.5,2012.5,initial_leaver_destinations,by_year_startend
+,ED.SLD_EMP_N__f,n Employment - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_EMP_P__f,% Employment - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_FE_N__f,n Further Education - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_FE_P__f,% Further Education - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_HE_N__f,n Higher Education - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_HE_P__f,% Higher Education - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_TOT_f,Total Number of School leavers - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_TRA_N__f,n Training - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_TRA_P__f,% Training - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_UNK_N__f,n Unknown - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_UNK_P__f,% Unknown - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_UNS_N__f,n Unemployed and not seeking employment or training - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_UNS_P__f,% Unemployed and not seeking employment or training - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_US_N__f,n Unemployed and seeking employment or training - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_US_P__f,% Unemployed and seeking employment or training - F,2008.5,2008.5,initial_leaver_destinations_-_fema,by_year_startend
+,ED.SLD_EMP_N__f,n Employment - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_EMP_P__f,% Employment - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_FE_N__f,n Further Education - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_FE_P__f,% Further Education - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_HE_N__f,n Higher Education - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_HE_P__f,% Higher Education - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_TOT_f,Total Number of School leavers - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_TRA_N__f,n Training - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_TRA_P__f,% Training - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_UNK_N__f,n Unknown - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_UNK_P__f,% Unknown - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_UNS_N__f,n Unemployed and not seeking employment or training - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_UNS_P__f,% Unemployed and not seeking employment or training - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_US_N__f,n Unemployed and seeking employment or training - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_US_P__f,% Unemployed and seeking employment or training - F,2008.5,2012.5,initial_leaver_destinations_-_female,by_year_startend
+,ED.SLD_EMP_N__asn,n Employment - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_EMP_P__asn,% Employment - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_FE_N__asn,n Further Education - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_FE_P__asn,% Further Education - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_HE_N__asn,n Higher Education - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_HE_P__asn,% Higher Education - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_TOT__asn,Total Number of School leavers - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_TRA_N__asn,n Training - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_TRA_P__asn,% Training - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_UNK_N__asn,n Unknown - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_UNK_P__asn,% Unknown - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_UNS_N__asn,n Unemployed and not seeking employment or training - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_UNS_P__asn,% Unemployed and not seeking employment or training - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_US_N__asn,n Unemployed and seeking employment or training - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_US_P__asn,% Unemployed and seeking employment or training - ASN,2008.5,2008.5,initial_leaver_destinations_-_leav,by_year_startend
+,ED.SLD_EMP_N__asn,n Employment - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_EMP_P__asn,% Employment - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_FE_N__asn,n Further Education - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_FE_P__asn,% Further Education - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_HE_N__asn,n Higher Education - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_HE_P__asn,% Higher Education - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_TOT__asn,Total Number of School leavers - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_TRA_N__asn,n Training - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_TRA_P__asn,% Training - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_UNK_N__asn,n Unknown - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_UNK_P__asn,% Unknown - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_UNS_N__asn,n Unemployed and not seeking employment or training - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_UNS_P__asn,% Unemployed and not seeking employment or training - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_US_N__asn,n Unemployed and seeking employment or training - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_US_P__asn,% Unemployed and seeking employment or training - ASN,2008.5,2012.5,initial_leaver_destinations_-_leavers_with_a,by_year_startend
+,ED.SLD_EMP_N__m,n Employment - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_EMP_P__m,% Employment - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_FE_N__m,n Further Education - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_FE_P__m,% Further Education - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_HE_N__m,n Higher Education - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_HE_P__m,% Higher Education - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_TOT_m,Total Number of School leavers - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_TRA_N__m,n Training - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_TRA_P__m,% Training - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_UNK_N__m,n Unknown - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_UNK_P__m,% Unknown - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_UNS_N__m,n Unemployed and not seeking employment or training - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_UNS_P__m,% Unemployed and not seeking employment or training - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_US_N__m,n Unemployed and seeking employment or training - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SLD_US_P__m,% Unemployed and seeking employment or training - M,2008.5,2012.5,initial_leaver_destinations_-_male,by_year_startend
+,ED.SQAsMaleS4Roll2,S4: No of male pupils,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsNSMALE5pAL3p,S4: No male pupils with 5 awards at SCQF level 3 and above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsNSMALE5pAL4p,S4: No male pupils with 5 awards at SCQF level 4 and above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsNSMALE5pAL5p,S4: No male pupils with 5 awards at SCQF level 5 and above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsNSMALEL3pEM,S4: No of male pupils with English and Maths at SCQF level 3 or above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsPSMALE5pAL3p,S4: Percentage of male pupils with 5 awards at SCQF level 3 and above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsPSMALE5pAL4p,S4: Percentage of male pupils with 5 awards at SCQF level 4 and above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsPSMALE5pAL5p,S4: Percentage of male pupils with 5 awards at SCQF level 5 and above,2008.5,2012.5,male_pupils,by_year_startend
+,ED.SQAsPSMALEL3pEM,S4: Percentage of male pupils with English and Maths at SCQF level 3 or above,2008.5,2012.5,male_pupils,by_year_startend
+,HS.NRAC_101,NRAC HCHS age-sex index,2011.5,2011.5,nhsscotland_resource_allocation_committee_nrac_formula,by_year_startend
+,HS.NRAC_102,NRAC HCHS MLC index,2011.5,2011.5,nhsscotland_resource_allocation_committee_nrac_formula,by_year_startend
+,HS.NRAC_103,NRAC HCHS UXC index,2011.5,2011.5,nhsscotland_resource_allocation_committee_nrac_formula,by_year_startend
+,HS.NRAC_104,NRAC HCHS overall index,2011.5,2011.5,nhsscotland_resource_allocation_committee_nrac_formula,by_year_startend
+,ED.SQAsASNS4Roll2,S4: No of pupils with ASN,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsNS4ASN5pAL3p,S4: No pupils with ASN with 5 awards at SCQF level 3 and above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsNS4ASN5pAL4p,S4: No pupils with ASN with 5 awards at SCQF level 4 and above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsNS4ASN5pAL5p,S4: No pupils with ASN with 5 awards at SCQF level 5 and above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsNS4ASNL3pEM,S4: No of pupils with ASN with English and Maths at SCQF level 3 or above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsPS4ASN5pAL3p,S4: Percentage of pupils with ASN with 5 awards at SCQF level 3 and above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsPS4ASN5pAL4p,S4: Percentage of pupils with ASN with 5 awards at SCQF level 4 and above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsPS4ASN5pAL5p,S4: Percentage of pupils with ASN with 5 awards at SCQF level 5 and above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SQAsPS4ASNL3pEM,S4: Percentage of pupils with ASN with English and Maths at SCQF level 3 or above,2008.5,2012.5,pupils_with_additional_support_needs_asn,by_year_startend
+,ED.SIMDSQA04,SIMD 2004 - Pupil performance on SQA at stage 4,2001.5,2001.5,simd_2004,by_year_startend
+,CR.SIMDCRIME_totno,Total no. of SIMD crimes,2007.5,2010.5,simd_crime_and_offences_recorded_by_the_police,by_year_startend
+,CR.SIMDCRIME_totrat,"No. SIMD crimes per 10,000",2007.5,2010.5,simd_crime_and_offences_recorded_by_the_police,by_year_startend
+,ED.SQAsFemaleS4Roll,S4: No female pupils,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsMaleS4Roll,S4: No male pupils,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsS4AvgTS,S4: Average tariff score - all pupils,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsS4AvgTSF,S4: Average tariff score - female pupils,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsS4AvgTSM,S4: Average tariff score - male pupils,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsASNS4Roll,S4: No pupils with ASN,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsS4AvgTS_asn,S4: Average tariff score - pupils with ASN,2002.5,2012.5,tariff_scores_data_s4,by_year_startend
+,ED.SQAsFemaleS5Roll,S5: No female pupils,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
+,ED.SQAsMaleS5Roll,S5: No male pupils,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
+,ED.SQAsS5AvgTS,S5: Average tariff score - all pupils,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
+,ED.SQAsS5AvgTSF,S5: Average tariff score - female pupils,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
+,ED.SQAsS5AvgTSM,S5: Average tariff score - male pupils,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
+,ED.SQAsASNS5Roll,S5: No pupils with ASN,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
+,ED.SQAsS5AvgTS_asn,S5: Average tariff score - pupils with ASN,2002.5,2012.5,tariff_scores_data_s5,by_year_startend
