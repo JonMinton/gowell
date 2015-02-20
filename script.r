@@ -56,7 +56,7 @@ greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %
 
 tenure_households <- source_DropboxData(
     file="tenure_households.csv",
-    key="kng5wc40le9kapj"
+    key="6t6dss41g8fat1y"
     ) %>% tbl_df() %>% select(
     dz_2001=datazone, year, 
     all_households=HO.allhouseholds,
@@ -277,6 +277,10 @@ tenure_wage %>%
     stat_smooth(method="lm") + stat_smooth(colour="green")
 
     
+tenure_wage %>% 
+    ggplot(aes(x=male, y=mix)) + 
+    geom_point() + 
+    stat_smooth(method="lm") + stat_smooth(colour="green")
 
 
 # Diversity Index ---------------------------------------------------------
@@ -373,7 +377,7 @@ greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %
 
 dwellings <- source_DropboxData(
     file="dwellings.csv", 
-    key="4hgjz7k5fiu8l3c"
+    key="1oqfsgpfzotxji4"
     ) %>% tbl_df
 
 
@@ -419,6 +423,43 @@ write.csv(dwellings_bands, file="data/derived/dwellings_by_band.csv", row.names=
 write.csv(dwellings_sizes, file="data/derived/dwellings_by_size.csv", row.names=FALSE)
 write.csv(dwellings_types, file="data/derived/dwellings_by_type.csv", row.names=FALSE)
 
+
+# Diversity by housing sizes?
+
+d_dwelling_types <- dwellings_types  %>% 
+    spread(type, count)  %>% 
+    select(-datazone, -year)  %>% 
+    as.matrix %>%
+    diversity
+
+dwelling_types_wide <- dwellings_types %>%
+    spread(type, count) %>%
+    mutate(diversity=d_dwelling_types)
+
+# What has been the change in diversity from year to year?
+
+div_by_year <- dwelling_types_wide %>%
+    group_by(year) %>%
+    summarise(
+        q_025=quantile(diversity, 0.025),
+        q_050=quantile(diversity, 0.050),
+        q_100=quantile(diversity, 0.100),
+        q_250=quantile(diversity, 0.250),
+        q_500=quantile(diversity, 0.500),
+        q_750=quantile(diversity, 0.750),
+        q_900=quantile(diversity, 0.900),
+        q_950=quantile(diversity, 0.950),
+        q_975=quantile(diversity, 0.975)
+    )
+
+
+div_by_year %>% ggplot(aes(x=year, y=q_500)) +
+    geom_line(size=1.1) +
+    geom_ribbon(aes(ymin=q_025, ymax=q_975), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_050, ymax=q_950), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_100, ymax=q_900), alpha=0.2) +
+    geom_ribbon(aes(ymin=q_250, ymax=q_750), alpha=0.2) +
+    labs(x="Year", y="Diversity Level")
 
 #1) qualifications mix
 # 
