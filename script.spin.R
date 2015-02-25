@@ -512,20 +512,24 @@ combined <- tenure %>%
     inner_join(dwell_sizes)
 
 
-# This will produce a 3x3 tiled graph. Each row represents a different tertile of the 
-# proportion social rented
-# each column represents a different tertile of the tenure diversity score for that area
 ggplot(data=combined) + 
     facet_grid(social_tertile ~ diversity_tertile) + 
     geom_boxplot(aes(x=factor(num_of_rooms), y=count)) + 
     labs(x="number of rooms", y="count")
 
 
+# tertile of social rented 
 
-# Qualifications ----------------------------------------------------------
+d_dwelling_types <- dwellings_types  %>% 
+    spread(type, count)  %>% 
+    select(-datazone, -year)  %>% 
+    as.matrix %>%
+    diversity
 
-# Qualifications are not available at datazone level. Instead we will need to extract at LA level 
-# then aggregate the datazones up
+dwelling_types_wide <- dwellings_types %>%
+    spread(type, count) %>%
+    mutate(diversity=d_dwelling_types)
+rm(d_dwelling_types)
 
 
 
