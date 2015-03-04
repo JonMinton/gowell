@@ -522,22 +522,107 @@ ggplot(data=combined) +
 
 
 
-# Qualifications ----------------------------------------------------------
-
-# Qualifications are not available at datazone level. Instead we will need to extract at LA level 
-# then aggregate the datazones up
 
 
+# Occupational Class From Census --------------------------------------------------
 
-#1) qualifications mix
+
+rm(list=ls())
+
+require(repmis)
+require(tidyr)
+require(stringr)
+require(plyr)
+require(dplyr)
+require(vegan)
+require(ggplot2)
+
+
+# This section will use relevant variables from the 2011 Census to identify the 
+# mix of occupational classes in each datazone
+
 # 
-# 
-# 
-# ES-degr-lev-all
-# # number of people with a degree
-# es-noquals 
-# # number of people with no qualifications
+
+dta_sec <- source_DropboxData(
+    key = "h4l5f34ktg7lxl6",
+    file="KS611SC.csv"
+) %>% tbl_df
 
 
-# Where are these files?
+dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, ",", ""))
+dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, "-", "0"))
+dta_sec[,-1] <- apply(dta_sec[,-1], 2, function(x) as.numeric(as.character(x)))
+dta_sec <- data.frame(dta_sec) %>%
+    tbl_df
+
+names(dta_sec) <- c(
+    "datazone", 
+    "total_working_age",
+    "I_higher_managerial",
+    "Ii_higher_managerial_upper",
+    "Iii_higher_managerial_lower",
+    "II_lower_managerial",
+    "III_intermediate",
+    "III_small_employers",
+    "III_lower_supervisory",
+    "IV_semi_routine",
+    "V_routine",
+    "X_nonstudent_total",
+    "X_nonstudent_neverworked",
+    "X_nonstudent_ltunemployed",
+    "X_student"    
+    )
+
+
+dta_sec <- dta_sec %>%
+    slice(-1) %>%
+    gather(key="sec", value="count", -datazone) 
+
+dta_sec$count <- as.numeric(as.character(dta_sec$count))
+
+
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df 
+
+dta_sec <- dta_sec %>%
+    inner_join(greater_glasgow_dzs, by=c("datazone"="dz_2001")) %>%
+    select(datazone, sec, count)
+
+
+# What are the mutually exclusive groups?
+
+dta_sec$diversity <- 
+tmp <- dta_sec %>%
+    spread(sec, count) %>%    
+    group_by(datazone) %>%
+    mutate(
+        total=total_working_age,
+        I=I_higher_managerial, 
+        II=II_lower_managerial + III_small_employers + III_lower_supervisory,
+        III=IV_semi_routine + III_intermediate,
+        IV=V_routine, 
+        X=X_nonstudent_total,
+        S=X_student
+    ) %>%
+    select(datazone, total, I, II, III, IV, X, S) %>%
+    mutate(t2=I+II+III+IV+X+S) %>%
+    select(datazone, I, II, III, IV, X, S)
+
+tmp$diversity <- tmp[,-1] %>%
+    as.matrix %>%
+    diversity 
+    
+dz_sec_diversity <- tmp %>%
+    select(datazone, sec_div=diversity)
+dz_sec_diversity
+
+write.csv(dz_sec_diversity, file="data/derived/diversity_sec_by_dz_2011_census.csv")
+
+
+################
+
+#Other types of diversity
+# 1) Tenure diversity
+# 2) Council Tax band diversity
+# 
+
 
