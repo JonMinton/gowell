@@ -624,18 +624,26 @@ plot(load2, type="n", xlim=c(-1, 1), ylim=c(-1,1),
 text(load2, labels=names(d_propdiv_all)[-1], cex=0.7) 
 abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
 
-load3_1 <- m3$loadings[,1:2]
-plot(load3_1, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+load3_12 <- m3$loadings[,1:2]
+plot(load3_12, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
      xlab="Loading on first factor", ylab="Loading on second factor", 
      main="Diversity Correlations: Three factor model") 
-text(load3_1, labels=names(d_propdiv_all)[-1], cex=0.7) 
+text(load3_12, labels=names(d_propdiv_all)[-1], cex=0.7) 
 abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
 
-load3_2 <- m3$loadings[,2:3]
-plot(load3_2, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+load3_23 <- m3$loadings[,2:3]
+plot(load3_23, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
      xlab="Loading on second factor", ylab="Loading on third factor", 
      main="Diversity Correlations: Three factor model") 
-text(load3_2, labels=names(d_propdiv_all)[-1], cex=0.7) 
+text(load3_23, labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+
+load3_13 <- m3$loadings[,c(1,3)]
+plot(load3_13, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on first factor", ylab="Loading on third factor", 
+     main="Diversity Correlations: Three factor model") 
+text(load3_13, labels=names(d_propdiv_all)[-1], cex=0.7) 
 abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
 
 
