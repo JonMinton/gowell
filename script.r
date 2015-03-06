@@ -537,6 +537,7 @@ require(stringr)
 require(dplyr)
 
 require(ggplot2)
+require(rgl)
 
 require(vegan)
 
@@ -606,11 +607,17 @@ m1 <- factanal(
     data=d_propdiv_all, 
     factors=1
     )
+
+m1$loadings
+
 m2 <- factanal(
     ~ demographic + dtype + ethnicity + sec + tenure + space + band, 
     data=d_propdiv_all, 
     factors=2
     )
+
+m2$loadings
+
 m3 <- factanal(
     ~ demographic + dtype + ethnicity + sec + tenure + space + band, 
     data=d_propdiv_all, 
@@ -647,5 +654,20 @@ text(load3_13, labels=names(d_propdiv_all)[-1], cex=0.7)
 abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
 
 
-> plot(load, type="n"); text(load, labels=names(d_propdiv_all)[-1], cex=0.7)
-> plot(load, type="n"); text(load, labels=names(d_propdiv_all)[-1], cex=0.7); abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+## Rgl representation of three dimensions
+tmp <- m3$loadings[,1:3]
+
+open3d()
+decorate3d(
+    xlim=c(-1, 1), ylim=c(-1, 1), zlim=c(-1, 1),
+    xlab="F1", ylab="F2", zlab="F3", box=FALSE, axes=FALSE
+    )
+text3d(
+    x=tmp[,1], y=tmp[,2], z=tmp[,3],
+    text=rownames(tmp)
+    )
+
+planes3d(a=1, b=0, c=0, alpha=0.2, col="red")
+planes3d(a=0, b=1, c=0, alpha=0.2, col="green")
+planes3d(a=0, b=0, c=1, alpha=0.2, col="blue")
+points3d(x=tmp[,1], y=tmp[,2], z=tmp[,3], size=3)
