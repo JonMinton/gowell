@@ -671,3 +671,21 @@ planes3d(a=1, b=0, c=0, alpha=0.2, col="red")
 planes3d(a=0, b=1, c=0, alpha=0.2, col="green")
 planes3d(a=0, b=0, c=1, alpha=0.2, col="blue")
 points3d(x=tmp[,1], y=tmp[,2], z=tmp[,3], size=3)
+
+
+# What about Cartesian distances?
+
+m_out <- matrix(NA, nrow=dim(tmp)[1], ncol=dim(tmp)[1], dimnames=list(rownames(tmp), rownames(tmp)))
+
+
+for (i in 1:dim(m_out)[1]){
+    for (j in 1:dim(m_out)[2]){
+        row_nm <- rownames(m_out)[i]
+        col_nm <- colnames(m_out)[j]
+        tmp2 <- tmp[row_nm,] - tmp[col_nm,]
+        tmp2 <- tmp2^2
+        tmp2 <- sum(tmp2)
+        tmp2 <- tmp2 ^ 0.5   
+        m_out[i, j] <- tmp2
+    }
+}
