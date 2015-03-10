@@ -69,6 +69,12 @@ Source: CRAN
 Version: 1.6
 Hash: ebefb2caf6ba73d3202d5153db1af0d8
 
+Package: TraMineR
+Source: CRAN
+Version: 1.8-9
+Hash: 1f24c64e268d00e28d74ba38a9b381b7
+Requires: RColorBrewer
+
 Package: assertthat
 Source: CRAN
 Version: 0.1
@@ -120,6 +126,7 @@ Hash: 42be2136555fa4b6167605df56d8cd7c
 Package: digest
 Source: CRAN
 Version: 0.6.8
+Hash: 89dc4c8734dad5322bb3c5c2af09056f
 
 Package: dplyr
 Source: CRAN
@@ -281,6 +288,11 @@ Source: CRAN
 Version: 1.4
 Hash: ec09ea32d2e42d1663871b52c475b474
 Requires: Rcpp, plyr, stringr
+
+Package: rgl
+Source: CRAN
+Version: 0.95.1201
+Hash: 104a455ccc7d4797adbe951c86240b01
 
 Package: rmarkdown
 Source: CRAN
