@@ -1,0 +1,12 @@
+base
+repmis
+plyr
+tidyr
+stringr
+dplyr
+ggplot2
+rgl
+corrplot
+permute
+lattice
+vegan

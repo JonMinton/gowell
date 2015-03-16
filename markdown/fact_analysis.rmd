@@ -2,7 +2,7 @@
 title: "Factor Analysis"
 author: "Jon_Minton"
 date: "Monday, March 16, 2015"
-output: html_document
+output: word_document
 ---
 
 # Dimensions of Diversity 
