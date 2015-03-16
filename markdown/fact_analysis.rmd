@@ -1,0 +1,197 @@
+---
+title: "Factor Analysis"
+author: "Jon_Minton"
+date: "Monday, March 16, 2015"
+output: html_document
+---
+
+# Dimensions of Diversity 
+
+ This section will look at the relationship between various forms of diversity 
+within Greater Glasgow. 
+```{r init, cache=TRUE, message=FALSE, echo=FALSE}
+rm(list=ls())
+
+require(repmis)
+require(plyr)
+require(tidyr)
+require(stringr)
+require(dplyr)
+
+require(ggplot2)
+require(rgl)
+require(corrplot)
+
+require(vegan)
+
+setwd("E:/repos/gowell/")
+demo_div <- read.csv("data/derived/demographic_diversity_2010.csv") %>%
+    tbl_df %>%
+    rename(demographic=diversity)
+
+dtype_div <- read.csv("data/derived/diversity_dwelling_type_2011.csv") %>%
+    tbl_df %>%
+    rename(dtype=diversity)
+
+eth_div <- read.csv("data/derived/diversity_ethnicity_2011.csv") %>%
+    tbl_df %>%
+    rename(ethnicity=diversity)
+
+sec_div <- read.csv("data/derived/diversity_sec_by_dz_2011_census.csv") %>%
+    tbl_df %>%
+    rename(sec=sec_div)
+
+ten_div <- read.csv("data/derived/diversity_tenure_2001.csv" ) %>%
+    tbl_df %>%
+    rename(tenure=diversity)
+
+spac_div <- read.csv("data/derived/diversity_space_2001.csv") %>%
+    tbl_df %>%
+    rename(space=diversity)
+
+band_div <- read.csv("data/derived/diversity_dwelling_band_2011.csv") %>%
+    tbl_df %>%
+    rename(band=diversity)
+
+```
+
+Now to explore some of the differences between types of diversity. Using a pairs plot
+
+```{r chunk2, cache=TRUE}
+# Inner join (will automatically cut to Greater Glasgow) while renaming vars
+
+div_all <- demo_div %>%
+    inner_join(dtype_div) %>%
+    inner_join(eth_div) %>%
+    inner_join(sec_div) %>%
+    inner_join(ten_div) %>%
+    inner_join(spac_div) %>%
+    inner_join(band_div) %>%
+    select(-X, -social, -rented, -owned)
+
+d_rankdiv_all <- div_all %>%
+    mutate_each(funs(min_rank), -datazone)
+
+pairs(sample_n(d_rankdiv_all[,-1], 500), panel=panel.smooth)
+```
+
+Now to look at correlations.
+
+```{r corrs, cache=TRUE}
+cor(d_rankdiv_all[,-1], method="spearman") %>% 
+    corrplot.mixed()
+
+
+d_propdiv_all <- div_all %>%
+    mutate_each(funs(percent_rank), -datazone)
+
+pairs(d_propdiv_all[,-1], panel=panel.smooth)
+cor(d_propdiv_all[,-1], method="spearman") %>% 
+    corrplot.mixed()
+
+# No difference
+````
+
+
+# factor analysis
+
+## Basic example using factanal function
+
+```{r fact_anal}
+# One factor model
+m1 <- factanal(
+    ~ demographic + dtype + ethnicity + sec + tenure + space + band, 
+    data=d_propdiv_all, 
+    factors=1
+    )
+
+m1$loadings
+
+# Two factor model
+
+m2 <- factanal(
+    ~ demographic + dtype + ethnicity + sec + tenure + space + band, 
+    data=d_propdiv_all, 
+    factors=2
+    )
+
+m2$loadings
+
+# Three factor model
+
+m3 <- factanal(
+    ~ demographic + dtype + ethnicity + sec + tenure + space + band, 
+    data=d_propdiv_all, 
+    factors=3
+    )
+
+
+# Plots
+load2 <- m2$loadings
+
+plot(load2, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on first factor", ylab="Loading on second factor", 
+     main="Diversity Correlations: Two factor model") 
+text(load2, labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+load3_12 <- m3$loadings[,1:2]
+plot(load3_12, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on first factor", ylab="Loading on second factor", 
+     main="Diversity Correlations: Three factor model") 
+text(load3_12, labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+load3_23 <- m3$loadings[,2:3]
+plot(load3_23, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on second factor", ylab="Loading on third factor", 
+     main="Diversity Correlations: Three factor model") 
+text(load3_23, labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+
+load3_13 <- m3$loadings[,c(1,3)]
+plot(load3_13, type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on first factor", ylab="Loading on third factor", 
+     main="Diversity Correlations: Three factor model") 
+text(load3_13, labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+```
+
+## Examples using princomp function
+
+```{r}
+
+fit <- princomp(
+    ~ demographic + dtype + ethnicity + sec + tenure + space + band, 
+    data=d_propdiv_all
+    )
+
+plot(fit, type="lines")    
+
+ev <- eigen(cor(d_propdiv_all[,c("demographic", "dtype", "ethnicity", "sec", "tenure", "space", "band")]))$values
+
+plot(ev, type="b", xlab="Component", ylab="value"); abline(h=1, lty="dashed")
+
+plot(fit$loadings[,c(1,2)], type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on first factor", ylab="Loading on second factor", 
+     main="Diversity Correlations: PCA") 
+text(fit$loadings[,c(1,2)], labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+    
+plot(fit$loadings[,c(1,3)], type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on first factor", ylab="Loading on third factor", 
+     main="Diversity Correlations: PCA") 
+text(fit$loadings[,c(1,3)], labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+plot(fit$loadings[,c(2,3)], type="n", xlim=c(-1, 1), ylim=c(-1,1), 
+     xlab="Loading on second factor", ylab="Loading on third factor", 
+     main="Diversity Correlations: PCA") 
+text(fit$loadings[,c(2,3)], labels=names(d_propdiv_all)[-1], cex=0.7) 
+abline(v=0, lty="dashed"); abline(h=0, lty="dashed")
+
+
+```
+
