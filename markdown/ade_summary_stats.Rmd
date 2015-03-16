@@ -108,85 +108,59 @@ print(tbl, type="html")
 
 ```
 
-##Mean and results of results rescaled to [0, 1]
-Within the factor analyses the scores are each normalised either by rank, or by centile. 
-The means and SDs when normalised by centile (0 to 1) are of course as follows
 
-
-```{r table_centile, echo=FALSE, results="asis"}
-
-joined_centile <- joined %>%
-    mutate_each(funs(percent_rank), vars=-datazone)
-
-tmp <- matrix(NA, nrow=7, ncol=2, 
-        dimnames=list(
-            c("demographic", "dwelling", "ethnic", "socioeconomic", "tenure", "space", "council tax band"),
-            c("mean", "sd")
-        )
-    )
-
-tmp["demographic", "mean"] <- mean(joined_centile$demographic)
-tmp["demographic", "sd"] <- sd(joined_centile$demographic)
-
-tmp["dwelling", "mean"] <- mean(joined_centile$dtype)
-tmp["dwelling", "sd"] <- sd(joined_centile$dtype)
-
-tmp["ethnic", "mean"] <- mean(joined_centile$ethnicity)
-tmp["ethnic", "sd"] <- sd(joined_centile$ethnicity)
-
-tmp["socioeconomic", "mean"] <- mean(joined_centile$sec)
-tmp["socioeconomic", "sd"] <- sd(joined_centile$sec)
-
-tmp["tenure", "mean"] <- mean(joined_centile$tenure)
-tmp["tenure", "sd"] <- sd(joined_centile$tenure)
-
-tmp["space", "mean"] <- mean(joined_centile$space)
-tmp["space", "sd"] <- sd(joined_centile$space)
-
-tmp["council tax band", "mean"] <- mean(joined_centile$band)
-tmp["council tax band", "sd"] <- sd(joined_centile$band)
-
-tbl <- xtable(tmp)
-print(tbl, type="html")
-
-```
-
-##Mean and SD of raw results
+##Results by SIMD quintile
 
 Here are the mean and SDs of the diversity scores themselves. Such numbers are 
 probably not too meaningful to compare as the scales are different. 
 
-```{r, echo=FALSE, results="asis"}
+```{r table_raw, echo=FALSE, results="asis"}
 
-tmp <- matrix(NA, nrow=7, ncol=2, 
-        dimnames=list(
-            c("demographic", "dwelling", "ethnic", "socioeconomic", "tenure", "space", "council tax band"),
-            c("mean", "sd")
-        )
-    )
 
-tmp["demographic", "mean"] <- mean(joined$demographic)
-tmp["demographic", "sd"] <- sd(joined$demographic)
+simd_raw <- read.csv("data/simd/00410767.csv", header=T) %>%
+    tbl_df
 
-tmp["dwelling", "mean"] <- mean(joined$dtype)
-tmp["dwelling", "sd"] <- sd(joined$dtype)
+simd <- simd_raw %>%
+    select(datazone=Data.Zone, la=Local.Authority.Name, simd=Overall.SIMD.2012.Score)
 
-tmp["ethnic", "mean"] <- mean(joined$ethnicity)
-tmp["ethnic", "sd"] <- sd(joined$ethnicity)
 
-tmp["socioeconomic", "mean"] <- mean(joined$sec)
-tmp["socioeconomic", "sd"] <- sd(joined$sec)
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df %>%
+    rename(datazone=dz_2001)
 
-tmp["tenure", "mean"] <- mean(joined$tenure)
-tmp["tenure", "sd"] <- sd(joined$tenure)
+simd <- simd %>%
+    right_join(greater_glasgow_dzs) %>%
+    select(-chp)
 
-tmp["space", "mean"] <- mean(joined$space)
-tmp["space", "sd"] <- sd(joined$space)
+simd <- simd  %>% mutate(simd_q=ntile(simd, 5))
 
-tmp["council tax band", "mean"] <- mean(joined$band)
-tmp["council tax band", "sd"] <- sd(joined$band)
+joined <- joined  %>%  inner_join(simd)
 
-tbl <- xtable(tmp)
-print(tbl, type="html")
+summaries_quints <- joined  %>% 
+    select(datazone, demographic, dtype, ethnicity, 
+           sec, tenure, space, band, simd_q)  %>% 
+    gather(key=type, value=value, -datazone, -simd_q) %>%
+    group_by(type, simd_q) %>%
+    summarise(mean=mean(value), sd=sd(value)) 
+
+summaries_quints %>%
+    ggplot +
+    geom_line(aes(x=simd_q, y=mean)) +
+    geom_segment(aes(x=simd_q, xend=simd_q, y=mean-2*sd, yend=mean+2*sd)) +
+    facet_wrap(~ type)
+
+summaries_quints <- joined  %>% 
+    select(datazone, demographic, dtype, ethnicity, 
+           sec, tenure, space, band, simd_q)  %>% 
+    mutate_each(vars=c(-datazone, -simd_q), funs(percent_rank)) %>%
+    gather(key=type, value=value, -datazone, -simd_q) %>%
+    group_by(type, simd_q) %>%
+    summarise(mean=mean(value), sd=sd(value), n=n()) 
+
+summaries_quints %>%
+    ggplot +
+    geom_line(aes(x=simd_q, y=mean)) +
+    geom_segment(aes(x=simd_q, xend=simd_q, y=mean-2*sd/sqrt(n), yend=mean+2*sd/sqrt(n))) +
+    facet_wrap(~ type)
 
 ```
+
