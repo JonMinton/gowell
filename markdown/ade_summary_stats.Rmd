@@ -2,7 +2,7 @@
 title: "diversity means and sds"
 author: "Jon Minton"
 date: "Tuesday, March 10, 2015"
-output: html_document
+output: word_document
 ---
 
 # Request from Ade
@@ -16,21 +16,20 @@ Ade
 
 #Mean and SDs for diversity scores
 
-```{r prereqs, echo=FALSE, cache=TRUE, results='hide', message=FALSE, warning=FALSE}
+```{r prereqs, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 
 # What are the sources of data?
 rm(list=ls())
 
 setwd("E:/repos/gowell")
 
-
+require(knitr)
 require(repmis)
 require(plyr)
 require(tidyr)
 require(stringr)
 require(dplyr)
 
-require(xtable)
 require(ggplot2)
 require(rgl)
 
@@ -103,20 +102,18 @@ tmp["space", "sd"] <- sd(joined$space)
 tmp["council tax band", "mean"] <- mean(joined$band)
 tmp["council tax band", "sd"] <- sd(joined$band)
 
-tbl <- xtable(tmp)
-print(tbl, type="html")
+kable(tmp, type="markdown", digits=3)
 
 ```
 
 
 ##Results by SIMD quintile
 
-Here are the mean and SDs of the diversity scores themselves. Such numbers are 
-probably not too meaningful to compare as the scales are different. 
+Here are the diversity scores by SIMD quintile. The first plot presents the 'raw' results. 
+In the second plot all values are presented as percentiles (i.e. scaled onto the 0-1 range).
+```{r table_quintile, echo=FALSE, results="asis"}
 
-```{r table_raw, echo=FALSE, results="asis"}
-
-
+setwd("E:/repos/gowell")
 simd_raw <- read.csv("data/simd/00410767.csv", header=T) %>%
     tbl_df
 
