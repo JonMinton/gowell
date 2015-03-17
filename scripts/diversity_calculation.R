@@ -192,10 +192,16 @@ dwelling_bands_2011$diversity <- dwelling_bands_2011%>%
     as.matrix %>%
     diversity
 
-dwelling_bands_2011$H <- dwelling_bands_2011%>%
+dwelling_bands_2011$entropy <- dwelling_bands_2011%>%
     select(-datazone, -year, -diversity) %>%
     as.matrix %>%
     H
+
+dwelling_bands_2011 <- dwelling_bands_2011 %>%
+    mutate(entropy = ifelse(is.finite(entropy), entropy, 0))
+           
+dwelling_diversity_2011<- dwelling_bands_2011 %>%
+    select(datazone, diversity, H=entropy)
 
 write.csv(dwelling_diversity_2011, file="data/derived/diversity_dwelling_band_2011.csv", row.names=FALSE)
 

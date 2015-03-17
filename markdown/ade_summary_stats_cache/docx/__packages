@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 repmis
 plyr
 tidyr
@@ -16,3 +10,4 @@ rgl
 permute
 lattice
 vegan
+knitr

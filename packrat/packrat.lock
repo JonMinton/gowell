@@ -345,6 +345,11 @@ Version: 0.6.1
 Hash: 3601d069f9b45b0d9a39b6954f4fed48
 Requires: rJava
 
+Package: xtable
+Source: CRAN
+Version: 1.7-4
+Hash: 7b30b5ca6c7ae80c4f916502e3ad0237
+
 Package: yaml
 Source: CRAN
 Version: 2.1.13
