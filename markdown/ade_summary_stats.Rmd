@@ -5,6 +5,17 @@ date: "Tuesday, March 10, 2015"
 output: word_document
 ---
 
+# Table of contents 
+
+---
+title: "table of contents"
+output:
+  word_document:
+    toc: true
+    toc_depth: 2
+---
+
+
 # Request from Ade
 
 Jon,
@@ -115,9 +126,9 @@ summaries_normalised2 <- joined  %>%
     group_by(type) %>%
     summarise(mean=mean(value), sd=sd(value)) 
 
-kable(summaries_raw, type="markdown", digits=3)
-kable(summaries_normalised, type="markdown", digits=3)
-kable(summaries_normalised2, type="markdown", digits=3)
+kable(summaries_raw, type="markdown", digits=3, caption="Raw values\n")
+kable(summaries_normalised, type="markdown", digits=3, caption="Percentile rank\n")
+kable(summaries_normalised2, type="markdown", digits=3, caption="(x-min(x))/(max(x)-min(x))\n")
 
 ```
 
@@ -373,3 +384,33 @@ summaries_quints %>%
     geom_segment(aes(x=simd_q, xend=simd_q, y=mean-2*sd/sqrt(n), yend=mean+2*sd/sqrt(n))) +
     facet_wrap(~ type)
 ```
+
+# Additional tasks (23/3/2015)
+
+1. Present all factor loadings as a table as well as figures
+2. Look at the relationship between diversity scores and urban/rural class
+3. Produce a map of urban categories for greater glasgow, ideally superimposing boundaries on the maps
+4. as above, but with quintiles of diversity for each of the diversity types
+6. do all of the above for both 2001 and 2011 where possible
+
+## Present all factor loadings as a table as well as figures
+
+
+
+
+## Look at the relationship between diversity scores and urban/rural class
+
+[stuff to go here]
+
+## Produce a map of urban categories for great glasgow, ideally superimposing boundaries on the maps
+
+[stuff to go here]
+
+## as above, but with quintiles of diversity for each of the diversity types 
+
+[stuff to go here]
+
+## Do all of the above for both 2001 and 2011 where possible 
+
+[stuff to go here]
+

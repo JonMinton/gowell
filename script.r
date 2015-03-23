@@ -25,28 +25,6 @@ require(vegan)
 
 
 
-# Linking chps to dzs -----------------------------------------------------
-
-
-# # find dzs referred to
-# 
-# chps_of_interest <- read.csv("data/geographies/greater_glasgow_definitions_simplified.csv") %>% tbl_df()
-# chps_of_interest <- chps_of_interest %>% slice(1:12)
-# 
-# chps_to_dzs <- read.csv("data/geographies/latestpcinfowithlinkpc.csv") %>% tbl_df()
-# chps_to_dzs <- chps_to_dzs %>% 
-#     select(dz_2001=Datazone, chp=CHP) %>% 
-#     distinct(dz_2001)
-# 
-# # n.b. need the 2001 not 2011 dz codes 
-# chps_of_interest <- chps_of_interest %>% rename(chp=chcp_code) 
-# 
-# dzs_in_greater_glasgow <- chps_to_dzs %>% 
-#     inner_join(chps_of_interest) %>%
-#     select(-chcp_name)
-# 
-# write.csv(dzs_in_greater_glasgow, file="data/geographies/dzs_in_greater_glasgow.csv", row.names=F)
-# # 
 
 # Main Analysis -----------------------------------------------------------
 

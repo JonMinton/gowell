@@ -107,7 +107,7 @@ tmp$H <- tmp  %>%
     H
 
 dz_sec_diversity <- tmp %>%
-    select(datazone, sec_div=diversity, sec_h=H)
+    select(datazone, diversity, H)
 dz_sec_diversity
 
 write.csv(dz_sec_diversity, file="data/derived/diversity_sec_by_dz_2011_census.csv")
