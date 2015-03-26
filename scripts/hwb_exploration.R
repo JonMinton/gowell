@@ -47,9 +47,15 @@ quantile(dtazone_count$freq, c(0.025, 0.5, 0.975))
 
 # Now to plot these on a map...
 
+hist(dtazone_count$freq, 
+     breaks=50, 
+     main="histogram of number of observations\nper datazone", 
+     xlab="Number of observations in datazone")
 
+# so what are the datazones with massive oversampling?
 
-
+dtazone_count$datazone[dtazone_count$freq > 27]
+dtazone_count$datazone[dtazone_count$freq > 120]
 
 # 2001 datazones and 2001 intermediate geographies are perfectly 
 # matched. Therefore, I am looking for 2001 intermediate geography 
