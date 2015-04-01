@@ -120,3 +120,34 @@ g2 <- spplot(
 
 g1 + g2
 
+
+# Exploring weighting -----------------------------------------------------
+
+# vars with weight in title
+dta  %>% select(contains("weight"))  %>% sample_n(10)
+
+# exploree WEIGHT FACTOR
+dta  %>% 
+    summarise(
+        q2_5=quantile(WEIGHT_FACTOR, 0.025, na.rm=T), 
+        q97_5=quantile(WEIGHT_FACTOR, 0.975, na.rm=T),
+        med=quantile(WEIGHT_FACTOR, 0.500, na.rm=T),
+        mean=mean(WEIGHT_FACTOR, na.rm=T)
+        )
+
+
+dta  %>% 
+    summarise(
+        q2_5=quantile(houseweight, 0.025, na.rm=T), 
+        q97_5=quantile(houseweight, 0.975, na.rm=T),
+        med=quantile(houseweight, 0.500, na.rm=T),
+        mean=mean(houseweight, na.rm=T)
+    )
+
+dta  %>% 
+    summarise(
+        q2_5=quantile(dep_weight, 0.025, na.rm=T), 
+        q97_5=quantile(dep_weight, 0.975, na.rm=T),
+        med=quantile(dep_weight, 0.500, na.rm=T),
+        mean=mean(dep_weight, na.rm=T)
+    )
