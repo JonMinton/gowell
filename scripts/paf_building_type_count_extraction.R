@@ -402,11 +402,6 @@ summary(lm(diversity ~ log(area), data=ig_ardiv))
 
 # Some attempts at using ggmap --------------------------------------------
 
-> require(ggmap)
-tmp <- qmap("Glasgow")
-tmp + geom_polygon(aes(x=long, y=lat, group=id), 
-                   data=spTransform(ig_gg_shp, CRS("+proj=longlat +datum=WGS84")), 
-                   fill="blue")
 
 # To do : 
 # zoom out of 'Glasgow' slightly
@@ -421,9 +416,11 @@ ig_gg_fort <- ig_gg_fort %>%
     left_join(ig_gg_shp@data, by=c("id"="zonecode"))
 
 png("figs/place_diversity.png", res=300, width=10, height=8, units="in")
-tmp + geom_polygon(
+gx <- tmp + geom_polygon(
     aes(x=long, y= lat, group=id, fill=diversity),
     data=ig_gg_fort,
     alpha=0.7
     )
+print(gx)
+
 dev.off()
