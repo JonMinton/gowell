@@ -415,10 +415,9 @@ tmp <- qmap("Glasgow", zoom=9)
 
 ig_gg_fort <- ig_gg_shp
 ig_gg_fort <- spTransform(ig_gg_fort, CRS("+proj=longlat +datum=WGS84"))
-ig_gg_fort <- fortify(ig_gg_fort)
-ig_gg_fort$id <- as.numeric(ig_gg_fort$id)
+ig_gg_fort <- fortify(ig_gg_fort, region="zonecode")
 ig_gg_fort <- ig_gg_fort %>%
-    left_join(ig_gg_shp@data, by=c("id"="gid"))
+    left_join(ig_gg_shp@data, by=c("id"="zonecode"))
 
 tmp + geom_polygon(
     aes(x=long, y= lat, group=id, fill=diversity),
@@ -426,6 +425,3 @@ tmp + geom_polygon(
     alpha=0.7
     )
 
-# This almost-but-doesn't quite work
-
-# the problem seems to be with the joining
