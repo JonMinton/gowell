@@ -10,12 +10,23 @@ require(tidyr)
 require(stringr)
 require(dplyr)
 
-require(lattice)
+require(rgeos)
+require(maptools)
+require(rgdal)
 require(sp)
+require(spdep)
+
+require(vegan)
+
+require(lattice)
+require(latticeExtra)
 require(ggplot2)
+require(RColorBrewer)
 
 
-# Data 
+
+# Aggregate count data to datazones and IGs for 2001 and 2010 -------------
+
 
 
 # What now? 
@@ -75,9 +86,6 @@ paf_2001 <- paf_2001 %>%
         ASHAPREV = V35,
         LEA = V36
         )
-
-# 0%     5%    10%    15%    20%    25%    30%    35%    40%    45%    50%    55%    60%    65%    70%    75%    80%    85%    90%    95%   100% 
-# 0.0    0.0    0.0    0.0    0.0    1.0    2.0    3.0    5.0    7.0   10.0   13.0   17.0   22.1   32.8   46.0   68.0  123.0  225.0  420.9 4178.0 
 
 
 
@@ -204,7 +212,7 @@ write.csv(paf_2010_ig, file="data/derived/building_use_counts_2010_intermed.csv"
 
           
 
-# simple explorations/sense testing ---------------------------------------
+# simple explorations/sense testing of aggregated data----------------------------------
 
 rm(list=ls())
 
@@ -244,5 +252,149 @@ paf_2001_ig %>%
     ggplot(data=., aes(x=sb_2001, y=sb_2010)) +
     geom_point(aes(alpha=0.1)) + 
     stat_smooth(method="lm")
+
+
+
+# Plot patterns of building types in Greater Glasgow -----------------------
+
+# Look at IGs to start with
+
+# Analyses of urban and rural class
+
+
+dz_shp <- readOGR("data/shp/scotland_2001_datazones", layer="scotland_dz_2001")
+summary(dz_shp)
+plot(dz_shp)
+
+# iii) load 2001 igs
+# iv ) display 2001 igs
+
+ig_shp <- readOGR("data/shp/scotland_2001_intermed", layer="scotland_igeog_2001")
+summary(ig_shp)
+plot(ig_shp)
+
+
+# Now to find our dzs comprising greater glasgow
+
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df %>%
+    rename(datazone=dz_2001)
+
+greater_glasgow_igs <- read.csv("data/geographies/igs_in_greater_glasgow.csv") %>%
+    tbl_df  %>% 
+    rename(ig=ig_2001)
+
+
+# Now to subset dzs  and subset igs
+
+dz_gg_shp <- dz_shp[dz_shp$zonecode %in% greater_glasgow_dzs$datazone,]
+plot(dz_gg_shp)
+
+ig_gg_shp <- ig_shp[ig_shp$zonecode %in% greater_glasgow_igs$ig,]
+plot(ig_gg_shp)
+
+# Now, to look at how these counts add up
+
+paf_2001_ig  %>% mutate(total = address_count + smallbus_count, dif =deliverypoint_count - total)  %>% sample_n(10)
+
+# Diffs are mostly zero, sometimes negative
+# This implies the negatives refer to shared use. 
+# This could be important, but I'm not sure how to go about coding it.
+# Instead I'll pretend the two mutually exclusive categories as 
+# addresses and small businesses
+
+# Want to categorise areas by proportion of total addresses that 
+# are small businesses 
+
+sb_props <- paf_2001_ig %>%
+    mutate(
+        prop_sb = smallbus_count / (smallbus_count + address_count),
+        sb_dec = ntile(prop_sb, 10)
+        ) %>%
+    select(intermed, prop_sb, sb_dec)
+
+
+ig_gg_shp@data <- merge(ig_gg_shp, sb_props, by.x="zonecode", by.y="intermed")
+
+spplot(ig_gg_shp, zcol="prop_sb", 
+       colorkey=TRUE, 
+       col="transparent"
+)
+
+# How about datazones?
+
+sb_props <- paf_2001_dz %>%
+    mutate(
+        prop_sb = smallbus_count / (smallbus_count + address_count),
+        sb_dec = ntile(prop_sb, 10)
+    ) %>%
+    select(datazone, prop_sb, sb_dec)
+
+
+dz_gg_shp@data <- merge(dz_gg_shp, sb_props, by.x="zonecode", by.y="datazone")
+
+spplot(dz_gg_shp, zcol="prop_sb", 
+       colorkey=TRUE, 
+       col="transparent"
+)
+
+# Now what about diversity?
+
+
+paf_2001_dz$diversity <- paf_2001_dz  %>% 
+    select(address_count, smallbus_count)  %>% 
+    as.matrix %>%
+    diversity
+
+
+dz_gg_shp@data <- merge(dz_gg_shp, paf_2001_dz, by.x="zonecode", by.y="datazone")
+
+spplot(dz_gg_shp, zcol="diversity", 
+       colorkey=TRUE, 
+       col="transparent"
+)
+
+# Now IG 
+paf_2001_ig$diversity <- paf_2001_ig  %>% 
+    select(address_count, smallbus_count)  %>% 
+    as.matrix %>%
+    diversity
+
+
+ig_gg_shp@data <- merge(ig_gg_shp, paf_2001_ig, by.x="zonecode", by.y="intermed")
+
+spplot(ig_gg_shp, zcol="diversity", 
+       colorkey=TRUE, 
+       col="transparent"
+)
+
+# Working hypothesis: place diversity should be linked to density of the areal units
+
+# to test this I need to extract the area size for each areal unit
+
+dz_ardiv <- data.frame(
+    datazone=dz_gg_shp@data$zonecode,
+    diversity=dz_gg_shp@data$diversity,
+    area= sapply(dz_gg_shp@polygons, function(x) x@area)
+    )
+
+qplot(x=area, y=diversity, data=dz_ardiv, log="x") + stat_smooth()
+
+summary(lm(diversity ~ log(area), data=dz_ardiv)) 
+# According to this, a slight stat sig POSITIVE association between area and diversity
+# (i.e. opposite direction to what I expected)
+
+# What about IG?
+
+ig_ardiv <- data.frame(
+    datazone=ig_gg_shp@data$zonecode,
+    diversity=ig_gg_shp@data$diversity,
+    area= sapply(ig_gg_shp@polygons, function(x) x@area)
+)
+
+qplot(x=area, y=diversity, data=ig_ardiv, log="x") + stat_smooth()
+summary(lm(diversity ~ log(area), data=ig_ardiv))
+# No association whatsoever at IG level.
+
+# Conclusion: this doesn't seem to be a factor.
 
 
