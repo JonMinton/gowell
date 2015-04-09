@@ -246,12 +246,3 @@ paf_2001_ig %>%
     stat_smooth(method="lm")
 
 
-# Obviously not right to use either V25 or V33 from PAF_2001
-# Need instead to look at things like IQR from 2010 and see which 2001 vars have similar properties
-
-paf_2010_ig$multipleocc_count %>%
-    quantile(probs=seq(0,1, by=0.05))
-
-
-# 0%     5%    10%    15%    20%    25%    30%    35%    40%    45%    50%    55%    60%    65%    70%    75%    80%    85%    90%    95%   100% 
-# 0.0    0.0    0.0    0.0    0.0    1.0    2.0    3.0    5.0    7.0   10.0   13.0   17.0   22.1   32.8   46.0   68.0  123.0  225.0  420.9 4178.0 
