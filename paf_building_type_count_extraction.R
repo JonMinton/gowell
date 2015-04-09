@@ -398,3 +398,34 @@ summary(lm(diversity ~ log(area), data=ig_ardiv))
 # Conclusion: this doesn't seem to be a factor.
 
 
+
+# Some attempts at using ggmap --------------------------------------------
+
+> require(ggmap)
+tmp <- qmap("Glasgow")
+tmp + geom_polygon(aes(x=long, y=lat, group=id), 
+                   data=spTransform(ig_gg_shp, CRS("+proj=longlat +datum=WGS84")), 
+                   fill="blue")
+
+# To do : 
+# zoom out of 'Glasgow' slightly
+
+tmp <- qmap("Glasgow", zoom=9)
+# transform and fortify ig_gg_shp, do choropleth
+
+ig_gg_fort <- ig_gg_shp
+ig_gg_fort <- spTransform(ig_gg_fort, CRS("+proj=longlat +datum=WGS84"))
+ig_gg_fort <- fortify(ig_gg_fort)
+ig_gg_fort$id <- as.numeric(ig_gg_fort$id)
+ig_gg_fort <- ig_gg_fort %>%
+    left_join(ig_gg_shp@data, by=c("id"="gid"))
+
+tmp + geom_polygon(
+    aes(x=long, y= lat, group=id, fill=diversity),
+    data=ig_gg_fort,
+    alpha=0.7
+    )
+
+# This almost-but-doesn't quite work
+
+# the problem seems to be with the joining
