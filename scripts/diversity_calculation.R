@@ -338,28 +338,7 @@ pops <- read.csv("data/derived/populations_by_age_year_sex.csv") %>%
     tbl_df
 
 
-tmp <- pops  %>% 
-    filter(year==2010)  %>% 
-    unite(sa, sex, age_range)  %>% 
-    select(datazone, sa, count) %>%
-    spread(sa, count) %>%
-    mutate(
-        f1=female_0_4 + female_5_9 + female_10_15,
-        m1=male_0_4 + male_5_9 + male_10_15, 
-        
-        f2=female_16_19 + female_20_24 + female_25_29,
-        m2=male_16_19 + male_20_24 + male_25_29,
-        
-        f3=female_30_34 + female_35_39 + female_40_44,
-        m3=male_30_34 + male_35_39 + male_40_44,
-        f4=female_45_49 + female_50_54 + female_55_59,
-        m4=male_45_49 + male_50_54 + male_55_59,
-        f5=  female_60_64 + female_65_69 + female_70_74,
-        m5=  male_60_64 + male_65_69 + male_70_74,
-        f6= female_75_79 +female_80_84 +female_85_89 +female_90_101,    
-        m6= male_75_79 +male_80_84 +male_85_89 +male_90_101
-    ) %>%
-    select(datazone, m1, m2, m3, m4, m5, m6, f1, f2, f3, f4, f5, f6)
+
 
 tmp$diversity <- tmp %>%
     select(-1) %>%

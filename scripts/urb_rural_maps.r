@@ -1,13 +1,5 @@
 # Analyses of urban and rural class
 
-#Tasks 
-# 1) Produce a map of urbal categories for greater glasgow, ideally superimposing boundaries on the maps
-
-# 2) Look at hte relationshp between diversity scores and urban /rural class
-
-# 3) produce a map with quintiles of diversity for each of the diversity types 
-
-
 
 # Prereqs 
 
