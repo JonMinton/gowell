@@ -20,7 +20,8 @@ require(vegan)
 
 # Main Analysis -----------------------------------------------------------
 
-greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% tbl_df()
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% 
+    tbl_df()
 
 
 # Tenure diversity 2001  --------------------------------------------------
@@ -238,44 +239,441 @@ write.csv(dwellings_sizes, file="data/derived/dwellings_by_size.csv", row.names=
 write.csv(dwellings_types, file="data/derived/dwellings_by_type.csv", row.names=FALSE)
 
 
-# dwelling - 2011 census --------------------------------------------------
 
-dwellings_2011 <- source_DropboxData(
-    file="QS401SC.csv",
-    key="gj8m6w0ysrgxpzx"
-    ) %>%
+# Occupational Mix - 2001 -------------------------------------------------
+
+# TO DO
+
+# Occupational Mix - 2011 -------------------------------------------------
+
+# This section will use relevant variables from the 2011 Census to identify the 
+# mix of occupational classes in each datazone
+
+# 
+
+dta_sec <- source_DropboxData(
+    key = "h4l5f34ktg7lxl6",
+    file="KS611SC.csv"
+) %>% tbl_df
+
+
+dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, ",", ""))
+dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, "-", "0"))
+dta_sec[,-1] <- apply(dta_sec[,-1], 2, function(x) as.numeric(as.character(x)))
+dta_sec <- data.frame(dta_sec) %>%
     tbl_df
 
-dwellings_2011 <- dwellings_2011 %>%
-    rename(datazone=V1)
+names(dta_sec) <- c(
+    "datazone", 
+    "total_working_age",
+    "I_higher_managerial",
+    "Ii_higher_managerial_upper",
+    "Iii_higher_managerial_lower",
+    "II_lower_managerial",
+    "III_intermediate",
+    "III_small_employers",
+    "III_lower_supervisory",
+    "IV_semi_routine",
+    "V_routine",
+    "X_nonstudent_total",
+    "X_nonstudent_neverworked",
+    "X_nonstudent_ltunemployed",
+    "X_student"    
+)
 
-dwellings_2011 <- dwellings_2011 %>%
-    filter(str_detect(datazone, "^S01")) %>%
-    mutate_each(funs(as.numeric(str_replace(., "-", "0")) ), -datazone) 
 
-# [1] "datazone"                                                                    
-# [2] "All people"                                                                  
-# [3] "Unshared dwelling total"                                                     
-# [4] "Unshared dwelling: Whole house or bungalow"                                  
-# [5] "Unshared dwelling: Whole house or bungalow: Detached"                        
-# [6] "Unshared dwelling: Whole house or bungalow: Semi-detached"                   
-# [7] "Unshared dwelling: Whole house or bungalow: Terraced (including end terrace)"
-# [8] "Unshared dwelling: Flat maisonette or apartment"                             
-# [9] "Unshared dwelling: Purpose-built block of flats or tenement"                 
-# [10] "Unshared dwelling: Part of a converted or shared house (including bed-sits)" 
-# [11] "Unshared dwelling: In a commercial building"                                 
-# [12] "Unshared dwelling: Caravan or other mobile or temporary structure"           
-# [13] "Shared dwelling"   
+dta_sec <- dta_sec %>%
+    slice(-1) %>%
+    gather(key="sec", value="count", -datazone) 
 
-numrooms_2011 <- source_DropboxData(
-    file= "QS407SC.csv",
-    key= "cbsuhjchyld2mtz"
+dta_sec$count <- as.numeric(as.character(dta_sec$count))
+
+
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df 
+
+dta_sec <- dta_sec %>%
+    inner_join(greater_glasgow_dzs, by=c("datazone"="dz_2001")) %>%
+    select(datazone, sec, count)
+
+
+# What are the mutually exclusive groups?
+
+
+tmp <- dta_sec %>%
+    spread(sec, count) %>%    
+    group_by(datazone) %>%
+    mutate(
+        total=total_working_age,
+        I=I_higher_managerial, 
+        II=II_lower_managerial + III_small_employers + III_lower_supervisory,
+        III=IV_semi_routine + III_intermediate,
+        IV=V_routine, 
+        X=X_nonstudent_total,
+        S=X_student
     ) %>%
+    select(datazone, total, I, II, III, IV, X, S) %>%
+    mutate(t2=I+II+III+IV+X+S) %>%
+    select(datazone, I, II, III, IV, X, S)
+
+sec_dz_2011 <- tmp %>%
+    mutate(year=2011) %>%
+    select(datazone, year, I, II, III, IV, X, S)
+
+write.csv(sec_dz_2011, file="data/derived/sec_by_dz_2011.csv")
+
+
+# Highest qualification - 2011 --------------------------------------------
+
+
+
+hq <- read.csv("data/2011_census/KS501SC.csv") %>%
     tbl_df
 
-numrooms_2011 <- numrooms_2011 %>%
-    rename(datazone=V1)
+hq <- hq %>%
+    slice(-1) %>%
+    rename(datazone=X) %>%
+    gather(key=key, value=count, -datazone) %>%
+    mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
 
-numrooms_2011 <- numrooms_2011 %>%
-    filter(str_detect(datazone, "^S01")) %>%
-    mutate_each(funs(as.numeric(str_replace(., "-", "0")) ), -datazone) 
+hq %>%
+    group_by(key) %>%
+    tally
+
+hq <- hq %>%
+    mutate(
+        key=mapvalues(
+            key,
+            from= c(
+                "All.people.aged.16.and.over",
+                "All.people.aged.16.and.over..No.qualifications",
+                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.1.qualifications",
+                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.2.qualifications",
+                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.3.qualifications",
+                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.4.qualifications.and.above",
+                "Schoolchildren.and.full.time.students..Aged.16.to.17",
+                "Schoolchildren.and.full.time.students..Aged.18.and.over",
+                "Full.time.students.aged.18.to.74..Economically.active..In.employment",
+                "Full.time.students.aged.18.to.74..Economically.active..Unemployed",
+                "Full.time.students.aged.18.to.74..Economically.Inactive"
+            ),
+            to= c(
+                NA,
+                "none",
+                "lvl_1",
+                "lvl_2",
+                "lvl_3",
+                "lvl_4",
+                NA,
+                NA,
+                NA,
+                NA,
+                NA
+            )
+            
+        )
+        
+    ) %>%
+    filter(!is.na(key)) %>%
+    spread(key, count)
+
+hq <- greater_glasgow_dzs %>%
+    rename(datazone=dz_2001) %>%
+    select(datazone) %>%
+    inner_join(hq)
+
+hq <- hq %>%
+    mutate(year=2011) %>%
+    select(datazone, year, none, lvl_1, lvl_2, lvl_3, lvl_4)
+
+write.csv(hq, file="data/derived/highest_qual_2011.csv", row.names=FALSE)
+
+
+# Industry, 2001 ----------------------------------------------------------
+
+# to do
+
+ 
+
+# Industry - 2011 ---------------------------------------------------------
+
+
+
+# Industry
+
+in1 <- read.csv("data/2011_census/KS605SC.csv") %>%
+    tbl_df
+
+in1 <- in1 %>%
+    slice(-1) %>%
+    rename(datazone=X) %>%
+    gather(key=key, value=count, -datazone) %>%
+    mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
+
+in1 %>%
+    group_by(key) %>%
+    tally
+
+in1 <- in1 %>%
+    mutate(
+        key=str_replace_all(str_extract(key, "^[A-Z]{1}[\\.]{2}"), "\\.", "")) %>%
+    filter(!is.na(key)) %>%
+    spread(key, count)
+
+industry <- in1 %>%
+    mutate(year = 2011) %>%
+    select(datazone, year, A, B, C, D, E, F, G, H, I, I, J, K, L, M, N, O, P, Q, R)
+
+
+
+write.csv(industry, file="data/derived/industry_2011.csv", row.names=FALSE)
+
+
+
+# Ethnicity - 2001 --------------------------------------------------------
+
+eth_2001 <- read.csv("data/prepared_census/eg_2001.csv") %>%
+    tbl_df
+
+# african = acb
+# all_people =NA
+# any_mixed_background = mixed
+# bangladeshi =asian
+# black_scottish_or_other_black =acb
+# caribbean =acb
+# chinese =asian
+# gaelic_speaker_and_born_in_scotland =NA
+# gaelic_speaker_and_not_born_in_scotland = NA 
+# indian =asian
+# other_ethnic_group = other 
+# other_south_asian =asian
+# other_white =wt_nonscot
+# other_white_british =wt_nonscot
+# pakistani =asian
+# white_irish =wt_nonscot
+# white_scottish =wt_scot
+ 
+eth_2001 <- eth_2001 %>%
+    select(-X) %>%
+    spread(type, count, fill=0) %>%
+    group_by(datazone, year) %>%
+    summarise(
+        wt_scot = sum(white_scottish),
+        wt_nonscot = sum(other_white + other_white_british + white_irish),
+        acb = sum(african + black_scottish_or_other_black + caribbean),
+        asian = sum(bangladeshi + chinese + indian + other_south_asian + pakistani),
+        mixed= sum(any_mixed_background),        
+        other= sum(other_ethnic_group)
+        ) 
+
+# have checked - these figs are mutually exclusive and exhaustive.
+
+
+
+# all_people =NA
+
+# gaelic_speaker_and_born_in_scotland =NA
+# gaelic_speaker_and_not_born_in_scotland = NA 
+
+
+# Ethnicity - 2011 --------------------------------------------------------
+
+
+# 5) ethnicity
+
+eth_2011 <- read.csv("data/prepared_census/eg_2011.csv") %>%
+    tbl_df
+
+eth_2011 <- eth_2011 %>%
+    select(datazone, type,  count)
+
+eth_2011 <- eth_2011 %>%
+    mutate(count = str_replace_all(str_replace_all(count, "-", "0"), ",", ""),
+           count= as.numeric(as.character(count)))
+
+
+# african 
+# african..african..african.scottish.or.african.british 
+# african..other.african 
+# all.people 
+# asian..asian.scottish.or.asian.british 
+# asian..asian.scottish.or.asian.british..bangladeshi..bangladeshi.scottish.or.bangladeshi.british 
+# asian..asian.scottish.or.asian.british..chinese..chinese.scottish.or.chinese.british 
+# asian..asian.scottish.or.asian.british..indian..indian.scottish.or.indian.british 
+# asian..asian.scottish.or.asian.british..other.asian 
+# asian..asian.scottish.or.asian.british..pakistani..pakistani.scottish.or.pakistani.british 
+# caribbean.or.black 
+# caribbean.or.black..black..black.scottish.or.black.british  
+# caribbean.or.black..caribbean..caribbean.scottish.or.caribbean.british 
+# caribbean.or.black..other.caribbean.or.black 
+# mixed.or.multiple.ethnic.groups 
+# other.ethnic.groups 
+# other.ethnic.groups..arab..arab.scottish.or.arab.british 
+# other.ethnic.groups..other.ethnic.group 
+# white 
+# white..gypsy.traveller
+# white..irish 
+# white..other.british 
+# white..other.white 
+# white..polish 
+# white..scottish 
+
+
+eth_2011 <- eth_2011 %>%
+    spread(type, count) %>%
+    mutate(
+        year=2011,
+        wt_scot=white..scottish,
+        wt_nonscot=white - wt_scot ,
+        acb=african + caribbean.or.black,
+        asian=asian..asian.scottish.or.asian.british,        
+        mixed=mixed.or.multiple.ethnic.groups,
+        other=other.ethnic.groups
+    ) %>%
+    select(datazone, year, wt_scot, wt_nonscot, acb, asian, mixed, other)
+
+eth <- bind_rows(eth_2001, eth_2011)
+
+eth <- greater_glasgow_dzs %>%
+    select(datazone=dz_2001) %>%
+    inner_join(eth) %>%
+    arrange(year, datazone)
+
+
+write.csv(eth, file="data/derived/ethnicity.csv", row.names=FALSE)
+
+
+
+# country of origin 2001 -----------------------------------------------------------
+
+coo_2001 <- read.csv("data/prepared_census/coo_2001.csv") %>%
+    tbl_df
+
+coo_2001 <- coo_2001 %>%
+    select(-X, datazone, year, type, count) %>%
+    spread(type, count) %>%
+    select(datazone, year, scotland, england, northern_ireland, wales, rep_ireland, other_eu, elsewhere)
+
+# country of origin 2011 -----------------------------------------------------------
+
+coo_2011 <- read.csv("data/prepared_census/coo_2011.csv") %>%
+    tbl_df
+
+coo_2011 <- coo_2011 %>%
+    select(-X, datazone, year, type, count) %>%
+    spread(type, count) %>%
+    mutate(
+        all_people = all.people,
+        england = england,
+        northern_ireland = northern.ireland,
+        other_eu = other.eu..accession.countries.april.2001.to.march.2011 + other.eu..member.countries.in.march.2001..1.,
+        rep_ireland = republic.of.ireland,
+        scotland=scotland, 
+        wales=wales,
+        elsewhere=other.countries
+        ) %>%
+    select(datazone, year, scotland, england, northern_ireland, wales, rep_ireland, other_eu, elsewhere)
+
+coo <- bind_rows(coo_2001, coo_2011)
+
+coo <- greater_glasgow_dzs %>%
+    select(datazone=dz_2001) %>%
+    inner_join(coo) %>%
+    arrange(year, datazone)
+
+write.csv(coo, file="data/derived/coo.csv", row.names=FALSE)
+
+
+# Religion ----------------------------------------------------------------
+
+
+# religion 2001 -----------------------------------------------------------
+
+rel_2001 <- read.csv("data/prepared_census/rel_2001.csv") %>%
+    tbl_df
+
+rel_2001 <- rel_2001 %>%
+    select(datazone, year, type, count) %>%
+    spread(type, count) %>%
+    mutate(
+        cos = church_of_scotland,
+        catholic = roman_catholic,
+        other_christian = other_christian,
+        none = none,
+        other_religion = another_religion + buddhist + hindu, + jewish + muslim + sikh,
+        not_announced = not_announced
+        ) %>%
+    select(datazone, year, cos, catholic, other_christian, none, other_religion, not_announced)
+
+# religion 2011 -----------------------------------------------------------
+
+rel_2011 <- read.csv("data/prepared_census/rel_2011.csv") %>%
+    tbl_df
+
+rel_2011 <- rel_2011 %>%
+    select(datazone, year, type, count)
+
+rel_2011 <- rel_2011 %>%
+    mutate(count = as.numeric(str_replace(str_replace(count, "-", "0"), ",", ""))) 
+
+
+rel_2011 <- rel_2011 %>%
+    select(datazone, year, type, count) %>%
+    spread(type, count) %>%
+    mutate(
+        cos= church.of.scotland,
+        catholic = roman.catholic,
+        other_christian = other.christian,
+        none = no.religion,
+        other_religion = buddhist + hindu + jewish + muslim + sikh + other.religion,
+        not_announced = religion.not.stated
+        ) %>%
+    select(datazone, year, cos, catholic, other_christian, none, other_religion, not_announced)
+
+rel <- bind_rows(rel_2001, rel_2011)
+
+rel <- greater_glasgow_dzs %>%
+    select(datazone = dz_2001) %>%
+    inner_join(rel) %>%
+    arrange(year, datazone)
+
+write.csv(rel, file="data/derived/rel.csv", row.names=FALSE)
+# Dwelling use ------------------------------------------------------------
+
+# Dwelling use 2001 -------------------------------------------------------
+
+
+
+# 4) land use # NOTE: 2001 only
+household_spaces <- source_DropboxData(
+    file="household_spaces.csv",
+    key="4eg2to2vx7rrfki")  %>% tbl_df
+
+tmp <- household_spaces %>%
+    rename(
+        total=HO.allspaces,
+        holiday=HO.holiday,
+        occupied=HO.occupied, 
+        vacant=HO.vacant
+    ) %>% 
+    select(datazone, total, occupied, holiday, vacant) 
+
+tmp$diversity <- tmp  %>% 
+    select(-datazone, -total)  %>% 
+    as.matrix  %>% 
+    diversity  
+
+tmp$H <- tmp  %>% 
+    select(-datazone, -total, -diversity)  %>% 
+    as.matrix  %>% 
+    H  
+
+
+space_diversity_2001 <- tmp  %>%
+    select(datazone, diversity, H)
+rm(tmp)
+write.csv(space_diversity_2001, file="data/derived/diversity_space_2001.csv", row.names=FALSE)
+
+
+
+
+
