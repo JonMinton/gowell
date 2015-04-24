@@ -23,7 +23,9 @@ require(vegan)
 greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% 
     tbl_df()
 
-
+area_unit_links <- read.csv("data/geographies/latestpcinfowithlinkpc.csv") %>%
+    tbl_df() %>%
+    select(Datazone, OA2001) # For 2001 Census
 # Tenure diversity 2001  --------------------------------------------------
 
 #Tenure - 2001 census via SNS
@@ -187,7 +189,7 @@ write.csv(populations_grouped, file="data/derived/demographic_groupings.csv", ro
 
 # Dwelling type -----------------------------------------------------------
 
-# from SNS - seems to be 2001
+# from SNS - 
 
 
 dwellings <- source_DropboxData(
@@ -242,8 +244,61 @@ write.csv(dwellings_types, file="data/derived/dwellings_by_type.csv", row.names=
 
 # Occupational Mix - 2001 -------------------------------------------------
 
-# TO DO
+dta_sec_2001 <- read.csv("data/2001_census/KS012a.csv") %>%
+    tbl_df
 
+# Need to do linking from zone.code to datazone
+
+dta_sec_2001 <- dta_sec_2001 %>%
+    inner_join(area_unit_links, by=c("Zone.Code"= "OA2001")) %>%
+    distinct() %>%
+    select(-Zone.Code) %>%
+    rename(datazone=Datazone) %>%
+    group_by(datazone) %>%
+    summarise_each(funs(sum)) %>%
+    filter(str_detect(datazone, "^S01"))
+
+# To make comparable with 2011 vars also need estimtes of total population sizes
+# these will form the 'X' groups below. 
+
+populations <- read.csv("data/derived/populations_by_age_year_sex.csv") %>% 
+    tbl_df()
+dta_sec_2001 <- populations  %>% 
+    filter(year==2001)  %>% 
+    spread(key=sex, value=count)  %>% 
+    mutate(total = male + female)  %>% 
+    filter(lower_age >=16 & upper_age <= 74)  %>% 
+    group_by(datazone)  %>% 
+    summarise(total_working_age=sum(total)) %>%
+    ungroup %>%
+    right_join(dta_sec_2001)
+
+with(dta_sec_2001, all(total_working_age >= all_16_74_employed))
+
+with(dta_sec_2001, total_working_age[total_working_age < all_16_74_employed] <- 
+         all_16_74_employed[total_working_age < all_16_74_employed]
+         )
+# this suggests there are some errors
+# HOwever, only two errors out of 6505 values. So, setting to 0
+
+
+
+dta_sec_2001 <- dta_sec_2001 %>%
+    mutate(year=2001) %>%
+    transmute(
+        datazone = datazone,
+        year=year,
+        total=total_working_age,
+        I = managers_senior_officials + prof_occupations,
+        II = associate_prof_technical_occ +  skilled_trades_occ + 
+        personal_service + admin_secretarial + sales_customer_service,
+        III = process_plant_machine_operatives,
+        IV = elementary,
+        X= total - (I + II + III + IV)
+        ) %>%
+    select(-total)
+
+# X is 0 
 # Occupational Mix - 2011 -------------------------------------------------
 
 # This section will use relevant variables from the 2011 Census to identify the 
@@ -308,38 +363,104 @@ tmp <- dta_sec %>%
         II=II_lower_managerial + III_small_employers + III_lower_supervisory,
         III=IV_semi_routine + III_intermediate,
         IV=V_routine, 
-        X=X_nonstudent_total,
-        S=X_student
+        X=X_nonstudent_total + X_student
     ) %>%
-    select(datazone, total, I, II, III, IV, X, S) %>%
-    mutate(t2=I+II+III+IV+X+S) %>%
-    select(datazone, I, II, III, IV, X, S)
+    select(datazone, total, I, II, III, IV, X) %>%
+    select(datazone, I, II, III, IV, X)
 
-sec_dz_2011 <- tmp %>%
+dta_sec_2011 <- tmp %>%
     mutate(year=2011) %>%
-    select(datazone, year, I, II, III, IV, X, S)
+    select(datazone, year, I, II, III, IV, X)
 
-write.csv(sec_dz_2011, file="data/derived/sec_by_dz_2011.csv")
+dta_sec <- bind_rows(dta_sec_2001, dta_sec_2011)
+
+dta_sec <- greater_glasgow_dzs  %>% 
+    select(datazone=dz_2001)  %>% 
+    inner_join(dta_sec) %>%
+    arrange(year, datazone)
+
+
+write.csv(dta_sec, file="data/derived/sec_by_dz.csv")
+
+
+
+# Highest qualification  - 2001 -------------------------------------------
+
+hq_2001 <- read.csv("data/2001_census/KS013.csv") %>%
+    tbl_df
+
+
+hq_2001 <- area_unit_links  %>% 
+    rename(Zone.Code = OA2001)  %>% 
+    left_join(hq_2001)  %>% 
+    distinct %>%
+    select(-Zone.Code)  %>% 
+    rename(datazone=Datazone)  %>% 
+    group_by(datazone)  %>% 
+    summarise_each(funs(sum))  %>% 
+    filter(str_detect(datazone, "^S01")) %>%
+    mutate(year=2001) %>%
+    gather(key=category, value=count, -datazone, -year) %>%
+    select(datazone, year, category, count) %>%
+    spread(key=category, value=count)
+
+
+hq_2001 <- hq_2001 %>%
+    gather(key=key, value=count, -datazone, -year) %>%
+    mutate(key=mapvalues(key,
+            from=c(
+                "all_people_aged_16_74",                 
+                "no_quals_or_quals_outwith_these_groups", 
+                "highest_qual_level_1",
+                "highest_qual_level_2",                 
+                "highest_qual_level_3",                  
+                "highest_qual_level_4",                   
+                "aged_16_17",                            
+                "aged_18_74",                             
+                "in_employment",                          
+                "unemployed",                            
+                "economically_inactive"
+                ),
+            to=c(
+                NA,                 
+                "none", 
+                "lvl_1",
+                "lvl_2",                 
+                "lvl_3",                  
+                "lvl_4",                   
+                NA,                            
+                NA,                             
+                NA,                          
+                NA,                            
+                NA
+                )
+            )
+        ) %>%
+    filter(!is.na(key)) %>%
+    spread(key=key, value=count)
+
+
+
 
 
 # Highest qualification - 2011 --------------------------------------------
 
 
 
-hq <- read.csv("data/2011_census/KS501SC.csv") %>%
+hq_2011 <- read.csv("data/2011_census/KS501SC.csv") %>%
     tbl_df
 
-hq <- hq %>%
+hq_2011 <- hq_2011 %>%
     slice(-1) %>%
     rename(datazone=X) %>%
     gather(key=key, value=count, -datazone) %>%
     mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
 
-hq %>%
+hq_2011 %>%
     group_by(key) %>%
     tally
 
-hq <- hq %>%
+hq_2011 <- hq_2011 %>%
     mutate(
         key=mapvalues(
             key,
@@ -376,23 +497,47 @@ hq <- hq %>%
     filter(!is.na(key)) %>%
     spread(key, count)
 
-hq <- greater_glasgow_dzs %>%
-    rename(datazone=dz_2001) %>%
-    select(datazone) %>%
-    inner_join(hq)
 
-hq <- hq %>%
+hq_2011 <- hq_2011 %>%
     mutate(year=2011) %>%
     select(datazone, year, none, lvl_1, lvl_2, lvl_3, lvl_4)
 
-write.csv(hq, file="data/derived/highest_qual_2011.csv", row.names=FALSE)
+hq <- bind_rows(hq_2001, hq_2011)
+
+hq <- greater_glasgow_dzs %>%
+    select(datazone=dz_2001) %>%
+    inner_join(hq)
+
+
+write.csv(hq, file="data/derived/highest_qual.csv", row.names=FALSE)
 
 
 # Industry, 2001 ----------------------------------------------------------
 
 # to do
 
- 
+ind_2001 <- read.csv("data/2001_census/KS011a.csv") %>%
+    tbl_df
+
+ind_2001 <-  area_unit_links  %>% 
+    rename(Zone.Code = OA2001)  %>% 
+    left_join(ind_2001)  %>% 
+    distinct %>%
+    select(-Zone.Code)  %>% 
+    rename(datazone=Datazone)  %>% 
+    group_by(datazone)  %>% 
+    summarise_each(funs(sum))  %>% 
+    filter(str_detect(datazone, "^S01")) %>%
+    mutate(year=2001) %>%
+    gather(key=category, value=count, -datazone, -year) %>%
+    select(datazone, year, category, count) %>%
+    spread(key=category, value=count)
+
+ind_2001 <- ind_2001  %>% 
+    mutate(
+        fish_agg_hunt_forestry = fishing + agriculture_hunting_forestry        
+        ) %>%
+    select(-all_aged_16_74, -fishing, -agriculture_hunting_forestry)
 
 # Industry - 2011 ---------------------------------------------------------
 
@@ -400,32 +545,57 @@ write.csv(hq, file="data/derived/highest_qual_2011.csv", row.names=FALSE)
 
 # Industry
 
-in1 <- read.csv("data/2011_census/KS605SC.csv") %>%
+ind_2011 <- read.csv("data/2011_census/KS605SC.csv") %>%
     tbl_df
 
-in1 <- in1 %>%
+ind_2011 <- ind_2011 %>%
     slice(-1) %>%
     rename(datazone=X) %>%
     gather(key=key, value=count, -datazone) %>%
     mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
 
-in1 %>%
+ind_2011 %>%
     group_by(key) %>%
     tally
 
-in1 <- in1 %>%
+ind_2011 <- ind_2011 %>%
     mutate(
         key=str_replace_all(str_extract(key, "^[A-Z]{1}[\\.]{2}"), "\\.", "")) %>%
     filter(!is.na(key)) %>%
     spread(key, count)
 
-industry <- in1 %>%
+ind_2011 <- ind_2011 %>%
     mutate(year = 2011) %>%
     select(datazone, year, A, B, C, D, E, F, G, H, I, I, J, K, L, M, N, O, P, Q, R)
 
+ind_2011 <- ind_2011 %>%
+    transmute(
+        datazone=datazone, 
+        year=year,
+        mining_and_quarrying = B,
+        manufacturing = C,
+        electricity_gas_water_supply = D + E,
+        construction = F,
+        wholesale_retail_trade_repairs = G,
+        hotels_restaurants = I,
+        transport_storage_communications = H + J,
+        financial_intermediaries = K,
+        real_estate_renting_business_activities = L + N,
+        public_admin_defence_social_security = O + M,
+        education = P,
+        health_and_social_work = Q,
+        other = R,
+        fish_agg_hunt_forestry = A
+        )
 
+ind <- bind_rows(ind_2001, ind_2011)
 
-write.csv(industry, file="data/derived/industry_2011.csv", row.names=FALSE)
+ind <- greater_glasgow_dzs %>%
+    select(datazone=dz_2001) %>%
+    inner_join(ind) %>%
+    arrange(year, datazone) 
+
+write.csv(ind, file="data/derived/industry.csv", row.names=FALSE)
 
 
 
@@ -675,5 +845,57 @@ write.csv(space_diversity_2001, file="data/derived/diversity_space_2001.csv", ro
 
 
 
+# Economic activity - 2001 ------------------------------------------------
+
+ecact_2001 <- read.csv("data/2001_census/KS009a.csv") %>%
+    tbl_df
+
+ecact_2001 <- area_unit_links  %>% 
+    rename(Zone.Code = OA2001)  %>% 
+    left_join(ecact_2001)  %>% 
+    distinct %>%
+    select(-Zone.Code)  %>% 
+    rename(datazone=Datazone)  %>% 
+    group_by(datazone)  %>% 
+    summarise_each(funs(sum))  %>% 
+    filter(str_detect(datazone, "^S01")) %>%
+    mutate(year=2001) %>%
+    gather(key=category, value=count, -datazone, -year) %>%
+    select(datazone, year, category, count) %>%
+    spread(key=category, value=count)
 
 
+
+# Economic Activity - 2011 ------------------------------------------------
+
+ecact_2011 <- source_DropboxData(
+    file = "KS601SC.csv",
+    key= "kejjriv7drqsub1"
+    ) %>%
+    tbl_df
+
+ecact_2011 <- ecact_2011  %>% 
+    rename(datazone=V1)  %>% 
+    filter(str_detect(datazone, "^S01")) 
+
+# Common categories?
+## All categories are the same, and in the same order
+
+# Need to convert from character to numeric
+ecact_2011 <- ecact_2011  %>% 
+    gather(key=category, value=count, -datazone)   %>% 
+    mutate(year = 2011) %>%
+    mutate(count = as.integer(as.character(str_replace(str_replace(count, ",", ""), "-", "0"))))  %>%
+    select(datazone, year, category, count)  %>% 
+    spread(key=category, value=count)
+
+
+names(ecact_2011) <- names(ecact_2001)
+
+ecact <- bind_rows(ecact_2001, ecact_2011)
+
+ecact <- greater_glasgow_dzs  %>% 
+    select(datazone = dz_2001)  %>% 
+    inner_join(ecact)
+
+write.csv(ecact, file="data/derived/economic_activity.csv", row.names=FALSE)
