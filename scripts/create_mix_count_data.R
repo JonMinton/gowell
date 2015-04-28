@@ -200,7 +200,7 @@ dwellings <- source_DropboxData(
 
 dwellings_bands <- dwellings %>%
     select(datazone, year, matches("_[A-Z]_")) %>%
-    inner_join(greater_glasgow_dzs) %>%
+    inner_join(greater_glasgow_dzs, by=c("datazone"="dz_2001")) %>%
     select(-chp)
 
 names(dwellings_bands) <- names(dwellings_bands) %>% 
@@ -814,36 +814,54 @@ write.csv(rel, file="data/derived/rel.csv", row.names=FALSE)
 
 
 # 4) land use # NOTE: 2001 only
-household_spaces <- source_DropboxData(
+household_spaces_01 <- source_DropboxData(
     file="household_spaces.csv",
     key="4eg2to2vx7rrfki")  %>% tbl_df
 
-tmp <- household_spaces %>%
+
+household_spaces_01 <- household_spaces_01 %>%
     rename(
-        total=HO.allspaces,
         holiday=HO.holiday,
         occupied=HO.occupied, 
         vacant=HO.vacant
     ) %>% 
-    select(datazone, total, occupied, holiday, vacant) 
-
-tmp$diversity <- tmp  %>% 
-    select(-datazone, -total)  %>% 
-    as.matrix  %>% 
-    diversity  
-
-tmp$H <- tmp  %>% 
-    select(-datazone, -total, -diversity)  %>% 
-    as.matrix  %>% 
-    H  
+    select(datazone, year, occupied, holiday, vacant) 
 
 
-space_diversity_2001 <- tmp  %>%
-    select(datazone, diversity, H)
-rm(tmp)
-write.csv(space_diversity_2001, file="data/derived/diversity_space_2001.csv", row.names=FALSE)
+
+#  Space diversity 2011 ---------------------------------------------------
+
+household_spaces_11 <- source_DropboxData(
+    file="KS401SC.csv",
+    key="adqpk37jkscnni6")  %>% tbl_df
+
+household_spaces_11 <- household_spaces_11 %>%
+    rename(datazone=V1) %>%
+    filter(str_detect(datazone, "^S01")) %>%
+    mutate(year = 2011) %>%
+    gather(key=type, value=count, -datazone, -year) %>%
+    mutate(count = as.numeric(str_replace(str_replace(count, "-", "0"), ",", "")))
 
 
+household_spaces_11 <- household_spaces_11 %>%
+    filter(
+        type %in% c(
+            "All household spaces: Occupied", 
+            "All household spaces: Unoccupied: Second residence/holiday accommodation",
+            "All household spaces: Unoccupied: Vacant"
+            )
+        ) %>%
+    spread(type, count)
+
+names(household_spaces_11) <- c("datazone", "year", "occupied", "holiday", "vacant")
+
+household_spaces <- bind_rows(household_spaces_01, household_spaces_11)
+
+household_spaces <- greater_glasgow_dzs  %>% 
+    select(datazone = dz_2001)  %>% 
+    inner_join(household_spaces)
+
+write.csv(household_spaces, file="data/derived/household_space_use.csv", row.names=FALSE)
 
 # Economic activity - 2001 ------------------------------------------------
 
@@ -899,3 +917,32 @@ ecact <- greater_glasgow_dzs  %>%
     inner_join(ecact)
 
 write.csv(ecact, file="data/derived/economic_activity.csv", row.names=FALSE)
+
+
+# Building use ------------------------------------------------------------
+
+
+# See paf_building_type_count_extraction for bulk of data wrangling
+
+use_2001 <- read.csv("data/derived/building_use_counts_2010_datazone.csv") %>%
+    tbl_df
+
+use_2010 <- read.csv("data/derived/building_use_counts_2010_datazone.csv") %>%
+    tbl_df
+
+
+use_2001 <- use_2001 %>%
+    mutate(year = 2001) %>%
+    select(datazone, year, address=address_count, deliverypoint=deliverypoint_count, smallbus=smallbus_count)
+
+use_2010 <- use_2010 %>%
+    mutate(year = 2010) %>%
+    select(datazone, year, address=address_count, deliverypoint=deliverypoint_count, smallbus=smallbus_count)
+
+use <- bind_rows(use_2001, use_2010)
+
+use <- greater_glasgow_dzs  %>% 
+    select(datazone = dz_2001)  %>% 
+    inner_join(use)
+
+write.csv(use, file="data/derived/building_use.csv", row.names=FALSE)
