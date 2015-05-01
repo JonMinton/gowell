@@ -599,3 +599,11 @@ fit_t2$rotation  %>%
     labs(x="Factor loading on Principal Component", y="Entropy Type", title="Factor loadings around 2011") +
     theme(plot.title=element_text(face = "bold"))
 ggsave("figures/s_factor_loadings_pca_around_2011.tiff", dpi=300, height=30, width=30, unit="cm")
+
+
+# SEM for H ---------------------------------------------------------------
+
+
+# Using lavaan package
+
+
