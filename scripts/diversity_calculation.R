@@ -205,7 +205,7 @@ all_H <- all_H %>%
     select(datazone, year, period, type, H) %>%
     spread(key=type, value=H)
 
-
+write.csv(all_H, file="data/derived/all_H.csv", row.names=F)
 
 # H, Correlations in both periods --------------------------------------------
 
@@ -216,6 +216,8 @@ p_all_H <- all_H %>%
     filter(datazone %in% greater_glasgow_dzs$datazone) %>% 
     select(-year)  %>% 
     spread(key=type, value=H)
+
+write.csv(p_all_H, file="data/derived/p_all_H.csv", row.names=F)
 
 fn <- function(x){
     xx <- as.matrix(x[,-c(1,2)])
@@ -485,7 +487,7 @@ all_S <- all_S %>%
     select(datazone, year, period, type, S) %>%
     spread(key=type, value=S)
 
-
+write.csv(all_S, file="data/derived/all_S.csv", row.names=F)
 
 
 # S, Correlations in both periods --------------------------------------------
@@ -497,6 +499,9 @@ p_all_S <- all_S %>%
     filter(datazone %in% greater_glasgow_dzs$datazone) %>% 
     select(-year)  %>% 
     spread(key=type, value=S)
+
+write.csv(p_all_S, file="data/derived/p_all_S.csv", row.names=F)
+
 
 fn <- function(x){
     xx <- as.matrix(x[,-c(1,2)])
