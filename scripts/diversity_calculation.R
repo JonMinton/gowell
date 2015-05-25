@@ -124,7 +124,7 @@ write.csv(dz_sec_diversity, file="data/derived/diversity_sec_by_dz_2011_census.c
 
 greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% tbl_df()
 
-#Tenure
+#Tenure households - ONLY AVAILABLE FOR 2001!
 
 tenure_households <- source_DropboxData(
     file="tenure_households.csv",
@@ -544,3 +544,13 @@ in1 <- in1 %>%
 
 write.csv(in1, file="data/derived/industry_1_diversity_2011.csv", row.names=FALSE)
 
+
+
+# 2001 Diversity scores ---------------------------------------------------
+
+
+# Which variables can be compared from 2001 to 2011?
+Occupational Class
+
+# type  2001    2011
+# sec   
