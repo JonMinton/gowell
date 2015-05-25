@@ -2,12 +2,6 @@
 # using SNS and 2011 census data
 
 
-
-
-
-# Occupational Class From Census --------------------------------------------------
-
-
 rm(list=ls())
 
 require(repmis)
@@ -17,8 +11,10 @@ require(plyr)
 require(dplyr)
 require(vegan)
 require(ggplot2)
+require(xtable)
 
-# Functions 
+# Entropy function --------------------------------------------------------
+
 
 # Entropy calculation
 H <- function(xx){
@@ -27,21 +23,14 @@ H <- function(xx){
     out <- -1 * apply(p, 2, function(x) sum(x * log(x))/N)
     return(out)
 }
-# This section will use relevant variables from the 2011 Census to identify the 
-# mix of occupational classes in each datazone
-
-# 
-
-dta_sec <- source_DropboxData(
-    key = "h4l5f34ktg7lxl6",
-    file="KS611SC.csv"
-) %>% tbl_df
 
 
-dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, ",", ""))
-dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, "-", "0"))
-dta_sec[,-1] <- apply(dta_sec[,-1], 2, function(x) as.numeric(as.character(x)))
-dta_sec <- data.frame(dta_sec) %>%
+
+
+# Data  -------------------------------------------------------------------
+
+# Primary
+tenure <- read.csv("data/derived/tenure_by_dz.csv") %>%
     tbl_df
 
 names(dta_sec) <- c(
@@ -153,404 +142,581 @@ tenure_households$diversity <- tenure_households %>%
     as.matrix %>%
     diversity
 
-tenure_households$H <- tenure_households  %>% 
-    ungroup  %>% 
-    select(-datazone, -diversity)  %>%
-    as.matrix %>%
-    H
 
-tenure_households <- tenure_households %>%
-    select(datazone, diversity, H)
+# Building type 
 
-write.csv(tenure_households, file="data/derived/diversity_tenure_2001.csv", row.names=FALSE)
-
-# 6505 observations - whole of Scotland
-# left join to just Greater Glasgow
-# tenure_households <- greater_glasgow_dzs %>% left_join(tenure_households)
-# now 2200 observations
-# this is 34% of total, dzs are approx equal population
-# if Scot population is 5.3 million this implies 
-# Pop of Greater Glasgow is about 1.8 Million - 
-# does this seem reasonable?
-
-#write.csv(tenure_households, file="data/derived/tenure_by_dz.csv", row.names=F)
-
-
-
-# 2) council tax band diversity
-
-dwelling_bands <- read.csv("data/derived/dwellings_by_band.csv") %>%
+bld_band <- read.csv("data/derived/dwellings_by_band.csv") %>%
     tbl_df
 
-dwelling_bands
-# going for 2011 for comparability with census
-dwelling_bands_2011 <- dwelling_bands %>%
-    filter(year==2011)
-
-dwelling_bands_2011$diversity <- dwelling_bands_2011%>%
-    select(-datazone, -year) %>%
-    as.matrix %>%
-    diversity
-
-dwelling_bands_2011$entropy <- dwelling_bands_2011%>%
-    select(-datazone, -year, -diversity) %>%
-    as.matrix %>%
-    H
-
-dwelling_bands_2011 <- dwelling_bands_2011 %>%
-    mutate(entropy = ifelse(is.finite(entropy), entropy, 0))
-           
-dwelling_diversity_2011<- dwelling_bands_2011 %>%
-    select(datazone, diversity, H=entropy)
-
-write.csv(dwelling_diversity_2011, file="data/derived/diversity_dwelling_band_2011.csv", row.names=FALSE)
-
-# 3) dwelling type diversity
-
-dwelling_types <- read.csv("data/derived/dwellings_by_type.csv") %>%
+bld_size <- read.csv("data/derived/dwellings_by_size.csv") %>%
     tbl_df
 
-tmp <- dwelling_types %>%
-    filter(year==2011) %>%
-    select(-year) %>%
-    spread(type, count)
-
-tmp$diversity <- tmp %>%
-    select(-1) %>%
-    as.matrix %>%
-    diversity 
-
-tmp$H <- tmp %>%
-    select(-datazone, diversity) %>%
-    as.matrix %>%
-    H 
-
-dwelling_type_diversity_2011 <- tmp %>%
-    select(datazone, diversity, H)
-
-write.csv(dwelling_type_diversity_2011, file="data/derived/diversity_dwelling_type_2011.csv", row.names=FALSE)
-
-
-# 4) land use # NOTE: 2001 only
-household_spaces <- source_DropboxData(
-    file="household_spaces.csv",
-    key="4eg2to2vx7rrfki")  %>% tbl_df
-
-tmp <- household_spaces %>%
-    rename(
-        total=HO.allspaces,
-        holiday=HO.holiday,
-        occupied=HO.occupied, 
-        vacant=HO.vacant
-    ) %>% 
-    select(datazone, total, occupied, holiday, vacant) 
-
-tmp$diversity <- tmp  %>% 
-    select(-datazone, -total)  %>% 
-    as.matrix  %>% 
-    diversity  
-
-tmp$H <- tmp  %>% 
-    select(-datazone, -total, -diversity)  %>% 
-    as.matrix  %>% 
-    H  
-
-
-space_diversity_2001 <- tmp  %>%
-    select(datazone, diversity, H)
-rm(tmp)
-write.csv(space_diversity_2001, file="data/derived/diversity_space_2001.csv", row.names=FALSE)
-
-# 5) ethnicity
-
-eth_2011 <- read.csv("data/prepared_census/eg_2011.csv") %>%
+bld_type <- read.csv("data/derived/dwellings_by_type.csv") %>%
     tbl_df
 
-eth_2011 <- eth_2011 %>%
-    select(datazone, type,  count)
 
-eth_2011 <- eth_2011 %>%
-    mutate(count = str_replace_all(str_replace_all(count, "-", "0"), ",", ""),
-           count= as.numeric(as.character(count)))
+# Demographic -------------------------------------------------------------
+
+demo_as <- read.csv("data/derived/demographic_groupings.csv") %>%
+    tbl_df
+
+demo_eth <- read.csv("data/derived/ethnicity.csv") %>%
+    tbl_df
+
+demo_rel <- read.csv("data/derived/rel.csv") %>%
+    tbl_df
+
+demo_coo <- read.csv("data/derived/coo.csv") %>%
+    tbl_df
 
 
-# african 
-# african..african..african.scottish.or.african.british 
-# african..other.african 
-# all.people 
-# asian..asian.scottish.or.asian.british 
-# asian..asian.scottish.or.asian.british..bangladeshi..bangladeshi.scottish.or.bangladeshi.british 
-# asian..asian.scottish.or.asian.british..chinese..chinese.scottish.or.chinese.british 
-# asian..asian.scottish.or.asian.british..indian..indian.scottish.or.indian.british 
-# asian..asian.scottish.or.asian.british..other.asian 
-# asian..asian.scottish.or.asian.british..pakistani..pakistani.scottish.or.pakistani.british 
-# caribbean.or.black 
-# caribbean.or.black..black..black.scottish.or.black.british  
-# caribbean.or.black..caribbean..caribbean.scottish.or.caribbean.british 
-# caribbean.or.black..other.caribbean.or.black 
-# mixed.or.multiple.ethnic.groups 
-# other.ethnic.groups 
-# other.ethnic.groups..arab..arab.scottish.or.arab.british 
-# other.ethnic.groups..other.ethnic.group 
-# white 
-# white..gypsy.traveller
-# white..irish 
-# white..other.british 
-# white..other.white 
-# white..polish 
-# white..scottish 
+# Economy -------------------------------------------------------------
 
-eth_2011 %>%
+econ_qual <- read.csv("data/derived/highest_qual.csv") %>%
+    tbl_df
+
+econ_act <- read.csv("data/derived/economic_activity.csv") %>%
+    tbl_df
+
+econ_sec <- read.csv("data/derived/sec_by_dz.csv") %>%
+    tbl_df
+
+econ_ind <- read.csv("data/derived/industry.csv") %>%
+    tbl_df
+
+
+# Land use ----------------------------------------------------------------
+
+land_vacant <- read.csv("data/derived/household_space_use.csv") %>%
+    tbl_df
+
+land_bus <- read.csv("data/derived/building_use.csv") %>%
+    tbl_df
+
+
+# NOTE: Not all are in the same format. Some additional prep will be required
+
+
+
+# Diversity using H -------------------------------------------------------
+
+
+tenure$H <- H(as.matrix(tenure[,c("social", "rented", "owned")]))
+tenure_H <- tenure %>%
+    select(datazone=dz_2001, year=year, H=H)
+
+
+bld_band$H <- H(as.matrix(bld_band[,c("A", "B", "C", "D", "E" ,"F", "G", "H")]))
+bld_band_H <- bld_band %>%
+    select(datazone, year, H)
+
+bld_size <- bld_size %>%
+    mutate(num_of_rooms = paste0("n_", num_of_rooms)) %>%
+    spread(key=num_of_rooms, value=count)
+bld_size$H <- H(as.matrix(bld_size[,-c(1,2)]))
+bld_size_H <- bld_size %>%
+    select(datazone, year, H)
+
+bld_type <- bld_type  %>%
+    spread(key=type, value=count) 
+bld_type$H <- H(as.matrix(bld_type[,-c(1,2)]))
+bld_type_H <- bld_type %>%
+    select(datazone, year, H)
+
+demo_as$H <- H(as.matrix(demo_as[,-c(1,2)]))
+demo_as_H <- demo_as %>%
+    select(datazone=dz_2001, year, H)
+
+
+demo_eth$H <- H(as.matrix(demo_eth[,-c(1,2)]))
+demo_eth_H <- demo_eth %>%
+    select(datazone, year, H)
+
+demo_rel$H <- H(as.matrix(demo_rel[,-c(1,2)]))
+demo_rel_H <- demo_rel %>%
+    select(datazone, year, H)
+
+demo_coo$H <- H(as.matrix(demo_coo[,-c(1,2)]))
+demo_coo_H <- demo_coo %>%
+    select(datazone, year, H)
+
+
+econ_qual$H <- H(as.matrix(econ_qual[,-c(1,2)]))
+econ_qual_H <- econ_qual %>%
+    select(datazone, year, H)
+
+econ_act$H <- H(as.matrix(econ_act[,-c(1,2)]))
+econ_act_H <- econ_act %>%
+    select(datazone, year, H)
+
+econ_sec$H <- H(as.matrix(econ_sec[,-c(1,2)]))
+econ_sec_H <- econ_sec %>%
+    select(datazone, year, H)
+
+econ_ind$H <- H(as.matrix(econ_ind[,-c(1,2)])) 
+econ_ind_H <- econ_ind %>%
+    select(datazone, year, H)
+
+land_vacant$H <- H(as.matrix(land_vacant[,-c(1,2)]))
+land_vacant_H <- land_vacant %>%
+    select(datazone, year, H)
+
+
+land_bus$H <- H(as.matrix(land_bus[,-c(1,2)])) 
+land_bus_H <- land_bus %>%
+    select(datazone, year, H)
+
+# Now to combine where there are common years
+
+all_H <- tenure_H %>%
+    rename(tenure=H) %>%
+    full_join(bld_band_H) %>%
+    rename(bld_band=H) %>%
+    full_join(bld_size_H) %>%
+    rename(bld_size=H) %>%
+    full_join(bld_type_H) %>%
+    rename(bld_type=H) %>%
+    full_join(demo_as_H) %>%
+    rename(demo_as=H) %>%
+    full_join(demo_eth_H) %>%
+    rename(demo_eth=H) %>%
+    full_join(demo_rel_H)  %>% 
+    rename(demo_rel=H) %>%
+    full_join(demo_coo_H) %>%
+    rename(demo_coo=H) %>%
+    full_join(econ_qual_H) %>%
+    rename(econ_qual=H) %>%
+    full_join(econ_act_H) %>%
+    rename(econ_act=H) %>%
+    full_join(econ_sec_H) %>%
+    rename(econ_sec=H) %>%
+    full_join(econ_ind_H) %>%
+    rename(econ_ind=H) %>%
+    full_join(land_vacant_H) %>%
+    rename(land_vacant=H) %>%
+    full_join(land_bus_H) %>%
+    rename(land_bus=H)
+
+
+
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% 
+    tbl_df() %>%
+    rename(datazone=dz_2001)
+
+all_H <- all_H %>%
+    gather(key=type, value=H, -datazone, -year) %>%
+    filter(!is.na(H)) %>%
     group_by(type) %>%
-    tally %>%
-    print(n=25)
+    mutate(t1 = min(year), t2=max(year)) %>%
+    mutate(d1 = abs(year - t1), d2 = abs(year - t2)) %>%
+    mutate(period = ifelse(d1==min(d1), "t1", ifelse(d2==min(d2), "t2", NA))) %>%
+    filter(!is.na(period)) %>%
+    select(datazone, year, period, type, H) %>%
+    spread(key=type, value=H)
 
-tmp <- eth_2011 %>%
-    spread(type, count) %>%
-    mutate(
-        acb=african + caribbean.or.black,
-        wt_scot=white..scottish,
-        wt_nonscot=white - wt_scot ,
-        asian=asian..asian.scottish.or.asian.british,
-        mixed=mixed.or.multiple.ethnic.groups,
-        other=other.ethnic.groups,
-        t2=acb+wt_scot+wt_nonscot+asian+mixed+other,
-        dif=all.people - t2
-    ) %>%
-    select(datazone, acb, wt_scot, wt_nonscot, asian, mixed, other)
+write.csv(all_H, file="data/derived/all_H.csv", row.names=F)
 
-tmp$diversity <- tmp  %>% 
-    select(-1) %>%
-    as.matrix %>%
-    diversity 
-
-tmp$H <- tmp %>%
-    select(-datazone, -diversity) %>%
-    H
-
-diversity_eth_2011 <- tmp %>%
-    select(datazone, diversity, H)
-
-write.csv(diversity_eth_2011, file="data/derived/diversity_ethnicity_2011.csv", row.names=FALSE)
-
-# 6) demographic mix # NOTE: THIS EXCLUDES 2011 - 2010 is last year
-pops <- read.csv("data/derived/populations_by_age_year_sex.csv") %>%
-    tbl_df
+# H, Correlations in both periods --------------------------------------------
 
 
-tmp <- pops  %>% 
-    filter(year==2010)  %>% 
-    unite(sa, sex, age_range)  %>% 
-    select(datazone, sa, count) %>%
-    spread(sa, count) %>%
-    mutate(
-        f1=female_0_4 + female_5_9 + female_10_15,
-        m1=male_0_4 + male_5_9 + male_10_15, 
-        
-        f2=female_16_19 + female_20_24 + female_25_29,
-        m2=male_16_19 + male_20_24 + male_25_29,
-        
-        f3=female_30_34 + female_35_39 + female_40_44,
-        m3=male_30_34 + male_35_39 + male_40_44,
-        f4=female_45_49 + female_50_54 + female_55_59,
-        m4=male_45_49 + male_50_54 + male_55_59,
-        f5=  female_60_64 + female_65_69 + female_70_74,
-        m5=  male_60_64 + male_65_69 + male_70_74,
-        f6= female_75_79 +female_80_84 +female_85_89 +female_90_101,    
-        m6= male_75_79 +male_80_84 +male_85_89 +male_90_101
-    ) %>%
-    select(datazone, m1, m2, m3, m4, m5, m6, f1, f2, f3, f4, f5, f6)
+p_all_H <- all_H %>% 
+    gather(key=type, value=H, -datazone, -year, -period)  %>% 
+    filter(!is.na(H) & is.finite(H))  %>% 
+    filter(datazone %in% greater_glasgow_dzs$datazone) %>% 
+    select(-year)  %>% 
+    spread(key=type, value=H)
 
-tmp$diversity <- tmp %>%
-    select(-1) %>%
-    as.matrix %>%
+write.csv(p_all_H, file="data/derived/p_all_H.csv", row.names=F)
+
+fn <- function(x){
+    xx <- as.matrix(x[,-c(1,2)])
+    out <- cor(xx, use="pairwise.complete.obs") %>%
+        round(2)
+    
+    return(out)
+}
+
+H_corrs  <- dlply(p_all_H, .(period), fn)
+
+
+# Table of correlations, t1 -----------------------------------------------
+
+tab <- H_corrs[["t1"]]
+print(xtable(tab), type="html", file="tables/Correlations_between_entropy_levels_t1.html")
+
+# Table of correlations, t2 -----------------------------------------------
+tab <- H_corrs[["t2"]]
+print(xtable(tab), type="html", file="tables/Correlations_between_entropy_levels_t2.html")
+
+
+
+# PCA, around 2001 --------------------------------------------------------
+
+fit_t1 <- p_all_H %>%
+    filter(period=="t1") %>%
+    filter(complete.cases(.)) %>%
+    select(-datazone, -period) %>%
+    prcomp(., cor=T)
+
+
+
+# table of H loadings around 2001 -----------------------------------------
+
+fit_t1$rotation  %>% 
+    round(2)  %>%
+    xtable %>%
+    print(type="html", file="tables/entropy_factor_loadings_t1.html")
+     
+
+# Graph of H loadings around 2001 -----------------------------------------
+
+fit_t1$rotation  %>% 
+    round(2)  %>% 
+    as.data.frame  %>%
+    mutate(type=rownames(.))  %>% 
+    gather(key="pc", value="loading", -type)  %>% 
+    ggplot(data=.) + 
+    geom_point(aes(x=loading, y= type)) + 
+    facet_wrap( ~ pc) + 
+    geom_segment(
+        aes(
+            y=type, yend=type, 
+            x=ifelse(loading < 0, loading, 0), 
+            xend=ifelse(loading > 0, loading, 0)
+            )
+        ) + 
+    labs(x="Factor loading on Principal Component", y="Entropy Type", title="Factor loadings around 2001") +
+    theme(plot.title=element_text(face = "bold"))
+ggsave("figures/h_factor_loadings_pca_around_2001.tiff", dpi=300, height=30, width=30, unit="cm")
+
+
+
+# pca around 2011 ---------------------------------------------------------
+
+fit_t2 <- p_all_H %>%
+    filter(period=="t2") %>%
+    filter(complete.cases(.)) %>%
+    select(-datazone, -period) %>%
+    prcomp(., cor=T)
+
+
+
+# table of H loadings around 2011 -----------------------------------------
+
+
+fit_t2$rotation  %>% 
+    round(2)  %>%
+    xtable %>%
+    print(type="html", file="tables/entropy_factor_loadings_t2.html")
+
+print(xtable(tab), type="html", file="tables/e0_mean_1750_onwards.html")
+
+
+
+# Graph of H loadings around 2001 -----------------------------------------
+
+fit_t2$rotation  %>% 
+    round(2)  %>% 
+    as.data.frame  %>%
+    mutate(type=rownames(.))  %>% 
+    gather(key="pc", value="loading", -type)  %>% 
+    ggplot(data=.) + 
+    geom_point(aes(x=loading, y= type)) + 
+    facet_wrap( ~ pc) + 
+    geom_segment(
+        aes(
+            y=type, yend=type, 
+            x=ifelse(loading < 0, loading, 0), 
+            xend=ifelse(loading > 0, loading, 0)
+        )
+    ) + 
+    labs(x="Factor loading on Principal Component", y="Entropy Type", title="Factor loadings around 2011") +
+    theme(plot.title=element_text(face = "bold"))
+ggsave("figures/h_factor_loadings_pca_around_2011.tiff", dpi=300, height=30, width=30, unit="cm")
+
+
+
+# Do as above, but Shannon's diversity index not H ----------------------------------------
+
+tenure$S <- diversity(as.matrix(tenure[,c("social", "rented", "owned")]))
+tenure_S <- tenure %>%
+    select(datazone=dz_2001, year=year, S=S)
+
+
+bld_band$S <- bld_band  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
     diversity
 
-tmp$H <- tmp %>%
-    select(-datazone, diversity) %>%
-    as.matrix %>%
-    H
+bld_band_S <- bld_band %>%
+    select(datazone, year, S)
 
-diversity_demo_2010 <- tmp %>%
-    select(datazone, diversity, H)
-
-write.csv(diversity_demo_2010, file="data/derived/demographic_diversity_2010.csv", row.names=FALSE)
-
-# 7) occupational class
-
-# DONE
-
-
-#### Additional sources of diversity?
-
-# Candidates from SNS
-
-
-# 2011 Census Tables ------------------------------------------------------
-
-
-# The following tables have been found in the 2011 Census
-
-# KS 204 SC     Country of birth [already done]
-# QS 203 SC     Country of birth [already done]
-# KS 501 SC     Highest qualification
-# KS 605 SC     Industry
-# QS 605 SC     Industry
-# KS 206 SC     Language
-# QS 702 SC     Method of Travel to Work
-# KS 202 SC     National Identity
-# KS 608 SC     Occupation
-# QS 606 SC     Occupation
-# KS 209 SCb    Religion
-# KS 209 SCa    Religion (UK Harmonised)
-# QS 101 SC     Residence Type
-# KS 402 SC     Tenure
-
-
-
-
-rm(list=ls())
-
-require(repmis)
-require(tidyr)
-require(stringr)
-require(plyr)
-require(dplyr)
-require(vegan)
-require(ggplot2)
-
-hq <- read.csv("data/2011_census/KS501SC.csv") %>%
-    tbl_df
-
-hq <- hq %>%
-    slice(-1) %>%
-    rename(datazone=X) %>%
-    gather(key=key, value=count, -datazone) %>%
-    mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
-
-hq %>%
-    group_by(key) %>%
-    tally
-
-hq <- hq %>%
-    mutate(
-        key=mapvalues(
-            key,
-            from= c(
-                "All.people.aged.16.and.over",
-                "All.people.aged.16.and.over..No.qualifications",
-                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.1.qualifications",
-                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.2.qualifications",
-                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.3.qualifications",
-                "All.people.aged.16.and.over..Highest.level.of.qualification..Level.4.qualifications.and.above",
-                "Schoolchildren.and.full.time.students..Aged.16.to.17",
-                "Schoolchildren.and.full.time.students..Aged.18.and.over",
-                "Full.time.students.aged.18.to.74..Economically.active..In.employment",
-                "Full.time.students.aged.18.to.74..Economically.active..Unemployed",
-                "Full.time.students.aged.18.to.74..Economically.Inactive"
-                ),
-            to= c(
-                NA,
-                "none",
-                "lvl_1",
-                "lvl_2",
-                "lvl_3",
-                "lvl_4",
-                NA,
-                NA,
-                NA,
-                NA,
-                NA
-                )
-                     
-            )
-        
-        ) %>%
-    filter(!is.na(key)) %>%
-    spread(key, count)
-
-
-hq$diversity <- hq  %>% 
-    select(-1)  %>% 
-    as.matrix %>%
-    diversity 
+bld_size$S <- bld_size  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
     
-hq <- hq %>%
-    select(datazone, diversity)
+bld_size_S <- bld_size %>%
+    select(datazone, year, S)
 
-write.csv(hq, file="data/derived/highest_qual_diversity_2011.csv", row.names=FALSE)
+bld_type$S <- bld_size  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
 
-# Industry
+bld_type_S <- bld_type %>%
+    select(datazone, year, S)
 
-in1 <- read.csv("data/2011_census/KS605SC.csv") %>%
-    tbl_df
-
-in1 <- in1 %>%
-    slice(-1) %>%
-    rename(datazone=X) %>%
-    gather(key=key, value=count, -datazone) %>%
-    mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
-
-in1 %>%
-    group_by(key) %>%
-    tally
-
-in1 <- in1 %>%
-    mutate(
-        key=str_replace_all(str_extract(key, "^[A-Z]{1}[\\.]{2}"), "\\.", "")) %>%
-    filter(!is.na(key)) %>%
-    spread(key, count)
-
-in1$diversity <- in1  %>% 
-    select(-1)  %>% 
-    as.matrix %>%
-    diversity 
-
-in1 <- in1 %>%
-    select(datazone, diversity)
-
-write.csv(in1, file="data/derived/industry_1_diversity_2011.csv", row.names=FALSE)
+demo_as$S <- demo_as  %>% 
+    select(-dz_2001, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+demo_as_S <- demo_as %>%
+    select(datazone=dz_2001, year, S)
 
 
-## Language
+demo_eth$S <- demo_eth  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+demo_eth_S <- demo_eth %>%
+    select(datazone, year, S)
+
+demo_rel$S <- demo_rel  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+
+demo_rel_S <- demo_rel %>%
+    select(datazone, year, S)
+
+demo_coo$S <- demo_coo  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+
+demo_coo_S <- demo_coo %>%
+    select(datazone, year, S)
 
 
-lan <- read.csv("data/2011_census/KS206SC.csv") %>%
-    tbl_df
+econ_qual$S <- econ_qual  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+    
+econ_qual_S <- econ_qual %>%
+    select(datazone, year, S)
 
-lan <- lan %>%
-    slice(-1) %>%
-    rename(datazone=X) %>%
-    gather(key=key, value=count, -datazone) %>%
-    mutate(count=as.numeric(str_replace_all(str_replace_all(count, ",", ""), "-", "0")))
+econ_act$S <- econ_act  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
 
-lan %>%
-    group_by(key) %>%
-    tally
+econ_act_S <- econ_act %>%
+    select(datazone, year, S)
 
-lan in1 <- in1 %>%
-    mutate(
-        key=str_replace_all(str_extract(key, "^[A-Z]{1}[\\.]{2}"), "\\.", "")) %>%
-    filter(!is.na(key)) %>%
-    spread(key, count)
+econ_sec$S <- econ_sec  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
 
-in1$diversity <- in1  %>% 
-    select(-1)  %>% 
-    as.matrix %>%
-    diversity 
+econ_sec_S <- econ_sec %>%
+    select(datazone, year, S)
 
-in1 <- in1 %>%
-    select(datazone, diversity)
+econ_ind$S <- econ_ind  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
 
-write.csv(in1, file="data/derived/industry_1_diversity_2011.csv", row.names=FALSE)
+econ_ind_S <- econ_ind %>%
+    select(datazone, year, S)
+
+land_vacant$S <- land_vacant  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+    
+land_vacant_S <- land_vacant %>%
+    select(datazone, year, S)
+
+
+land_bus$S <- land_bus  %>% 
+    select(-datazone, -year, -H)  %>% 
+    as.matrix  %>% 
+    diversity
+
+land_bus_S <- land_bus %>%
+    select(datazone, year, S)
+
+# Now to combine where there are common years
+
+all_S <- tenure_S %>%
+    rename(tenure=S) %>%
+    full_join(bld_band_S) %>%
+    rename(bld_band=S) %>%
+    full_join(bld_size_S) %>%
+    rename(bld_size=S) %>%
+    full_join(bld_type_S) %>%
+    rename(bld_type=S) %>%
+    full_join(demo_as_S) %>%
+    rename(demo_as=S) %>%
+    full_join(demo_eth_S) %>%
+    rename(demo_eth=S) %>%
+    full_join(demo_rel_S)  %>% 
+    rename(demo_rel=S) %>%
+    full_join(demo_coo_S) %>%
+    rename(demo_coo=S) %>%
+    full_join(econ_qual_S) %>%
+    rename(econ_qual=S) %>%
+    full_join(econ_act_S) %>%
+    rename(econ_act=S) %>%
+    full_join(econ_sec_S) %>%
+    rename(econ_sec=S) %>%
+    full_join(econ_ind_S) %>%
+    rename(econ_ind=S) %>%
+    full_join(land_vacant_S) %>%
+    rename(land_vacant=S) %>%
+    full_join(land_bus_S) %>%
+    rename(land_bus=S)
 
 
 
-# 2001 Diversity scores ---------------------------------------------------
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% 
+    tbl_df() %>%
+    rename(datazone=dz_2001)
+
+all_S <- all_S %>%
+    gather(key=type, value=S, -datazone, -year) %>%
+    filter(!is.na(S) & !is.na(year)) %>%
+    group_by(type) %>%
+    mutate(t1 = min(year), t2=max(year)) %>%
+    mutate(d1 = abs(year - t1), d2 = abs(year - t2)) %>%
+    mutate(period = ifelse(d1==min(d1), "t1", ifelse(d2==min(d2), "t2", NA))) %>%
+    filter(!is.na(period)) %>%
+    select(datazone, year, period, type, S) %>%
+    spread(key=type, value=S)
+
+write.csv(all_S, file="data/derived/all_S.csv", row.names=F)
 
 
-# Which variables can be compared from 2001 to 2011?
-Occupational Class
+# S, Correlations in both periods --------------------------------------------
 
-# type  2001    2011
-# sec   
+
+p_all_S <- all_S %>% 
+    gather(key=type, value=S, -datazone, -year, -period)  %>% 
+    filter(!is.na(S) & is.finite(S))  %>% 
+    filter(datazone %in% greater_glasgow_dzs$datazone) %>% 
+    select(-year)  %>% 
+    spread(key=type, value=S)
+
+write.csv(p_all_S, file="data/derived/p_all_S.csv", row.names=F)
+
+
+fn <- function(x){
+    xx <- as.matrix(x[,-c(1,2)])
+    out <- cor(xx, use="pairwise.complete.obs") %>%
+        round(2)
+    
+    return(out)
+}
+
+S_corrs  <- dlply(p_all_S, .(period), fn)
+
+
+# Table of correlations, t1 -----------------------------------------------
+
+tab <- S_corrs[["t1"]]
+print(xtable(tab), type="html", file="tables/Correlations_between_shannon_diversity_t1.html")
+
+# Table of correlations, t2 -----------------------------------------------
+tab <- S_corrs[["t2"]]
+print(xtable(tab), type="html", file="tables/Correlations_between_shannon_diversity_t2.html")
+
+
+
+# S, PCA, around 2001 --------------------------------------------------------
+
+fit_t1 <- p_all_S %>%
+    filter(period=="t1") %>%
+    filter(complete.cases(.)) %>%
+    select(-datazone, -period) %>%
+    prcomp(., cor=T)
+
+
+
+# table of S loadings around 2001 -----------------------------------------
+
+fit_t1$rotation  %>% 
+    round(2)  %>%
+    xtable %>%
+    print(type="html", file="tables/shannon_factor_loadings_t1.html")
+
+
+# Graph of S loadings around 2001 -----------------------------------------
+
+fit_t1$rotation  %>% 
+    round(2)  %>% 
+    as.data.frame  %>%
+    mutate(type=rownames(.))  %>% 
+    gather(key="pc", value="loading", -type)  %>% 
+    ggplot(data=.) + 
+    geom_point(aes(x=loading, y= type)) + 
+    facet_wrap( ~ pc) + 
+    geom_segment(
+        aes(
+            y=type, yend=type, 
+            x=ifelse(loading < 0, loading, 0), 
+            xend=ifelse(loading > 0, loading, 0)
+        )
+    ) + 
+    labs(x="Factor loading on Principal Component", y="Entropy Type", title="Factor loadings around 2001") +
+    theme(plot.title=element_text(face = "bold"))
+ggsave("figures/S_factor_loadings_pca_around_2001.tiff", dpi=300, height=30, width=30, unit="cm")
+
+
+
+# pca around 2011 ---------------------------------------------------------
+
+fit_t2 <- p_all_S %>%
+    filter(period=="t2") %>%
+    filter(complete.cases(.)) %>%
+    select(-datazone, -period) %>%
+    prcomp(., cor=T)
+
+
+
+# table of S loadings around 2011 -----------------------------------------
+
+
+fit_t2$rotation  %>% 
+    round(2)  %>%
+    xtable %>%
+    print(type="html", file="tables/S_factor_loadings_t2.html")
+
+# Graph of H loadings around 2001 -----------------------------------------
+
+fit_t2$rotation  %>% 
+    round(2)  %>% 
+    as.data.frame  %>%
+    mutate(type=rownames(.))  %>% 
+    gather(key="pc", value="loading", -type)  %>% 
+    ggplot(data=.) + 
+    geom_point(aes(x=loading, y= type)) + 
+    facet_wrap( ~ pc) + 
+    geom_segment(
+        aes(
+            y=type, yend=type, 
+            x=ifelse(loading < 0, loading, 0), 
+            xend=ifelse(loading > 0, loading, 0)
+        )
+    ) + 
+    labs(x="Factor loading on Principal Component", y="Entropy Type", title="Factor loadings around 2011") +
+    theme(plot.title=element_text(face = "bold"))
+ggsave("figures/s_factor_loadings_pca_around_2011.tiff", dpi=300, height=30, width=30, unit="cm")
+
+
+# SEM for H ---------------------------------------------------------------
+
+
+# Using lavaan package
+
