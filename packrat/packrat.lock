@@ -245,6 +245,12 @@ Version: 0.6-26
 Hash: 2c59a30bb9d9d4651b913b828dca2640
 Requires: RColorBrewer
 
+Package: lavaan
+Source: CRAN
+Version: 0.5-18
+Hash: 7af48e85bc63520f8613352ce864308d
+Requires: mnormt, pbivnorm, quadprog
+
 Package: lazyeval
 Source: CRAN
 Version: 0.1.10
@@ -295,6 +301,11 @@ Version: 1.2.4
 Hash: bf5030834197a011dc7bc9e117ab8ce3
 Requires: Rcpp
 
+Package: mnormt
+Source: CRAN
+Version: 1.5-2
+Hash: 483c576a9691823320064b1123ae3159
+
 Package: munsell
 Source: CRAN
 Version: 0.4.2
@@ -310,6 +321,11 @@ Package: packrat
 Source: CRAN
 Version: 0.4.2-1
 Hash: 085f944cec9b56e8a280222b5174c76e
+
+Package: pbivnorm
+Source: CRAN
+Version: 0.6.0
+Hash: 7fb7f2518390040c9a8991c4941f856b
 
 Package: pbkrtest
 Source: CRAN
@@ -337,6 +353,11 @@ Package: proto
 Source: CRAN
 Version: 0.3-10
 Hash: 668a9e87cedbdc5f56c396edf1bd2648
+
+Package: quadprog
+Source: CRAN
+Version: 1.5-5
+Hash: c5b36fd14dff166f26d68ccf1515c200
 
 Package: quantreg
 Source: CRAN

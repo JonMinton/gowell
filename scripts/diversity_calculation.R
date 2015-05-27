@@ -12,6 +12,8 @@ require(dplyr)
 require(vegan)
 require(ggplot2)
 require(xtable)
+require(corrplot)
+
 
 # Entropy function --------------------------------------------------------
 
@@ -338,7 +340,11 @@ fn <- function(x){
 
 H_corrs  <- dlply(p_all_H, .(period), fn)
 
-
+require(corrplot)
+H_corrs[["t1"]]  %>% 
+    corrplot(., type="lower", main="\n\nDiversity using H, Around 2001", method=c("number"))
+H_corrs[["t2"]]  %>% 
+    corrplot(., type="lower", main="\n\nDiversity using H, Around 2011", method=c("number"))
 # Table of correlations, t1 -----------------------------------------------
 
 tab <- H_corrs[["t1"]]
