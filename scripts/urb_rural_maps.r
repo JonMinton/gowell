@@ -14,7 +14,8 @@ require(RColorBrewer)
 
 
 require(lattice)
-
+require(ggplot2)
+require(ggmap)
 
 require(repmis)
 require(plyr)
@@ -261,3 +262,51 @@ spplot(dz_gg_shp_qnts, zcol="band",
        col="transparent"
 )
 
+
+
+# Map changes in diversity ------------------------------------------------
+
+p_all_H <- read.csv("data/derived/p_all_H.csv") %>%
+    tbl_df
+
+tenure_div_quint <- p_all_H  %>% 
+    mutate_each(funs(ntile(., n=3)), -datazone, -period)  %>% 
+    select(datazone, period, tenure)  %>% 
+    spread(key=period, value=tenure)  %>% 
+    mutate(change_tenure_quint= t2 - t1) 
+
+
+dz_shp <- readOGR("data/shp/scotland_2001_datazones", layer="scotland_dz_2001")
+greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df %>%
+    rename(datazone=dz_2001)
+
+dz_gg_shp <- dz_shp[dz_shp@data$zonecode %in% greater_glasgow_dzs$datazone,]
+unique_dzs <- unique(dz_gg_shp@data$zonecode)
+dz_gg_shp <- dz_gg_shp[dz_gg_shp@data$zonecode %in% unique_dzs,]
+
+dz_gg_shp@data <- merge(dz_gg_shp@data, tenure_div_quint, by.x="zonecode", by.y="datazone", all.x=TRUE)
+
+dz_gg_shp_qnts <- dz_gg_shp
+
+dz_gg_shp_qnts@data$change_tenure_quint <- as.factor(dz_gg_shp_qnts@data$change_tenure_quint)
+spplot(dz_gg_shp_qnts, zcol="change_tenure_quint", 
+       col="transparent"
+)
+
+# To do : 
+# zoom out of 'Glasgow' slightly
+
+tmp <- qmap("Glasgow", zoom=9)
+# transform and fortify ig_gg_shp, do choropleth
+
+dz_gg_fort <- dz_gg_shp
+dz_gg_fort <- spTransform(dz_gg_fort, CRS("+proj=longlat +datum=WGS84"))
+dz_gg_fort <- fortify(dz_gg_fort, region="zonecode")
+dz_gg_fort <- dz_gg_fort %>%
+    left_join(dz_gg_shp@data, by=c("id"="zonecode"))
+
+tmp + geom_polygon(
+    aes(x=long, y= lat, group=id, fill=as.factor(change_tenure_quint)),
+    data=dz_gg_fort,
+    alpha=0.7
+)

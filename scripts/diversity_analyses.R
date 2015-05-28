@@ -220,3 +220,10 @@ fit <- p_all_H[complete.cases(p_all_H),] %>%
 
 plot(fit)
 text(fit, use.n=T, all=T, cex=0.8)         
+
+
+
+# Changes in diversity  ---------------------------------------------------
+
+
+
