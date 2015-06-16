@@ -1,0 +1,102 @@
+---
+title: "Data for dissimilarity calculations"
+author: "Jon Minton"
+date: "16 June 2015"
+output: html_document
+---
+
+# Introduction
+A number of datasets have been identified that can be used to calculate dissimilarity scores using. These data sets are derived mainly from the 2001 and 2011 censuses, and the Scottish Neighbourhood Statistics (SNS) website. Where possible, I have used data relating to 2001 and 2011 for comparability with census variables. 
+The tables have been prepared mainly for the 2196 datazones that comparise a definition of Greater Glasgow based on health boards. However in principle all tables could be prepared for the whole of Scotland.
+
+
+# Census-based variables: country of origin, ethnic group, and religion
+
+## Country of origin, ethnic group and religion.
+
+These tables were first found and used as part of the dissimilarity inference app, and are available 
+to select within the latest version of the Shiny app. 
+
+
+The country of origin variable looks as follows:
+```{r}
+require(readr)
+require(dplyr)
+require(tidyr)
+dta_coo <- read_csv("data/derived/coo.csv")
+dta_coo
+dta_coo %>% group_by(year) %>% tally
+dta_coo %>% select(-1) %>% gather(key="coo", value="count", -datazone, -year) %>% 
+    group_by(year, coo) %>% summarise(count=sum(count))
+
+```
+
+The ethnic group table:
+
+```{r}
+dta_eg <- read_csv("data/derived/ethnicity.csv")
+dta_eg %>% group_by(year) %>% tally
+dta_eg %>% gather(key= "eg", value="count", -datazone, -year) %>% xtabs(count ~ year + eg, data= . )
+
+```
+
+Religion table:
+
+```{r}
+dta_rel <- read_csv("data/derived/rel.csv")
+dta_rel
+dta_rel %>% gather(key= "rel", value="count", -datazone, -year) %>% xtabs(count ~ year + rel, data= . )
+```
+
+
+## Additional census variables
+
+These variables were identified more recently. 
+
+
+ Highest qualification
+ 
+```{r}
+ 
+ dta_qual <- read_csv("data/derived/highest_qual.csv")
+dta_qual
+dta_qual %>% gather(key="hq", value="count", -datazone, -year) %>% xtabs(count ~ year + hq, data = .)
+ 
+```
+
+Industry
+
+```{r}
+dta_ind <- read_csv("data/derived/industry.csv")
+dta_ind
+dta_ind %>% gather(key="industry", value="count", -datazone, -year) %>% xtabs(count ~ industry + year, data = .)
+```
+
+
+Economic activity
+
+```{r}
+dta_econ <- read_csv("data/derived/economic_activity.csv")
+dta_econ
+
+dta_econ %>% gather(key="econ", value="count", -datazone, -year) %>% xtabs(count ~ econ + year, data = .)
+```
+
+Socioeconomic class 
+
+```{r}
+dta_sec <- read_csv("data/derived/sec_by_dz.csv")
+dta_sec
+dta_sec %>% gather(key="sec", value = "count", -datazone, -year) %>% xtabs(count ~ year + sec, data = .)
+
+```
+
+# Tables from the SNS and elsewhere 
+
+A number of tables refer to houses rather than individuals or households. These are mainly taken from the SNS website.
+
+Dwellings by size (number of rooms) - the earliest available year is 2006, unfortunately.
+```{r}
+dta_dwelsize <- read_csv("data/derived/dwellings_by_size.csv")
+dta_dwelsize
+dta_dwelsize %>% xtabs(count ~ num_of_rooms + year, data = .)
