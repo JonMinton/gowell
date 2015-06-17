@@ -306,11 +306,7 @@ dta_sec_2001 <- dta_sec_2001 %>%
 
 # 
 
-dta_sec <- source_DropboxData(
-    key = "h4l5f34ktg7lxl6",
-    file="KS611SC.csv"
-) %>% tbl_df
-
+dta_sec
 
 dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, ",", ""))
 dta_sec <- apply(dta_sec, 2, function(x) str_replace_all(x, "-", "0"))
