@@ -300,8 +300,8 @@ paf_2001_ig  %>% mutate(total = address_count + smallbus_count, dif =deliverypoi
 # Diffs are mostly zero, sometimes negative
 # This implies the negatives refer to shared use. 
 # This could be important, but I'm not sure how to go about coding it.
-# Instead I'll pretend the two mutually exclusive categories as 
-# addresses and small businesses
+# Instead I'll pretend addresses and small businesses are the two mutually exclusive categories as 
+
 
 # Want to categorise areas by proportion of total addresses that 
 # are small businesses 

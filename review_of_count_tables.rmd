@@ -18,7 +18,7 @@ These tables were first found and used as part of the dissimilarity inference ap
 to select within the latest version of the Shiny app. 
 
 
-The country of origin variable looks as follows:
+## Country of origin
 ```{r}
 require(readr)
 require(dplyr)
@@ -31,7 +31,7 @@ dta_coo %>% select(-1) %>% gather(key="coo", value="count", -datazone, -year) %>
 
 ```
 
-The ethnic group table:
+## The ethnic group table:
 
 ```{r}
 dta_eg <- read_csv("data/derived/ethnicity.csv")
@@ -40,7 +40,7 @@ dta_eg %>% gather(key= "eg", value="count", -datazone, -year) %>% xtabs(count ~ 
 
 ```
 
-Religion table:
+## Religion table:
 
 ```{r}
 dta_rel <- read_csv("data/derived/rel.csv")
@@ -49,12 +49,12 @@ dta_rel %>% gather(key= "rel", value="count", -datazone, -year) %>% xtabs(count 
 ```
 
 
-## Additional census variables
+# Additional census variables
 
 These variables were identified more recently. 
 
 
- Highest qualification
+## Highest qualification
  
 ```{r}
  
@@ -64,7 +64,7 @@ dta_qual %>% gather(key="hq", value="count", -datazone, -year) %>% xtabs(count ~
  
 ```
 
-Industry
+## Industry
 
 ```{r}
 dta_ind <- read_csv("data/derived/industry.csv")
@@ -73,7 +73,7 @@ dta_ind %>% gather(key="industry", value="count", -datazone, -year) %>% xtabs(co
 ```
 
 
-Economic activity
+## Economic activity
 
 ```{r}
 dta_econ <- read_csv("data/derived/economic_activity.csv")
@@ -82,7 +82,7 @@ dta_econ
 dta_econ %>% gather(key="econ", value="count", -datazone, -year) %>% xtabs(count ~ econ + year, data = .)
 ```
 
-Socioeconomic class 
+## Socioeconomic class 
 
 ```{r}
 dta_sec <- read_csv("data/derived/sec_by_dz.csv")
@@ -95,8 +95,91 @@ dta_sec %>% gather(key="sec", value = "count", -datazone, -year) %>% xtabs(count
 
 A number of tables refer to houses rather than individuals or households. These are mainly taken from the SNS website.
 
-Dwellings by size (number of rooms) - the earliest available year is 2006, unfortunately.
+## Dwellings by size (number of rooms) - the earliest available year is 2006, unfortunately.
 ```{r}
 dta_dwelsize <- read_csv("data/derived/dwellings_by_size.csv")
 dta_dwelsize
 dta_dwelsize %>% xtabs(count ~ num_of_rooms + year, data = .)
+```
+
+## Dwellings by council tax band
+
+```{r}
+dta_band <- read_csv("data/derived/dwellings_by_band.csv")
+dta_band
+dta_band %>% gather(key="band", value="count", -datazone, -year) %>% xtabs(count ~ year + band, data = .)
+
+```
+
+## Dwellings by type
+
+```{r}
+dta_type <- read_csv("data/derived/dwellings_by_type.csv")
+dta_type
+dta_type %>% xtabs(count ~ year + type, data = .)
+```
+
+
+
+
+# Demographic variables
+
+I have data on population, by five year age groups and gender, at datazone level, based on a combination of the 2001 and 2011 censuses, and small area population estimates (SAPE) for non-census years. I have combined into a single, very large file, as well as used this file to group people into different categories based on age and gender classifications. 
+
+```{r}
+demo_big <- read_csv("data/derived/populations_by_age_year_sex.csv")
+demo_big
+demo_big %>% xtabs(count ~ year + age_range + sex, data = .)
+```
+
+As you can see, the age groupings are net entirely consistent across years. I have produced a version with some consistent groupings, just for 2001 and 2011, here
+
+```{r}
+demo_grps <- read_csv("data/derived/demographic_groupings.csv")
+demo_grps
+
+demo_grps %>% gather(key="grp", value="count", -dz_2001, -year) %>% xtabs(count ~ year + grp, data = .)
+
+# The code used to produce the groupings:
+#         f1 = female_0_4 + female_5_9 + female_10_14 + female_10_15,
+#         f2 = female_15_19 + female_16_19 + female_20_24,
+#         f3 = female_25_29 + female_30_34 + female_35_39,
+#         f4 = female_40_44 + female_45_49 + female_50_54,
+#         f5 = female_55_59 + female_60_64,
+#         f6 = female_65_69 + female_70_74 + female_75_79,
+#         f7 = female_80_84 + female_85_89 + female_90_101,
+#         
+#         m1 = male_0_4 + male_5_9 + male_10_14 + male_10_15,
+#         m2 = male_15_19 + male_16_19 + male_20_24,
+#         m3 = male_25_29 + male_30_34 + male_35_39,
+#         m4 = male_40_44 + male_45_49 + male_50_54,
+#         m5 = male_55_59 + male_60_64,
+#         m6 = male_65_69 + male_70_74 + male_75_79,
+#         m7 = male_80_84 + male_85_89 + male_90_101
+```
+
+# Quirkier tables
+
+I have also extracted data from the Postcode Address File (PAF) on different types of building use.
+The PAF distinguishes between 
+
+* *address points*: residential
+* *delivery points*: any use
+* *small business points*: small businesses
+
+The number of delivery points less the number of address points and small business points should 
+indicate the number of large businesses. But in practice (I *think*) categories are not mutually exclusive,
+so correctly using the PAF can be tricky...
+
+```{r}
+
+bld_use <- read_csv("data/derived/building_use.csv")
+bld_use 
+bld_use %>% gather(key="type", value="count", -datazone, -year) %>% xtabs(count ~ year + type, data = . )
+```
+
+
+#Other variables
+
+A very large number of variables have been extracted and rearranged from the SNS. These are available on Dropbox. 
+
