@@ -93,6 +93,28 @@ simd_H_gg %>%
     summarise_each(funs(median(., na.rm=T)), tenure:land_bus) %>% 
     gather(key=div_type, value=div_value, -period, -simd_quint) %>% 
     ggplot(.) +
-    geom_point(aes(x=simd_quint, y=div_value, group=period, colour=period)) +
-    facet_wrap( ~ div_type) 
+    geom_bar(aes(x=simd_quint, y=div_value, group=period, fill = period, colour=period), stat = "identity", position = "dodge") +
+    facet_wrap( ~ div_type, scales ="free_y") + 
+    labs(x = "SIMD Quintile within Greater Glasgow", y = "median diversity scores for areas within quintile")
+
+ggsave("figures/diversity_quintiles_gg.png_free_y.png",
+       width = 25, height = 15, units = "cm", dpi = 300
+)
+
+
+simd_H_gg %>% 
+    group_by(period) %>% 
+    mutate(simd_quint = ntile(overall_rank, 5)) %>% 
+    group_by(period, simd_quint) %>% 
+    summarise_each(funs(median(., na.rm=T)), tenure:land_bus) %>% 
+    gather(key=div_type, value=div_value, -period, -simd_quint) %>% 
+    ggplot(.) +
+    geom_bar(aes(x=simd_quint, y=div_value, group=period, fill = period, colour=period), stat = "identity", position = "dodge") +
+    facet_wrap( ~ div_type) + 
+    labs(x = "SIMD Quintile within Greater Glasgow", y = "median diversity scores for areas within quintile")
+
+ggsave("figures/diversity_quintiles_gg.png_common_y.png",
+       width = 25, height = 15, units = "cm", dpi = 300
+)
+
 
