@@ -15,6 +15,7 @@ require(tidyr)
 require(stringr)
 require(dplyr)
 
+
 require(ggplot2)
 require(corrplot)
 
@@ -69,10 +70,21 @@ summary(lm(tenure ~ overall_rank + period, data=simd_H_gg))
 # As deprivation increases, tenure diversity reduces,
 # but the diversity has increased over time
 
+this_labeller <- function(variable, value){
+    lookup <-  list(
+        "t1" = "Around 2001 census",
+        "t2" = "Around 2011 census"
+    )
+    return(lookup[value])
+}
+# Borrowing from : http://stackoverflow.com/questions/3472980/ggplot-how-to-change-facet-labels
+
 simd_H_gg %>% ggplot(data=.) +
-    geom_point(aes(x=overall_rank, y=tenure)) + 
-    facet_wrap(~ period) +
-    stat_smooth(mapping=aes(x=overall_rank, y=tenure))
+    geom_point(aes(x=overall_rank, y=tenure), alpha = 0.1) + 
+    facet_grid(. ~ period, labeller=this_labeller) +
+    stat_smooth(mapping=aes(x=overall_rank, y=tenure)) + 
+    labs(x = "Overall SIMD rank", y = "Tenure diversity within datazone")
+
 # asymmetric u-shaped relationship betwene the two, but overall 
 # diversity has increased 
 
@@ -82,9 +94,8 @@ simd_H_gg %>%
     group_by(period) %>% 
     mutate(simd_quint = ntile(overall_rank, 5)) %>% 
     group_by(period, simd_quint) %>% 
-    summarise_each(funs(median(., na.rm=T)), tenure:land_bus)
+    summarise_each(funs(median(., na.rm=T)), tenure:land_bus) 
 
-# Note - many NaNs and Infs produced. need to investigate
 
 simd_H_gg %>% 
     group_by(period) %>% 
@@ -97,10 +108,25 @@ simd_H_gg %>%
     facet_wrap( ~ div_type, scales ="free_y") + 
     labs(x = "SIMD Quintile within Greater Glasgow", y = "median diversity scores for areas within quintile")
 
-ggsave("figures/diversity_quintiles_gg.png_free_y.png",
+ggsave("figures/diversity_quintiles_gg_free_y.png",
        width = 25, height = 15, units = "cm", dpi = 300
 )
 
+simd_H_gg %>% 
+    group_by(period) %>% 
+    mutate(simd_quint = ntile(overall_rank, 5)) %>% 
+    group_by(period, simd_quint) %>% 
+    summarise_each(funs(median(., na.rm=T)), tenure:land_bus) %>% 
+    gather(key=div_type, value=div_value, -period, -simd_quint) %>% 
+    ggplot(., mapping = aes(x=simd_quint, y=div_value, group=period, colour=period, label = round(div_value, 4))) +
+    geom_point() + geom_line() +
+    geom_text(colour = "black") + 
+    facet_wrap( ~ div_type, scales ="free_y") + 
+    labs(x = "SIMD Quintile within Greater Glasgow", y = "median diversity scores for areas within quintile")
+
+ggsave("figures/diversity_quintiles_gg_labelled_lines_free_y.png",
+       width = 50, height = 30, units = "cm", dpi = 300
+)
 
 simd_H_gg %>% 
     group_by(period) %>% 
