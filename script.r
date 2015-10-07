@@ -33,7 +33,7 @@ simd <- read.csv("data/simd/00410767.csv") %>% tbl_df
 
 all_H <- read.csv("data/derived/all_H.csv")  %>% tbl_df
 
-
+all_S <- read.csv("data/derived/all_S.csv") %>% tbl_df
 
 
 # Derived data  -------------------------------------------------
@@ -65,12 +65,45 @@ simd_H_gg <- simd_ss %>% left_join(all_H_gg)
 simd_H_gg
 
 
+
+# Derived data  - S not H -------------------------------------------------
+
+all_S_gg <- all_S %>% filter(datazone %in% greater_glasgow_dzs$dz_2001)
+
+all_S_gg <- all_S_gg %>% select(-year) %>% group_by(datazone, period) %>% 
+    summarise_each(funs(mean(., na.rm=T)))
+
+
+simd_ss <- simd %>% 
+    select(
+        datazone=Data.Zone, 
+        overall_rank = Overall.SIMD.2012.Rank, 
+        income_rank = Income.domain.2012.rank, 
+        health_rank = Health.domain.2012.rank, 
+        crime_rank = SIMD.Crime.2012.rank
+    )
+
+simd_ss[,-1] <- lapply(simd_ss[,-1], 
+                       function(x) as.numeric(str_replace(as.character(x),",", ""))
+) 
+simd_ss <- greater_glasgow_dzs %>% select(datazone=dz_2001) %>% left_join(simd_ss)
+
+simd_S_gg <- simd_ss %>% left_join(all_S_gg)
+
+# This is the df to work with
+
+simd_S_gg
+
+
+
 # Analyses  ---------------------------------------------------------------
 
 
 # mean diversity, of each type, by overall SIMD rank, in each time period
 
 summary(lm(tenure ~ overall_rank + period, data=simd_H_gg))
+summary(lm(tenure ~ overall_rank + period, data=simd_S_gg))
+
 # As deprivation increases, tenure diversity reduces,
 # but the diversity has increased over time
 
@@ -89,6 +122,13 @@ simd_H_gg %>% ggplot(data=.) +
     stat_smooth(mapping=aes(x=overall_rank, y=tenure)) + 
     labs(x = "Overall SIMD rank", y = "Tenure diversity within datazone")
 
+
+simd_S_gg %>% ggplot(data=.) +
+    geom_point(aes(x=overall_rank, y=tenure), alpha = 0.1) + 
+    facet_grid(. ~ period, labeller=this_labeller) +
+    stat_smooth(mapping=aes(x=overall_rank, y=tenure)) + 
+    labs(x = "Overall SIMD rank", y = "Tenure diversity within datazone")
+ggsave("figures/tenure_diversity.png", dpi = 300, width = 20, height = 15, units = "cm")
 # asymmetric u-shaped relationship betwene the two, but overall 
 # diversity has increased 
 
@@ -116,12 +156,52 @@ ggsave("figures/diversity_quintiles_gg_free_y.png",
        width = 25, height = 15, units = "cm", dpi = 300
 )
 
-simd_H_gg %>% 
+simd_long <- simd_S_gg%>% 
     group_by(period) %>% 
     mutate(simd_quint = ntile(overall_rank, 5)) %>% 
     group_by(period, simd_quint) %>% 
     summarise_each(funs(median(., na.rm=T)), tenure:land_bus) %>% 
-    gather(key=div_type, value=div_value, -period, -simd_quint) %>% 
+    gather(key=div_type, value=div_value, -period, -simd_quint) 
+
+simd_long$div_type <- simd_long$div_type %>% mapvalues(.,
+                        from = c(
+                            "tenure",
+                            "bld_band",
+                            "bld_size",
+                            "bld_type",
+                            "demo_as",
+                            "demo_eth",
+                            "demo_rel",
+                            "demo_coo",
+                            "econ_qual",
+                            "econ_act",
+                            "econ_sec",
+                            "econ_ind",
+                            "land_vacant",
+                            "land_bus"
+                        ),
+                        to = c(
+                             "Tenure",
+                             "Council tax band",
+                             "Number of rooms",
+                             "Accommodation type", 
+                             "Age and sex",
+                             "Ethnicity", 
+                             "Religion",
+                             "Country of origin",
+                             "Highest qualification",
+                             "Economic activity",
+                             "Socioeconomic classification",
+                             "Industry employed in",
+                             "Land use",
+                             "Building use"   
+                      )
+)
+
+
+
+
+simd_long %>% 
     ggplot(., mapping = aes(x=simd_quint, y=div_value, group=period, colour=period, label = round(div_value, 4))) +
     geom_point() + geom_line() +
     geom_text(colour = "black") + 
@@ -132,21 +212,37 @@ ggsave("figures/diversity_quintiles_gg_labelled_lines_free_y.png",
        width = 50, height = 30, units = "cm", dpi = 300
 )
 
-simd_H_gg %>% 
-    group_by(period) %>% 
-    mutate(simd_quint = ntile(overall_rank, 5)) %>% 
-    group_by(period, simd_quint) %>% 
-    summarise_each(funs(median(., na.rm=T)), tenure:land_bus) %>% 
-    gather(key=div_type, value=div_value, -period, -simd_quint) %>% 
-    ggplot(.) +
-    geom_bar(aes(x=simd_quint, y=div_value, group=period, fill = period, colour=period), stat = "identity", position = "dodge") +
-    facet_wrap( ~ div_type) + 
-    labs(x = "SIMD Quintile within Greater Glasgow", y = "median diversity scores for areas within quintile")
 
-ggsave("figures/diversity_quintiles_gg.png_common_y.png",
-       width = 25, height = 15, units = "cm", dpi = 300
-)
+# each of the above individually...
 
+
+fn <- function(x){
+    label <- x$div_type
+    label2 <- str_replace_all(label, " ", "_")
+    x$simd_quint <- factor(
+        x$simd_quint,
+        levels = c("1", "2", "3", "4", "5"),
+        labels = c("most deprived", "2", "middle quintile", "4" ,"least deprived")
+                              )
+    
+    
+    
+    x %>% ggplot(., mapping = aes(x = simd_quint, y = div_value, group = period, colour = period, label = round(div_value, 4))) +
+        geom_point() + geom_line() + 
+        geom_text(colour = "black") + 
+        labs(x = "SIMD quintile", y = "median diversity", title = label) 
+    
+    
+    ggsave(
+        paste0("figures/individual/", label2, ".png"),
+        width = 15, height = 15, units = "cm", dpi = 300
+        
+    )
+    
+    return(NULL)
+}
+
+d_ply(simd_long, .(div_type), fn)
 
 
 # Notes on meeting with Ade, 28 July 2015
