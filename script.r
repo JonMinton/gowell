@@ -6,6 +6,9 @@
 # 1) Load previously calculated diversity scores
 # 2) Load previous SIMD scores
 # 3) Report diversity along each dimension by diversity quintile
+# 4) Extract Urban Rural Classification and attach to each datazone
+# 5) Calculate and attach a distance to city centre attribute to each datazone
+# 6) Calculate density for each datazone
 
 
 rm(list=ls())

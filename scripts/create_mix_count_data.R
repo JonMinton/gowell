@@ -51,6 +51,9 @@ tenure_households <- source_DropboxData(
     owned=owned_with_mortgage + owned_outright + shared_ownership
 ) 
 
+# NOTE: This does not add up to the total number of households due to the HO.other category
+
+
 # 6505 observations - whole of Scotland
 # left join to just Greater Glasgow
 tenure_households_2001 <- greater_glasgow_dzs %>% left_join(tenure_households)
