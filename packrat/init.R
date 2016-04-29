@@ -7,13 +7,6 @@ local({
         is.na(Sys.getenv("RSTUDIO_PACKRAT_BOOTSTRAP", unset = NA))) {
     Sys.setenv("RSTUDIO_PACKRAT_BOOTSTRAP" = "1")
     setHook("rstudio.sessionInit", function(...) {
-      # Ensure that, on sourcing 'packrat/init.R', we are
-      # within the project root directory
-      if (exists(".rs.getProjectDirectory")) {
-        owd <- getwd()
-        setwd(.rs.getProjectDirectory())
-        on.exit(setwd(owd), add = TRUE)
-      }
       source("packrat/init.R")
     })
     return(invisible(NULL))
@@ -22,8 +15,7 @@ local({
   ## Unload packrat in case it's loaded -- this ensures packrat _must_ be
   ## loaded from the private library. Note that `requireNamespace` will
   ## succeed if the package is already loaded, regardless of lib.loc!
-  if ("packrat" %in% loadedNamespaces())
-    try(unloadNamespace("packrat"), silent = TRUE)
+  try(unloadNamespace("packrat"), silent = TRUE)
 
   if (suppressWarnings(requireNamespace("packrat", quietly = TRUE, lib.loc = libDir))) {
 
@@ -151,7 +143,7 @@ local({
     ## an 'installed from source' version
 
     ## -- InstallAgent -- ##
-    installAgent <- 'InstallAgent: packrat 0.4.3'
+    installAgent <- 'InstallAgent: packrat 0.4.2'
 
     ## -- InstallSource -- ##
     installSource <- 'InstallSource: source'
