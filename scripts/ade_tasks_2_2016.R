@@ -1,17 +1,14 @@
 rm(list = ls())
 
 
+#install.packages("pacman")
 
-require(readr)
-require(stringr)
-
-require(plyr)
-require(tidyr)
-require(dplyr)
-
-require(ggplot2)
-require(tmap)
-require(rgeos)
+require(pacman)
+p_load(
+    readr, stringr, 
+    purrr, tidyr, dplyr, 
+    ggplot2, tmap, rgeos,
+    xlsx)
 
 
 # Task 1: Diversity by UR class -------------------------------------------
@@ -55,43 +52,55 @@ div_ur_summaries %>%
         )
     ) %>% 
     select(ur_label, category, value = med_H) %>% 
-    mutate(value = round(value, 2)) %>% 
+    mutate(value = round(value, 3)) %>% 
     spread(ur_label, value)
 
-div_ur_summaries %>%
+
+dta1 <- div_ur_summaries %>%
     ungroup() %>% 
-    filter(period == "t1") %>% 
     mutate(ur_label = factor(
         ur_class, 
         levels = c(1, 2, 3, 5, 6), 
-        labels = c("large_urban", "other_urban", "accessible small towns", "accessible_rural", "remote_rural")
+        labels = c("Large Urban", "Other Urban", "Accessible Small Towns", "Accessible Rural", "Remote Rural")
     )
     ) %>% 
-    select(ur_label, category, value = med_H) %>% 
-    ggplot(., aes(y = ur_label, x = value)) +
-    facet_wrap(~ category, scales = "free_x") +
-    geom_point() + 
-    labs(x = "Median diversity score", y = "Urban/Rural Class", title = "Diversity by UR class in 2001")
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nBuilding Use type", 
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+            )
+    )) %>% 
+    filter(category != "Land Use:\nBuilding Use type") %>%  # dropping as only for t2
+    select(period, ur_label, category, value = med_H) %>% spread(period, value)
+
+dta1 %>% 
+    ggplot(., aes(y = ur_label)) +
+    facet_grid(category  ~ .) + 
+    geom_segment(aes(x = t1, xend = t2, yend = ur_label), arrow = arrow(length = unit(0.1, "npc"), type = "closed")) + 
+    labs(
+        x = "Median diversity score", 
+        y = "Urban/Rural Class", 
+        title = "Diversity Change by Urban/Rural Class"
+    ) +
+    theme(strip.text.y = element_text(angle = 0))
+
+ggsave("figures/change_in_diversity.png", height = 30, width = 15, units = "cm", dpi = 300)
+
+
     
-
-# Now for both years on the same plot
-
-div_ur_summaries %>%
-    ungroup() %>% 
-    mutate(ur_label = factor(
-        ur_class, 
-        levels = c(1, 2, 3, 5, 6), 
-        labels = c("large_urban", "other_urban", "accessible small towns", "accessible_rural", "remote_rural")
-    )
-    ) %>% 
-    select(ur_label, period, category, value = med_H) %>% 
-    ggplot(., aes(y = ur_label, x = value, group = period, shape = period, colour = period)) +
-    facet_wrap(~ category, scales = "free_x") +
-    geom_point() + 
-    labs(x = "Median diversity score", y = "Urban/Rural Class", title = "Diversity by UR class in 2001 and 2011")
-
-
-ggsave(filename = "figures/median_diversity_by_urclass.png", width = 20, height = 20, units = "cm")
 #     
 # - Look at the geography of diversity (at each of the two time points?) in terms of:
 # o   SG urban-rural 6-fold classification.
@@ -110,28 +119,110 @@ div_h_dist <- diversity_H %>%
     left_join(distance_dz, by = c("datazone" = "dz_2001")) %>% 
     select(datazone, period, distance_to_centre, category, H) 
 
+div_h_dist <- div_h_dist %>% filter(category !="land_bus") %>% 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
 
 
 # Now to visualise this 
 
 div_h_dist %>% 
-    ggplot(., aes(x = distance_to_centre, y = H, group = period, colour = period)) +
-    geom_point(alpha = 0.1) +
-    stat_smooth() + 
-    facet_wrap(~category, scale = "free_y") 
+    filter(distance_to_centre < 40000) %>% 
+    mutate(distance_to_centre = distance_to_centre / 1000) %>% 
+    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") + 
+    facet_wrap(~category) + 
+    labs(x = "Distance to city centre in km", y = "Diversity score")
 
-# What's improtant here is that most of the change in diversity only occures within the 
-# first 5-10 km or so of the distance from city centre 
-
-# This suggests using a log X scale
+ggsave("figures/diversity_distance_upto40km.png", width = 30, height = 30, units = "cm", dpi = 300)
 
 div_h_dist %>% 
-    ggplot(., aes(x = distance_to_centre, y = H, group = period, colour = period)) +
-    geom_point(alpha = 0.1) +
-    stat_smooth() + 
-    facet_wrap(~category, scale = "free_y") +
-    scale_x_log10()
-ggsave("figures/diversity_against_log_distance_from_centre.png", width = 20, height = 20, units = "cm")
+    filter(distance_to_centre < 15000) %>% 
+    mutate(distance_to_centre = distance_to_centre / 1000) %>% 
+    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") + 
+    facet_wrap(~category) + 
+    labs(x = "Distance to city centre in km", y = "Diversity score")
+ggsave("figures/diversity_distance_upto15km.png", width = 30, height = 30, units = "cm", dpi = 300)
+
+
+
+div_h_dist %>% 
+    filter(distance_to_centre < 15000) %>% 
+    mutate(distance_to_centre = distance_to_centre / 1000) %>% 
+    filter(category %in% c("Built: Type", "Demographic:\nCountry of Origin", "Tenure")) %>% 
+    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") + 
+    facet_wrap(~category, scale = "free_y") + 
+    labs(x = "Distance to city centre in km", y = "Diversity score") + 
+    scale_x_continuous(breaks = seq(0, 15, by = 1)) + 
+    geom_vline(aes(xintercept = 8), linetype ="dashed") + 
+    geom_vline(aes(xintercept = 10), linetype = "solid")
+ggsave("figures/diversity_distance_tenurecoohousingstock.png", width =30, height = 30, units = "cm", dpi = 300)
+
+
+# What about the three built environment indicators?
+div_h_dist %>% 
+    filter(distance_to_centre < 15000) %>% 
+    mutate(distance_to_centre = distance_to_centre / 1000) %>% 
+    filter(str_detect(category, "Built")) %>% 
+    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") + 
+    facet_wrap(~category, scale = "free_y") + 
+    labs(x = "Distance to city centre in km", y = "Diversity score") + 
+    scale_x_continuous(breaks = seq(0, 15, by = 1)) + 
+    geom_vline(aes(xintercept = 8), linetype ="dashed") + 
+    geom_vline(aes(xintercept = 10), linetype = "solid")
+ggsave("figures/diversity_distance_builtonly.png", width =30, height = 30, units = "cm", dpi = 300)
+
+# What about the demographic variables?
+div_h_dist %>% 
+    filter(distance_to_centre < 15000) %>% 
+    mutate(distance_to_centre = distance_to_centre / 1000) %>% 
+    filter(str_detect(category, "Demographic")) %>% 
+    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") + 
+    facet_wrap(~category, scale = "free_y") + 
+    labs(x = "Distance to city centre in km", y = "Diversity score") + 
+    scale_x_continuous(breaks = seq(0, 15, by = 1)) + 
+    geom_vline(aes(xintercept = 4), linetype ="dashed") + 
+    geom_vline(aes(xintercept = 6), linetype = "solid")
+ggsave("figures/diversity_distance_demogrpahiconly.png", width =30, height = 30, units = "cm", dpi = 300)
+
+# And now economic
+div_h_dist %>% 
+    filter(distance_to_centre < 15000) %>% 
+    mutate(distance_to_centre = distance_to_centre / 1000) %>% 
+    filter(str_detect(category, "Economic")) %>% 
+    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") + 
+    facet_wrap(~category, scale = "free_y") + 
+    labs(x = "Distance to city centre in km", y = "Diversity score") + 
+    scale_x_continuous(breaks = seq(0, 15, by = 1)) 
+ggsave("figures/diversity_distance_economiconly.png", width =30, height = 30, units = "cm", dpi = 300)
 
 
 
@@ -148,6 +239,27 @@ dens_h_dist <- diversity_H %>%
     left_join(density_dz, by = c("datazone" = "dz_2001")) %>% 
     select(datazone, period, population_density, category, H)    
 
+
+dens_h_dist <- dens_h_dist %>% filter(category !="land_bus") %>% 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
 dens_h_dist %>% 
     ggplot(., aes(x = population_density, y = H, group = period, colour = period)) +
     geom_point(alpha = 0.1) +
@@ -156,14 +268,67 @@ dens_h_dist %>%
 
 
 dens_h_dist %>% 
-    ggplot(., aes(x = population_density, y = H, group = period, colour = period)) +
-    geom_point(alpha = 0.1) +
-    stat_smooth() + 
+    ggplot(., aes(x = population_density, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") +
     facet_wrap(~category, scale = "free_y") + 
-    scale_x_log10()
+    scale_x_log10(
+        breaks = c(50, 100, 500, 1000, 2000, 5000, 10000, 20000),
+        labels = c("50", "100", "500", "1k", "2k", "5k", "10k", "20k")
+        ) + 
+    geom_vline(aes(xintercept = 3390), linetype = "dashed") + # Indicative average density for Glasgow overall
+    labs(x = "Persons per square km", y = "Diversity score")
+    
 
-ggsave("figures/diveristy_by_population_density.png", height = 20, width = 20, units = "cm")
+ggsave("figures/diversity_by_population_density.png", height = 20, width = 20, units = "cm")
 
+# Now to look at places with at least 1k/km
+dens_h_dist %>% 
+    ggplot(., aes(x = population_density, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") +
+    facet_wrap(~category, scale = "free_y") + 
+    scale_x_log10(
+        limits = c(1000, 15000),
+        breaks = c(1000, 2000, 5000, 10000, 15000),
+        labels = c("1", "2", "5", "10", "15")
+    ) + 
+    geom_vline(aes(xintercept = 3390), linetype = "dashed") + # Indicative average density for Glasgow overall
+    geom_vline(aes(xintercept = 6000)) + 
+    labs(x = "Thousand of persons per square km", y = "Diversity score")
+ggsave("figures/diversity_by_population_density_higherdensonly.png", height = 20, width = 20, units = "cm")
+# Now to look at places with at least 1k/km
+dens_h_dist %>% 
+    mutate(population_density = population_density / 1000) %>% 
+    ggplot(., aes(x = population_density, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") +
+    facet_wrap(~category, scale = "free_y") + 
+    scale_x_continuous(
+        limits = c(1, 15),
+        breaks = 1:15
+    ) + 
+    geom_vline(aes(xintercept = 3.390), linetype = "dashed") + # Indicative average density for Glasgow overall
+    geom_vline(aes(xintercept = 6)) + 
+    labs(x = "Thousand of persons per square km", y = "Diversity score")
+ggsave("figures/diversity_by_population_density_higherdensonly_linearscale.png", height = 20, width = 20, units = "cm")
+
+# And now to focus just on ethnicity, built type, and tenure
+dens_h_dist %>% 
+    mutate(population_density = population_density / 1000) %>%
+    filter(category %in% c("Demographic:\nEthnicity", "Built: Type", "Tenure")) %>% 
+    ggplot(., aes(x = population_density, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    stat_smooth(colour = "black") +
+    facet_wrap(~category) + 
+    scale_x_continuous(
+        limits = c(1, 15),
+        breaks = 1:15
+    ) + 
+    geom_vline(aes(xintercept = 3.390), linetype = "dashed") + # Indicative average density for Glasgow overall
+    geom_vline(aes(xintercept = 6)) + 
+    labs(x = "Thousand of persons per square km", y = "Diversity score")
+ggsave("figures/diversity_by_population_density_builttenureethnicity_linearscale.png", height = 20, width = 20, units = "cm")
 
 
 
@@ -180,62 +345,237 @@ simd_simple <- simd %>%
 simd_h_dist <- diversity_H %>% 
     gather(key = "category", value = "H", tenure:land_bus) %>% 
     left_join(simd_simple, by = c("datazone" = "dz_2001")) %>% 
-    select(datazone, period, simd_score, category, H)   
-
-# % change from 2001 to 2011 by simd quintile
-
-# As a table
-simd_h_dist %>% 
+    select(datazone, period, simd_score, category, H)  %>% 
     filter(category != "land_bus") %>% 
-    mutate(simd_quintile = ntile(simd_score, 5)) %>% 
-    select(simd_quintile, period, category, H) %>% 
-    group_by(simd_quintile, period, category) %>% 
-    summarise(H = median(H, na.rm = T)) %>% 
-    ungroup %>% 
-    spread(period, H) %>% 
-    mutate(per_change = (t2 - t1) / t1) %>% 
-    select(-t1, -t2) %>%
-    mutate(per_change = round(per_change, 3)) %>% 
-    spread(simd_quintile, per_change) 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
 
 
-# As figures 
-simd_h_dist %>%
-    filter(category != "land_bus") %>% 
-    mutate(simd_quintile = ntile(simd_score, 5)) %>% 
-    select(simd_quintile, period, category, H) %>% 
-    group_by(simd_quintile, period, category) %>% 
-    summarise(H = median(H, na.rm = T)) %>% 
-    ungroup %>% 
-    spread(period, H) %>% 
-    mutate(per_change = (t2 - t1) / t1) %>% 
-    select(-t1, -t2) %>%
-    ggplot(.) + 
-    geom_line(aes(x = simd_quintile, y = per_change, group = category, linetype = category, colour = category))
 
 simd_h_dist %>%
+    ggplot(., aes(x = simd_score, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    facet_wrap(~ category, scale = "free_y") + 
+    stat_smooth(colour = "black") + 
+    labs(x = "SIMD Score (lowest = most deprived)", y = "Diversity scores")
+ggsave("figures/diversity_by_deprivation.png", height = 20, width = 20, units = "cm")
+
+
+# Now the same but for the income domain
+
+simd_simple <- simd %>% 
+    select(dz_2001 = `Data Zone`, simd_score = `Education, Skills and Training domain 2012 score`)
+
+simd_h_dist <- diversity_H %>% 
+    gather(key = "category", value = "H", tenure:land_bus) %>% 
+    left_join(simd_simple, by = c("datazone" = "dz_2001")) %>% 
+    select(datazone, period, simd_score, category, H)  %>% 
     filter(category != "land_bus") %>% 
-    mutate(simd_quintile = ntile(simd_score, 5)) %>% 
-    select(simd_quintile, period, category, H) %>% 
-    group_by(simd_quintile, period, category) %>% 
-    summarise(H = median(H, na.rm = T)) %>% 
-    ungroup %>% 
-    spread(period, H) %>% 
-    mutate(per_change = 100 * (t2 - t1) / t1) %>% 
-    select(-t1, -t2) %>%
-    ggplot(., 
-           mapping = aes(
-               x = simd_quintile, y = per_change)
-           ) + 
-    geom_line() + geom_point() +
-    geom_hline(yintercept = 0) + 
-    facet_wrap(~category, scales = "free_y") + 
-    labs(y = "percentage change in diversity from 2001 to 2011", 
-         x = "SIMD Quintile (1 = most deprived)"
-         )
-ggsave(
-    "figures/percent_change_in_diversity_by_simd_quintile.png", 
-    height = 20, width = 20, units = "cm")
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
+
+
+simd_h_dist %>%
+    ggplot(., aes(x = simd_score, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    facet_wrap(~ category, scale = "free_y") + 
+    stat_smooth(colour = "black") + 
+    labs(x = "Income Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+ggsave("figures/diversity_by_income_deprivation.png", height = 20, width = 20, units = "cm")
+
+# And how housing deprivation
+
+simd_simple <- simd %>% 
+    select(dz_2001 = `Data Zone`, simd_score = `Housing domain score 2004, 2006, 2009 & 2012`)
+
+simd_h_dist <- diversity_H %>% 
+    gather(key = "category", value = "H", tenure:land_bus) %>% 
+    left_join(simd_simple, by = c("datazone" = "dz_2001")) %>% 
+    select(datazone, period, simd_score, category, H)  %>% 
+    filter(category != "land_bus") %>% 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
+
+
+simd_h_dist %>%
+    ggplot(., aes(x = simd_score, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    facet_wrap(~ category, scale = "free_y") + 
+    stat_smooth(colour = "black") + 
+    labs(x = "Housing Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+ggsave("figures/diversity_by_housing_deprivation.png", height = 20, width = 20, units = "cm")
+
+
+# And now skills deprivation
+
+simd_simple <- simd %>% 
+    select(dz_2001 = `Data Zone`, simd_score = `Education, Skills and Training domain 2012 score`)
+
+simd_h_dist <- diversity_H %>% 
+    gather(key = "category", value = "H", tenure:land_bus) %>% 
+    left_join(simd_simple, by = c("datazone" = "dz_2001")) %>% 
+    select(datazone, period, simd_score, category, H)  %>% 
+    filter(category != "land_bus") %>% 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
+
+
+simd_h_dist %>%
+    ggplot(., aes(x = simd_score, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    facet_wrap(~ category, scale = "free_y") + 
+    stat_smooth(colour = "black") + 
+    labs(x = "Skills Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+ggsave("figures/diversity_by_skills_deprivation.png", height = 20, width = 20, units = "cm")
+
+# And now health deprivation
+
+simd_simple <- simd %>% 
+    select(dz_2001 = `Data Zone`, simd_score = `Health domain 2012 score`)
+
+simd_h_dist <- diversity_H %>% 
+    gather(key = "category", value = "H", tenure:land_bus) %>% 
+    left_join(simd_simple, by = c("datazone" = "dz_2001")) %>% 
+    select(datazone, period, simd_score, category, H)  %>% 
+    filter(category != "land_bus") %>% 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
+
+
+simd_h_dist %>%
+    ggplot(., aes(x = simd_score, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    facet_wrap(~ category, scale = "free_y") + 
+    stat_smooth(colour = "black") + 
+    labs(x = "Health Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+ggsave("figures/diversity_by_health_deprivation.png", height = 20, width = 20, units = "cm")
+
+
+# And now geographic access  deprivation
+
+simd_simple <- simd %>% 
+    select(dz_2001 = `Data Zone`, simd_score = `Geographic Access domain 2012 score`)
+
+simd_h_dist <- diversity_H %>% 
+    gather(key = "category", value = "H", tenure:land_bus) %>% 
+    left_join(simd_simple, by = c("datazone" = "dz_2001")) %>% 
+    select(datazone, period, simd_score, category, H)  %>% 
+    filter(category != "land_bus") %>% 
+    mutate(category = factor(
+        category, 
+        labels = c(
+            "Built: Band",
+            "Built: Size",
+            "Built: Type",
+            "Demographic:\nAge Structure",
+            "Demographic:\nCountry of Origin",
+            "Demographic:\nEthnicity",
+            "Demographic:\nReligion",
+            "Economic:\nEconomic Activity",
+            "Economic:\nIndustry of Employment",
+            "Economic:\nHighest Qualification",
+            "Economic:\nSocioeconomic\nClassification",
+            "Land Use:\nVacant/occupied land",
+            "Tenure"
+        )
+    ))
+
+
+
+simd_h_dist %>%
+    ggplot(., aes(x = simd_score, y = H, group = period, linetype = period)) +
+    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    facet_wrap(~ category, scale = "free_y") + 
+    stat_smooth(colour = "black") + 
+    labs(x = "Geographic Access Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+ggsave("figures/diversity_by_geographicaccess_deprivation.png", height = 20, width = 20, units = "cm")
+
+
+
 # Some comments/ideas on this: 
 
 # Largest % change is in tenure, around 60% in most deprived quintile. 
