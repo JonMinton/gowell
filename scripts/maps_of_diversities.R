@@ -102,25 +102,33 @@ save_tmap(this_map,
 
 roads <- read_shape(file = "data/shp/scotland-roads-shape/roads.shp")
 
-# clip the roads to within shp_ur_gg
+# Need to set common projection
 
-# From http://robinlovelace.net/r/2014/07/29/clipping-with-r.html
-gClip <- function(shp, bb){
-    if(class(bb) == "matrix") b_poly <- as(extent(as.vector(t(bb))), "SpatialPolygons")
-    else b_poly <- as(extent(bb), "SpatialPolygons")
-    gIntersection(shp, b_poly, byid = T)
-}
+roads <- set_projection(roads, projection = get_projection(shp_ur_gg))
 
-# Now need to find the bounding box of shp_ur_gg and apply to roads
+roads_in_gg <- raster::crop(roads, bb(shp_ur_gg))
 
-this_bb <- bbox(shp_ur_gg)
+# Road network and UR class for GG
 
-roads_clipped <- gClip(roads, this_bb)
-roads_clipped()
+tm_shape(shp_ur_gg, borders = NULL) + 
+    tm_fill("ur_label", title = "Urban Rural Class") + # Note - important to add title at this stage rather than later
+    tm_legend(
+        title.size = 2.0,
+        text.size = 1.5
+    ) + 
+    tm_shape(roads_in_gg) + 
+    tm_lines(col = "grey", alpha = 0.4) -> map_urclass_glasgow_roads
 
-this_map + 
-    tm_shape(roads) + 
-    tm_lines()
+#tmap_mode("view")
+map_urclass_glasgow_roads
+
+save_tmap(map_urclass_glasgow_roads, 
+          filename = "maps/gg_urbanrural_standard_roads.png", 
+          width = 30, height = 30, units = "cm", dpi=300
+)
+
+
+
 
 # To display this interactively using leaflet
 # tmap_mode("view")
