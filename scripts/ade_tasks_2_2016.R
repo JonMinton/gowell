@@ -14,7 +14,7 @@ p_load(
 # Task 1: Diversity by UR class -------------------------------------------
 
 ur_class <- read_csv("data/derived/dz_2001_by_ur_6fold_class.csv")
-    diversity_H <- read_csv("data/derived/p_all_H.csv")
+diversity_H <- read_csv("data/derived/p_all_H.csv")
 
 div_h_ur <- diversity_H %>% 
     gather(key = "category", value = "H", tenure:land_bus) %>% 
@@ -280,7 +280,7 @@ dens_h_dist %>%
     labs(x = "Persons per square km", y = "Diversity score")
     
 
-ggsave("figures/diversity_by_population_density.png", height = 20, width = 20, units = "cm")
+ggsave("figures/diversity_by_population_density.png", height = 20, width = 30, units = "cm")
 
 # Now to look at places with at least 1k/km
 dens_h_dist %>% 
