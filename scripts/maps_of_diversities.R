@@ -10,7 +10,7 @@ p_load(
     readr, stringr, 
     purrr, tidyr, dplyr, 
     ggplot2, 
-    tmap, rgeos, sp,
+    tmap, rgeos, sp, maptools,
     xlsx
     )
 
@@ -82,6 +82,7 @@ append_data(
     shp = shp, data = ur_gg_only, 
     key.shp = "zonecode", key.data = "dz_2001"
     ) -> tmp
+
 shp_ur_gg <- tmp[!is.na(tmp@data$ur_class),]
 rm(tmp)
 
@@ -119,14 +120,169 @@ tm_shape(shp_ur_gg, borders = NULL) +
     tm_shape(roads_in_gg) + 
     tm_lines(col = "grey", alpha = 0.4) -> map_urclass_glasgow_roads
 
+# TAKES AGES - BUT
 #tmap_mode("view")
-map_urclass_glasgow_roads
+# map_urclass_glasgow_roads
+# 
+# save_tmap(map_urclass_glasgow_roads, 
+#           filename = "maps/gg_urbanrural_standard_roads.png", 
+#           width = 30, height = 30, units = "cm", dpi=300
+# )
 
-save_tmap(map_urclass_glasgow_roads, 
-          filename = "maps/gg_urbanrural_standard_roads.png", 
-          width = 30, height = 30, units = "cm", dpi=300
+
+# Cartogram? 
+ur_class <- read_csv("data/derived/dz_2001_by_ur_6fold_class.csv")
+
+ur_class %>% 
+    mutate(ur_label = factor(
+        ur_class, 
+        levels = c(1, 2, 3, 5, 6), 
+        labels = c("large_urban", "other_urban", "accessible small towns", "accessible_rural", "remote_rural")
+    )
+    ) -> ur_class
+
+shp_cart <- read_shape(file = "data/cartogram/Scotland_2001_population_cartogram.shp")
+
+cart_ur_join <- append_data(shp = shp_cart, data = ur_class, key.shp = "zonecode", key.data = "dz_2001")
+
+
+tm_shape(cart_ur_join, projection = "longlat") + 
+    tm_fill("ur_label")
+# This works, just remember to set a projection
+
+
+# Now, to do a cartogram for GG only 
+dzs_in_gg  %>% .$dz_2001 -> tmp
+cart_ur_ggonly <- cart_ur_join[cart_ur_join$zonecode %in% tmp,]
+rm(tmp)
+
+tm_shape(cart_ur_ggonly, projection = "longlat") + 
+    tm_fill("ur_label")
+# This ALSO WORKS - GREAT! 
+
+
+# Now a standard map, with a border around the GG zone
+
+shp_ur_join <- append_data(
+    shp_ur_join, dzs_in_gg, 
+    key.shp = "zonecode", key.data = "dz_2001")
+
+tmp <- shp_ur_join@data
+tmp  %>% mutate(in_gg = !is.na(dz_2001.data))  -> tmp
+tmp -> shp_ur_join@data
+rm(tmp)
+
+shp_gg_only <- shp_ur_join[shp_ur_join$in_gg,]
+shp_gg_only <- unionSpatialPolygons(shp_gg_only, IDs = shp_gg_only$chp)
+# This shows the separate health boards 
+
+# Note unionSpatialPolygons returns a SpatialPolygons object not a spatialpolygons DF
+# to convert back
+#http://gis.stackexchange.com/questions/61633/r-convert-a-spatial-polygon-objet-to-spatial-polygon-data-frame
+tmp_df <- data.frame(id = getSpPPolygonsIDSlots(shp_gg_only))
+row.names(tmp_df) <- getSpPPolygonsIDSlots(shp_gg_only)
+
+shp_gg_only <- SpatialPolygonsDataFrame(shp_gg_only, data = tmp_df)
+rm(tmp_df)
+
+# To get the labels for each health partnership
+chp_lookup <- read_csv("data/geographies/greater_glasgow_definitions_simplified.csv")
+
+short_name <- c(
+    "East Dunbartonshire",
+    "East Glasgow",
+    "East Renfrewshire",
+    "Inverclyde",
+    "North Glasgow",
+    "North Lanarkshire",
+    "Renfrewshire",
+    "South East Glasgow",
+    "South Lanarkshire",    
+    "South West Glasgow",
+    "West Dunbartonshire",
+    "West Glasgow"
 )
 
+
+chp_lookup %>% mutate(short_label = short_name) -> chp_lookup
+rm(short_name)
+
+shp_gg_only <- append_data(shp = shp_gg_only, data = chp_lookup, key.shp = "id", key.data = "chcp_code")
+
+tm_shape(shp_ur_gg) + 
+    tm_fill("ur_label") + 
+    tm_shape(shp_gg_only) + 
+    tm_borders() +
+    tm_text("short_label", size = 0.5, shadow = T)
+
+# Good. This works now....
+
+# Now to do the same with the cartogram
+
+cart_ur_join <- append_data(
+    cart_ur_join, dzs_in_gg, 
+    key.shp = "zonecode", key.data = "dz_2001")
+
+tmp <- cart_ur_join@data
+tmp  %>% mutate(in_gg = !is.na(dz_2001.data))  -> tmp
+tmp -> cart_ur_join@data
+rm(tmp)
+
+cart_gg_only <- cart_ur_join[cart_ur_join$in_gg,]
+cart_gg_only <- unionSpatialPolygons(cart_gg_only, IDs = cart_gg_only$chp)
+# This shows the separate health boards 
+
+# Note unionSpatialPolygons returns a SpatialPolygons object not a spatialpolygons DF
+# to convert back
+#http://gis.stackexchange.com/questions/61633/r-convert-a-spatial-polygon-objet-to-spatial-polygon-data-frame
+tmp_df <- data.frame(id = getSpPPolygonsIDSlots(cart_gg_only))
+row.names(tmp_df) <- getSpPPolygonsIDSlots(cart_gg_only)
+
+cart_gg_only <- SpatialPolygonsDataFrame(cart_gg_only, data = tmp_df)
+rm(tmp_df)
+
+# To get the labels for each health partnership
+chp_lookup <- read_csv("data/geographies/greater_glasgow_definitions_simplified.csv")
+
+short_name <- c(
+    "East Dunbartonshire",
+    "East Glasgow",
+    "East Renfrewshire",
+    "Inverclyde",
+    "North Glasgow",
+    "North Lanarkshire",
+    "Renfrewshire",
+    "South East Glasgow",
+    "South Lanarkshire",    
+    "South West Glasgow",
+    "West Dunbartonshire",
+    "West Glasgow"
+)
+
+
+chp_lookup %>% mutate(short_label = short_name) -> chp_lookup
+rm(short_name)
+
+cart_gg_only <- append_data(shp = cart_gg_only, data = chp_lookup, key.shp = "id", key.data = "chcp_code")
+
+tm_shape(cart_ur_gg) + 
+    tm_fill("ur_label") + 
+    tm_shape(cart_gg_only) + 
+    tm_borders() +
+    tm_text("short_label", size = 0.5, shadow = T)
+
+
+# Let's look at diversity for one of the measures 
+
+
+
+
+
+    
+
+
+# This will involve dissolving shapes by 
+# Now to try to create a border around CHPs of interest
 
 
 
