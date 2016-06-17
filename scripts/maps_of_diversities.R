@@ -137,7 +137,7 @@ ur_class %>%
     mutate(ur_label = factor(
         ur_class, 
         levels = c(1, 2, 3, 5, 6), 
-        labels = c("large_urban", "other_urban", "accessible small towns", "accessible_rural", "remote_rural")
+        labels = c("large urban", "other urban", "accessible small towns", "accessible rural", "remoterural")
     )
     ) -> ur_class
 
@@ -147,9 +147,17 @@ cart_ur_join <- append_data(shp = shp_cart, data = ur_class, key.shp = "zonecode
 
 
 tm_shape(cart_ur_join, projection = "longlat") + 
-    tm_fill("ur_label")
+    tm_fill("ur_label", title = "Urban Rural Class") +
+    tm_legend(
+        title.size = 2.0,
+        text.size = 1.5
+    )  -> map_cart_ur_scotland
 # This works, just remember to set a projection
 
+save_tmap(map_cart_ur_scotland,
+          filename = "maps/scotland_cartogram_ur.png",
+          width = 20, height = 30, units = "cm", dpi=300
+)
 
 # Now, to do a cartogram for GG only 
 dzs_in_gg  %>% .$dz_2001 -> tmp
@@ -157,7 +165,17 @@ cart_ur_ggonly <- cart_ur_join[cart_ur_join$zonecode %in% tmp,]
 rm(tmp)
 
 tm_shape(cart_ur_ggonly, projection = "longlat") + 
-    tm_fill("ur_label")
+    tm_fill("ur_label", title = "Urban Rural Class") +
+    tm_legend(
+        title.size = 2.0,
+        text.size = 1.5
+    ) -> map_cart_ur_glasgow
+
+save_tmap(map_cart_ur_glasgow,
+          filename = "maps/glasgow_cartogram_ur.png",
+          width = 25, height = 25, units = "cm", dpi=300
+)
+
 # This ALSO WORKS - GREAT! 
 
 
@@ -210,79 +228,20 @@ rm(short_name)
 shp_gg_only <- append_data(shp = shp_gg_only, data = chp_lookup, key.shp = "id", key.data = "chcp_code")
 
 tm_shape(shp_ur_gg) + 
-    tm_fill("ur_label") + 
+    tm_fill("ur_label", title = "Urban Rural Class") + 
     tm_shape(shp_gg_only) + 
-    tm_borders() +
-    tm_text("short_label", size = 0.5, shadow = T)
+    tm_borders(lwd = 2) + 
+    tm_legend(
+        title.size = 2.0,
+        text.size = 1.5
+    ) + 
+    tm_text("short_label", shadow = T) -> map_gg_ur_healthboard
 
-# Good. This works now....
 
-# Now to do the same with the cartogram
-
-cart_ur_join <- append_data(
-    cart_ur_join, dzs_in_gg, 
-    key.shp = "zonecode", key.data = "dz_2001")
-
-tmp <- cart_ur_join@data
-tmp  %>% mutate(in_gg = !is.na(dz_2001.data))  -> tmp
-tmp -> cart_ur_join@data
-rm(tmp)
-
-cart_gg_only <- cart_ur_join[cart_ur_join$in_gg,]
-cart_gg_only <- unionSpatialPolygons(cart_gg_only, IDs = cart_gg_only$chp)
-# This shows the separate health boards 
-
-# Note unionSpatialPolygons returns a SpatialPolygons object not a spatialpolygons DF
-# to convert back
-#http://gis.stackexchange.com/questions/61633/r-convert-a-spatial-polygon-objet-to-spatial-polygon-data-frame
-tmp_df <- data.frame(id = getSpPPolygonsIDSlots(cart_gg_only))
-row.names(tmp_df) <- getSpPPolygonsIDSlots(cart_gg_only)
-
-cart_gg_only <- SpatialPolygonsDataFrame(cart_gg_only, data = tmp_df)
-rm(tmp_df)
-
-# To get the labels for each health partnership
-chp_lookup <- read_csv("data/geographies/greater_glasgow_definitions_simplified.csv")
-
-short_name <- c(
-    "East Dunbartonshire",
-    "East Glasgow",
-    "East Renfrewshire",
-    "Inverclyde",
-    "North Glasgow",
-    "North Lanarkshire",
-    "Renfrewshire",
-    "South East Glasgow",
-    "South Lanarkshire",    
-    "South West Glasgow",
-    "West Dunbartonshire",
-    "West Glasgow"
+save_tmap(map_gg_ur_healthboard,
+          filename = "maps/glasgow_healthboard_ur.png",
+          width = 25, height = 25, units = "cm", dpi=300
 )
-
-
-chp_lookup %>% mutate(short_label = short_name) -> chp_lookup
-rm(short_name)
-
-cart_gg_only <- append_data(shp = cart_gg_only, data = chp_lookup, key.shp = "id", key.data = "chcp_code")
-
-tm_shape(cart_ur_gg) + 
-    tm_fill("ur_label") + 
-    tm_shape(cart_gg_only) + 
-    tm_borders() +
-    tm_text("short_label", size = 0.5, shadow = T)
-
-
-# Let's look at diversity for one of the measures 
-
-
-
-
-
-    
-
-
-# This will involve dissolving shapes by 
-# Now to try to create a border around CHPs of interest
 
 
 
@@ -296,37 +255,145 @@ tm_shape(cart_ur_gg) +
 
 
 
-# .... --------------------------------------------------------------------
+# Produce maps of diversities  --------------------------------------------------------------------
 
 
 
 diversity_H <- read_csv("data/derived/p_all_H.csv")
 
+
 dta <- diversity_H %>% select(-land_bus) %>% gather(key = "category", value = "h", tenure:land_vacant) 
 shp <- read_shape(file = "data/shp/scotland_2001_datazones/scotland_dz_2001.shp")
-
+shp_cart <- read_shape(file = "data/cartogram/Scotland_2001_population_cartogram.shp")
 # Let's try nesting this 
 
 dta_nested <- dta %>% group_by(period, category) %>% nest()
 
-fn <- function(DTA){
-    out <- append_data(shp, DTA, key.shp = "zonecode", key.data = "datazone") 
+fn <- function(DTA, SHP){
+    
+    out <- append_data(SHP, DTA, key.shp = "zonecode", key.data = "datazone") 
     out <- out[!is.na(out$h),]
     return(out)
 }
 
-dta_nested <- dta_nested %>% mutate(shp = map(data, fn))
+dta_nested <- dta_nested %>% 
+    mutate(
+        shp = map(data, fn, SHP = shp)
+        ) 
+    
 
 fn <- function(TITLE, SHP){
-    graph <- qtm(SHP, fill = "h", borders = NULL, title = TITLE)
-    return(graph)
+    this_map <- tm_shape(SHP) + 
+        tm_layout(
+            title = TITLE, 
+            title.position = c("right", "top"), 
+            title.bg.color = "lightgrey"
+        ) +  
+        tm_fill(
+            "h", 
+            n = 5,
+            max_categories = 10,
+            palette = "Spectral", 
+            title = "Diversity Scores", 
+            legend.hist = T
+            ) + 
+        tm_shape(shp_gg_only) + 
+        tm_borders(lwd = 2)
+        
+    return(this_map)
+}
+
+
+dta_nested <- dta_nested %>% 
+    mutate(tmp1 = ifelse(period == "t1", "2001", "2011"),
+           TITLE = paste0(tmp1, ", ", category)) %>% 
+    mutate(this_map = map2(TITLE, shp, fn))
+
+# Now to print out 
+
+fn <- function(FILENAME, MAP){
+    full_filename = paste0("maps/diversities/diversity_", FILENAME, ".png")
+    
+    save_tmap(MAP,
+              filename = full_filename,
+              width = 15, height = 15, units = "cm", dpi=300
+    )
+    return(NULL)
+}
+
+
+# Interestingly the walk function needs to be within the mutate function even though it 
+# doesn't return anything... 
+
+dta_nested %>% 
+    select(-tmp1) %>% 
+    mutate(filenm = paste0(category, "_", period)) %>% 
+    mutate(walk2(filenm, this_map, fn))
+
+
+
+# Now to try the same kind of thing but with cartograms 
+
+
+fn <- function(DTA, SHP){
+    
+    out <- append_data(SHP, DTA, key.shp = "zonecode", key.data = "datazone") 
+    out <- out[!is.na(out$h),]
+    return(out)
 }
 
 dta_nested <- dta_nested %>% 
-    mutate(TITLE = paste0(period, ", ", category)) %>% 
-    mutate(this_map = map2(TITLE, shp, fn))
+    mutate(
+        shp_cart = map(data, fn, SHP = shp_cart)
+    ) 
 
 
 
+fn <- function(TITLE, SHP){
+    this_map <- tm_shape(SHP, projection = "longlat") + 
+        tm_fill(
+            "h", 
+            n = 5,
+            max_categories = 10,
+            palette = "Spectral", 
+            title = "Diversity Scores", 
+            legend.hist = T
+        ) +
+        tm_layout(
+            title = TITLE, 
+            title.position = c("left", "bottom"), 
+            title.bg.color = "lightgrey"
+        )  + 
+        tm_legend(
+            position = c("right", "top"),
+            frame = T,
+            legend.width = 0.30, legend.height = 0.35,
+            bg.color = "lightgrey"
+        )
+    
+    return(this_map)
+}
+
+    
+dta_nested <- dta_nested %>% 
+    mutate(tmp1 = ifelse(period == "t1", "2001", "2011"),
+           TITLE = paste0(tmp1, ", ", category)) %>% 
+    mutate(this_cart = map2(TITLE, shp_cart, fn))
 
 
+# Now to print out 
+
+fn <- function(FILENAME, MAP){
+    full_filename = paste0("maps/diversities/cartogram_diversity_", FILENAME, ".png")
+    
+    save_tmap(MAP,
+              filename = full_filename,
+              width = 20, height = 20, units = "cm", dpi=300
+    )
+    return(NULL)
+}
+
+dta_nested %>% 
+    select(-tmp1) %>% 
+    mutate(filenm = paste0(category, "_", period)) %>% 
+    mutate(walk2(filenm, this_cart, fn))
