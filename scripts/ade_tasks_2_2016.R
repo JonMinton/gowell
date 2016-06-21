@@ -152,7 +152,7 @@ div_h_dist %>%
     facet_wrap(~category) + 
     labs(x = "Distance to city centre in km", y = "Diversity score")
 
-ggsave("figures/diversity_distance_upto40km.png", width = 30, height = 30, units = "cm", dpi = 300)
+ggsave("figures/diversity_distance_upto40km.png", width = 20, height = 20, units = "cm", dpi = 300)
 
 div_h_dist %>% 
     filter(distance_to_centre < 15000) %>% 
@@ -162,7 +162,7 @@ div_h_dist %>%
     stat_smooth(colour = "black") + 
     facet_wrap(~category) + 
     labs(x = "Distance to city centre in km", y = "Diversity score")
-ggsave("figures/diversity_distance_upto15km.png", width = 30, height = 30, units = "cm", dpi = 300)
+ggsave("figures/diversity_distance_upto15km.png", width = 20, height = 20, units = "cm", dpi = 300)
 
 
 
