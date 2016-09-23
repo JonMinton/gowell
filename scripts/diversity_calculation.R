@@ -4,15 +4,13 @@
 
 rm(list=ls())
 
-require(repmis)
-require(tidyr)
-require(stringr)
-require(plyr)
-require(dplyr)
-require(vegan)
-require(ggplot2)
-require(xtable)
-require(corrplot)
+pacman::p_load(
+    readr,
+    tidyr, stringr,
+    dplyr, 
+    purrr,
+    ggplot2
+)
 
 
 # Entropy function --------------------------------------------------------
@@ -20,88 +18,119 @@ require(corrplot)
 
 # Entropy calculation
 H <- function(xx){
+    # I'm not sure about the N here
     N <- ncol(xx)
     p <- apply(xx, 1, function(x) (x+0.5)/sum(x))
+    # Or about the necessity of 0.5 continuity correction here
     out <- -1 * apply(p, 2, function(x) sum(x * log(x))/N)
     return(out)
 }
 
+# Shannon's Diversity Score (0 to - infinity)
+calc_H <- function(df, correction = 0){
+    vec <- as.vector(df) 
+    vec <- vec + correction
+    - sum(vec * log(vec))
+}
+#
 
+# Simpson's diversity index
+# from 
+# http://geographyfieldwork.com/SimpsonsDiversityIndex.htm
+calc_S <- function(df, correction = 0){
+    vec <- as.vector(df) 
+    vec <- vec + correction
+    N <-  sum(vec)
+    v2 <- (vec * (vec - 1)) / (N * (N - 1))
+    1 - sum(v2)
+}
+
+# Now to reformulate the above 
 
 
 # Data  -------------------------------------------------------------------
 
 # Primary
-tenure <- read.csv("data/derived/tenure_by_dz.csv") %>%
-    tbl_df
+tenure <- read_csv("data/derived/tenure_by_dz.csv") 
 
-names(dta_sec) <- c(
-    "datazone", 
-    "total_working_age",
-    "I_higher_managerial",
-    "Ii_higher_managerial_upper",
-    "Iii_higher_managerial_lower",
-    "II_lower_managerial",
-    "III_intermediate",
-    "III_small_employers",
-    "III_lower_supervisory",
-    "IV_semi_routine",
-    "V_routine",
-    "X_nonstudent_total",
-    "X_nonstudent_neverworked",
-    "X_nonstudent_ltunemployed",
-    "X_student"    
-)
+tenure %>% select(-total) %>% 
+    group_by(dz_2001, year) %>% nest %>% 
+    mutate(
+        shannon = map_dbl(data, calc_H, correction = 0.5),
+        simpson = map_dbl(data, calc_S, correction = 0.5),
+        inv_simpson = 1 / simpson
+        ) %>% 
+    select(
+        dz_2001, year, shannon, simpson, inv_simpson
+    ) -> tenure_diversity
 
-
-dta_sec <- dta_sec %>%
-    slice(-1) %>%
-    gather(key="sec", value="count", -datazone) 
-
-dta_sec$count <- as.numeric(as.character(dta_sec$count))
+# names(dta_sec) <- c(
+#     "datazone", 
+#     "total_working_age",
+#     "I_higher_managerial",
+#     "Ii_higher_managerial_upper",
+#     "Iii_higher_managerial_lower",
+#     "II_lower_managerial",
+#     "III_intermediate",
+#     "III_small_employers",
+#     "III_lower_supervisory",
+#     "IV_semi_routine",
+#     "V_routine",
+#     "X_nonstudent_total",
+#     "X_nonstudent_neverworked",
+#     "X_nonstudent_ltunemployed",
+#     "X_student"    
+# )
+# 
+# 
+# dta_sec <- dta_sec %>%
+#     slice(-1) %>%
+#     gather(key="sec", value="count", -datazone) 
+# 
+# dta_sec$count <- as.numeric(as.character(dta_sec$count))
 
 
 greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df 
 
-dta_sec <- dta_sec %>%
-    inner_join(greater_glasgow_dzs, by=c("datazone"="dz_2001")) %>%
-    select(datazone, sec, count)
+# dta_sec <- dta_sec %>%
+#     inner_join(greater_glasgow_dzs, by=c("datazone"="dz_2001")) %>%
+#     select(datazone, sec, count)
 
 
 # What are the mutually exclusive groups?
 
 
-tmp <- dta_sec %>%
-    spread(sec, count) %>%    
-    group_by(datazone) %>%
-    mutate(
-        total=total_working_age,
-        I=I_higher_managerial, 
-        II=II_lower_managerial + III_small_employers + III_lower_supervisory,
-        III=IV_semi_routine + III_intermediate,
-        IV=V_routine, 
-        X=X_nonstudent_total,
-        S=X_student
-    ) %>%
-    select(datazone, total, I, II, III, IV, X, S) %>%
-    mutate(t2=I+II+III+IV+X+S) %>%
-    select(datazone, I, II, III, IV, X, S)
+# tmp <- dta_sec %>%
+#     spread(sec, count) %>%    
+#     group_by(datazone) %>%
+#     mutate(
+#         total=total_working_age,
+#         I=I_higher_managerial, 
+#         II=II_lower_managerial + III_small_employers + III_lower_supervisory,
+#         III=IV_semi_routine + III_intermediate,
+#         IV=V_routine, 
+#         X=X_nonstudent_total,
+#         S=X_student
+#     ) %>%
+#     select(datazone, total, I, II, III, IV, X, S) %>%
+#     mutate(t2=I+II+III+IV+X+S) %>%
+#     select(datazone, I, II, III, IV, X, S)
+# 
+# tmp$diversity <- tmp[,-1] %>%
+#     as.matrix %>%
+#     diversity 
 
-tmp$diversity <- tmp[,-1] %>%
-    as.matrix %>%
-    diversity 
-
-tmp$H <- tmp  %>% 
-    ungroup  %>% 
-    select(-datazone, -diversity)  %>%
-    as.matrix %>%
-    H
-
-dz_sec_diversity <- tmp %>%
-    select(datazone, sec_div=diversity, sec_h=H)
-dz_sec_diversity
-
-write.csv(dz_sec_diversity, file="data/derived/diversity_sec_by_dz_2011_census.csv")
+# tmp$H <- tmp  %>% 
+#     ungroup  %>% 
+#     select(-datazone, -diversity)  %>%
+#     as.matrix %>%
+#     H
+# 
+# dz_sec_diversity <- tmp %>%
+#     select(datazone, sec_div=diversity, sec_h=H)
+# dz_sec_diversity
+# 
+# write.csv(dz_sec_diversity, file="data/derived/diversity_sec_by_dz_2011_census.csv")
 
 
 ################

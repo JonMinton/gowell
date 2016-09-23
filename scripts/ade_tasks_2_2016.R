@@ -373,7 +373,7 @@ simd_h_dist %>%
     geom_point(aes(colour = period, shape = period), alpha = 0.1) +
     facet_wrap(~ category, scale = "free_y") + 
     stat_smooth(colour = "black") + 
-    labs(x = "SIMD Score (lowest = most deprived)", y = "Diversity scores")
+    labs(x = "SIMD Score (lowest = least deprived)", y = "Diversity scores")
 ggsave("figures/diversity_by_deprivation.png", height = 20, width = 20, units = "cm")
 
 
@@ -413,7 +413,7 @@ simd_h_dist %>%
     geom_point(aes(colour = period, shape = period), alpha = 0.1) +
     facet_wrap(~ category, scale = "free_y") + 
     stat_smooth(colour = "black") + 
-    labs(x = "Income Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+    labs(x = "Income Deprivation Score (lowest = lest deprived)", y = "Diversity scores")
 ggsave("figures/diversity_by_income_deprivation.png", height = 20, width = 20, units = "cm")
 
 # And how housing deprivation
@@ -452,7 +452,7 @@ simd_h_dist %>%
     geom_point(aes(colour = period, shape = period), alpha = 0.1) +
     facet_wrap(~ category, scale = "free_y") + 
     stat_smooth(colour = "black") + 
-    labs(x = "Housing Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+    labs(x = "Housing Deprivation Score (lowest = lest deprived)", y = "Diversity scores")
 ggsave("figures/diversity_by_housing_deprivation.png", height = 20, width = 20, units = "cm")
 
 
@@ -492,7 +492,7 @@ simd_h_dist %>%
     geom_point(aes(colour = period, shape = period), alpha = 0.1) +
     facet_wrap(~ category, scale = "free_y") + 
     stat_smooth(colour = "black") + 
-    labs(x = "Skills Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+    labs(x = "Skills Deprivation Score (lowest = lest deprived)", y = "Diversity scores")
 ggsave("figures/diversity_by_skills_deprivation.png", height = 20, width = 20, units = "cm")
 
 # And now health deprivation
@@ -531,7 +531,7 @@ simd_h_dist %>%
     geom_point(aes(colour = period, shape = period), alpha = 0.1) +
     facet_wrap(~ category, scale = "free_y") + 
     stat_smooth(colour = "black") + 
-    labs(x = "Health Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+    labs(x = "Health Deprivation Score (lowest = lest deprived)", y = "Diversity scores")
 ggsave("figures/diversity_by_health_deprivation.png", height = 20, width = 20, units = "cm")
 
 
@@ -571,7 +571,7 @@ simd_h_dist %>%
     geom_point(aes(colour = period, shape = period), alpha = 0.1) +
     facet_wrap(~ category, scale = "free_y") + 
     stat_smooth(colour = "black") + 
-    labs(x = "Geographic Access Deprivation Score (lowest = most deprived)", y = "Diversity scores")
+    labs(x = "Geographic Access Deprivation Score (lowest = lest deprived)", y = "Diversity scores")
 ggsave("figures/diversity_by_geographicaccess_deprivation.png", height = 20, width = 20, units = "cm")
 
 
