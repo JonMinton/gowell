@@ -15,17 +15,6 @@ pacman::p_load(
 
 # Entropy function --------------------------------------------------------
 
-
-# Entropy calculation
-H <- function(xx){
-    # I'm not sure about the N here
-    N <- ncol(xx)
-    p <- apply(xx, 1, function(x) (x+0.5)/sum(x))
-    # Or about the necessity of 0.5 continuity correction here
-    out <- -1 * apply(p, 2, function(x) sum(x * log(x))/N)
-    return(out)
-}
-
 # Shannon's Diversity Score (0 to - infinity)
 calc_H <- function(df, correction = 0){
     vec <- as.vector(df) 
@@ -50,184 +39,76 @@ calc_S <- function(df, correction = 0){
 
 # Data  -------------------------------------------------------------------
 
-# Primary
-tenure <- read_csv("data/derived/tenure_by_dz.csv") 
-
-tenure %>% select(-total) %>% 
-    group_by(dz_2001, year) %>% nest %>% 
-    mutate(
-        shannon = map_dbl(data, calc_H, correction = 0.5),
-        simpson = map_dbl(data, calc_S, correction = 0.5),
-        inv_simpson = 1 / simpson
-        ) %>% 
-    select(
-        dz_2001, year, shannon, simpson, inv_simpson
-    ) -> tenure_diversity
-
-# names(dta_sec) <- c(
-#     "datazone", 
-#     "total_working_age",
-#     "I_higher_managerial",
-#     "Ii_higher_managerial_upper",
-#     "Iii_higher_managerial_lower",
-#     "II_lower_managerial",
-#     "III_intermediate",
-#     "III_small_employers",
-#     "III_lower_supervisory",
-#     "IV_semi_routine",
-#     "V_routine",
-#     "X_nonstudent_total",
-#     "X_nonstudent_neverworked",
-#     "X_nonstudent_ltunemployed",
-#     "X_student"    
-# )
-# 
-# 
-# dta_sec <- dta_sec %>%
-#     slice(-1) %>%
-#     gather(key="sec", value="count", -datazone) 
-# 
-# dta_sec$count <- as.numeric(as.character(dta_sec$count))
-
-
-greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv")  %>% tbl_df 
-
-# dta_sec <- dta_sec %>%
-#     inner_join(greater_glasgow_dzs, by=c("datazone"="dz_2001")) %>%
-#     select(datazone, sec, count)
-
-
-# What are the mutually exclusive groups?
-
-
-# tmp <- dta_sec %>%
-#     spread(sec, count) %>%    
-#     group_by(datazone) %>%
-#     mutate(
-#         total=total_working_age,
-#         I=I_higher_managerial, 
-#         II=II_lower_managerial + III_small_employers + III_lower_supervisory,
-#         III=IV_semi_routine + III_intermediate,
-#         IV=V_routine, 
-#         X=X_nonstudent_total,
-#         S=X_student
-#     ) %>%
-#     select(datazone, total, I, II, III, IV, X, S) %>%
-#     mutate(t2=I+II+III+IV+X+S) %>%
-#     select(datazone, I, II, III, IV, X, S)
-# 
-# tmp$diversity <- tmp[,-1] %>%
-#     as.matrix %>%
-#     diversity 
-
-# tmp$H <- tmp  %>% 
-#     ungroup  %>% 
-#     select(-datazone, -diversity)  %>%
-#     as.matrix %>%
-#     H
-# 
-# dz_sec_diversity <- tmp %>%
-#     select(datazone, sec_div=diversity, sec_h=H)
-# dz_sec_diversity
-# 
-# write.csv(dz_sec_diversity, file="data/derived/diversity_sec_by_dz_2011_census.csv")
-
-
-################
-
-#Other types of diversity
-# 1) Housing tenure diversity 
-
-
 
 # Main Analysis -----------------------------------------------------------
+greater_glasgow_dzs <- read_csv("data/geographies/dzs_in_greater_glasgow.csv") 
 
-greater_glasgow_dzs <- read.csv("data/geographies/dzs_in_greater_glasgow.csv") %>% tbl_df()
 
-#Tenure households - ONLY AVAILABLE FOR 2001!
-
-tenure_households <- source_DropboxData(
-    file="tenure_households.csv",
-    key="6t6dss41g8fat1y"
-) %>% tbl_df() %>% select(
-    datazone, year, 
-    all_households=HO.allhouseholds,
-    council_houses=HO.council,
-    rented_from_employer=HO.employ,
-    owned_with_mortgage=HO.ownmortloan,
-    owned_outright=HO.ownoutright,
-    private_rented=HO.privlet,
-    rented_from_relative=HO.relative,
-    shared_ownership=HO.sharedown,
-    other_social_rented=HO.social
-) %>% mutate(
-    social=council_houses + other_social_rented,
-    rented=rented_from_employer + private_rented+ rented_from_relative,
-    owned=owned_with_mortgage + owned_outright + shared_ownership
-) %>%
-    select(datazone, social, rented, owned)
-
-# just for 2001 
-tenure_households$diversity <- tenure_households %>%
-    select(-datazone) %>%
-    as.matrix %>%
-    diversity
+# Primary
+tenure <- read_csv("data/derived/tenure_by_dz.csv") 
 
 
 # Building type 
 
-bld_band <- read.csv("data/derived/dwellings_by_band.csv") %>%
-    tbl_df
-
-bld_size <- read.csv("data/derived/dwellings_by_size.csv") %>%
-    tbl_df
-
-bld_type <- read.csv("data/derived/dwellings_by_type.csv") %>%
-    tbl_df
+bld_band <- read_csv("data/derived/dwellings_by_band.csv") 
+bld_size <- read_csv("data/derived/dwellings_by_size.csv") 
+bld_type <- read_csv("data/derived/dwellings_by_type.csv") 
 
 
 # Demographic -------------------------------------------------------------
 
-demo_as <- read.csv("data/derived/demographic_groupings.csv") %>%
-    tbl_df
-
-demo_eth <- read.csv("data/derived/ethnicity.csv") %>%
-    tbl_df
-
-demo_rel <- read.csv("data/derived/rel.csv") %>%
-    tbl_df
-
-demo_coo <- read.csv("data/derived/coo.csv") %>%
-    tbl_df
+demo_as <- read_csv("data/derived/demographic_groupings.csv") 
+demo_eth <- read_csv("data/derived/ethnicity.csv") 
+demo_rel <- read_csv("data/derived/rel.csv") 
+demo_coo <- read_csv("data/derived/coo.csv") 
 
 
 # Economy -------------------------------------------------------------
 
-econ_qual <- read.csv("data/derived/highest_qual.csv") %>%
-    tbl_df
-
-econ_act <- read.csv("data/derived/economic_activity.csv") %>%
-    tbl_df
-
-econ_sec <- read.csv("data/derived/sec_by_dz.csv") %>%
-    tbl_df
-
-econ_ind <- read.csv("data/derived/industry.csv") %>%
-    tbl_df
+econ_qual <- read_csv("data/derived/highest_qual.csv") 
+econ_act <- read_csv("data/derived/economic_activity.csv") 
+econ_sec <- read_csv("data/derived/sec_by_dz.csv") 
+econ_ind <- read_csv("data/derived/industry.csv") 
 
 
 # Land use ----------------------------------------------------------------
 
-land_vacant <- read.csv("data/derived/household_space_use.csv") %>%
-    tbl_df
-
-land_bus <- read.csv("data/derived/building_use.csv") %>%
-    tbl_df
+land_vacant <- read_csv("data/derived/household_space_use.csv") 
+land_bus <- read_csv("data/derived/building_use.csv") 
 
 
 # NOTE: Not all are in the same format. Some additional prep will be required
 
+calc_diversities <- function(dta, grp_name){
+    dta %>% 
+        group_by(dz_2001, year) %>% nest %>% 
+        mutate(
+            shannon = map_dbl(data, calc_H),
+            simpson = map_dbl(data, calc_S),
+            inv_simpson = 1 / simpson,
+            group = grp_name
+        ) %>% 
+        select(
+            dz_2001, year, group, shannon, simpson, inv_simpson
+        ) 
+}
 
+tenure %>% calc_diversities("tenure") -> diversities_tenure
+
+map2(
+    list(
+        tenure %>% select_(~-total), 
+        bld_band, bld_size, bld_type, 
+        demo_as, demo_eth, demo_rel, demo_coo, 
+        econ_qual, econ_act, econ_sec, econ_ind, 
+        land_vacant, land_bus), 
+    list("tenure", 
+         "building band", "bulding size", "building type", 
+         "demo age structure", "demo ethnicity", "demo religion", "demo country of origin", 
+         "econ qualification", "econ activity ", "econ socioeconomic", "econ industrial", 
+         "land vacant", "land business"), 
+    calc_diversities
+    ) -> diversities_list
 
 # Diversity using H -------------------------------------------------------
 
