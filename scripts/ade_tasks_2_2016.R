@@ -14,26 +14,25 @@ p_load(
 # Task 1: Diversity by UR class -------------------------------------------
 
 ur_class <- read_csv("data/derived/dz_2001_by_ur_6fold_class.csv")
-diversity_H <- read_csv("data/derived/p_all_H.csv")
-
-div_h_ur <- diversity_H %>% 
-    gather(key = "category", value = "H", tenure:land_bus) %>% 
+#diversity_H <- read_csv("data/derived/p_all_H.csv")
+all_diversities <- read_csv("data/derived/all_diversities.csv")
+div_h_ur <- all_diversities %>%
     left_join(ur_class, by = c("datazone" = "dz_2001")) %>% 
-    select(datazone, period, ur_class, category, H) 
-    
+    select(datazone, year, category, ur_class, simpson)
+
 div_ur_summaries <- div_h_ur  %>% 
-    group_by(period, ur_class, category)   %>% 
+    group_by(year, ur_class, category)   %>% 
     summarise(
-        n_missing = length(is.na(H)), 
-        min_H = min(H, na.rm =T),
-        med_H = median(H, na.rm = T), 
-        max_H = max(H, na.rm = T), 
-        mean_H = mean(H, na.rm = T),
-        sd_H = sd(H, na.rm = T), 
-        lower_025 = quantile(H, 0.025, na.rm = T),
-        upper_975 = quantile(H, 0.975, na.rm = T), 
-        lower_250 = quantile(H, 0.250, na.rm = T),
-        upper_750 = quantile(H, 0.750, na.rm = T)
+        n_missing = length(is.na(simpson)), 
+        min_H = min(simpson, na.rm =T),
+        med_H = median(simpson, na.rm = T), 
+        max_H = max(simpson, na.rm = T), 
+        mean_H = mean(simpson, na.rm = T),
+        sd_H = sd(simpson, na.rm = T), 
+        lower_025 = quantile(simpson, 0.025, na.rm = T),
+        upper_975 = quantile(simpson, 0.975, na.rm = T), 
+        lower_250 = quantile(simpson, 0.250, na.rm = T),
+        upper_750 = quantile(simpson, 0.750, na.rm = T)
         )
 
 
@@ -44,7 +43,7 @@ div_ur_summaries <- div_h_ur  %>%
 
 div_ur_summaries %>%
     ungroup() %>% 
-    filter(period == "t1") %>% 
+    filter(year == 2001) %>% 
     mutate(ur_label = factor(
         ur_class, 
         levels = c(1, 2, 3, 5, 6), 
@@ -84,12 +83,13 @@ dta1 <- div_ur_summaries %>%
             )
     )) %>% 
     filter(category != "Land Use:\nBuilding Use type") %>%  # dropping as only for t2
-    select(period, ur_label, category, value = med_H) %>% spread(period, value)
+    select(year, ur_label, category, value = med_H) %>% 
+    filter(year %in% c(2001, 2011)) %>% spread(year, value)
 
 dta1 %>% 
     ggplot(., aes(y = ur_label)) +
     facet_grid(category  ~ .) + 
-    geom_segment(aes(x = t1, xend = t2, yend = ur_label), arrow = arrow(length = unit(0.1, "npc"), type = "closed")) + 
+    geom_segment(aes(x = `2001`, xend = `2011`, yend = ur_label), arrow = arrow(length = unit(0.1, "npc"), type = "closed")) + 
     labs(
         x = "Median diversity score", 
         y = "Urban/Rural Class", 
@@ -112,12 +112,10 @@ ggsave("figures/change_in_diversity.png", height = 30, width = 15, units = "cm",
 
 
 distance_dz <- read_csv("data/derived/dz_2001_by_distance_from_gg_centre.csv")
-diversity_H <- read_csv("data/derived/p_all_H.csv")
 
-div_h_dist <- diversity_H %>% 
-    gather(key = "category", value = "H", tenure:land_bus) %>% 
+div_h_dist <- all_diversities %>% 
     left_join(distance_dz, by = c("datazone" = "dz_2001")) %>% 
-    select(datazone, period, distance_to_centre, category, H) 
+    select(datazone, year, distance_to_centre, category, simpson) 
 
 div_h_dist <- div_h_dist %>% filter(category !="land_bus") %>% 
     mutate(category = factor(
@@ -144,10 +142,12 @@ div_h_dist <- div_h_dist %>% filter(category !="land_bus") %>%
 # Now to visualise this 
 
 div_h_dist %>% 
+    filter(year %in% c(2001, 2011)) %>% 
+    mutate(year = factor(year)) %>% 
     filter(distance_to_centre < 40000) %>% 
     mutate(distance_to_centre = distance_to_centre / 1000) %>% 
-    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
-    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    ggplot(., aes(x = distance_to_centre, y = simpson, group = year, linetype = year)) +
+    geom_point(aes(colour = year, shape = year), alpha = 0.1) +
     stat_smooth(colour = "black") + 
     facet_wrap(~category) + 
     labs(x = "Distance to city centre in km", y = "Diversity score")
@@ -155,10 +155,12 @@ div_h_dist %>%
 ggsave("figures/diversity_distance_upto40km.png", width = 20, height = 20, units = "cm", dpi = 300)
 
 div_h_dist %>% 
+    filter(year %in% c(2001, 2011)) %>% 
+    mutate(year = factor(year)) %>% 
     filter(distance_to_centre < 15000) %>% 
     mutate(distance_to_centre = distance_to_centre / 1000) %>% 
-    ggplot(., aes(x = distance_to_centre, y = H, group = period, linetype = period)) +
-    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    ggplot(., aes(x = distance_to_centre, y = simpson, group = year, linetype = year)) +
+    geom_point(aes(colour = year, shape = year), alpha = 0.1) +
     stat_smooth(colour = "black") + 
     facet_wrap(~category) + 
     labs(x = "Distance to city centre in km", y = "Diversity score")
@@ -232,12 +234,11 @@ ggsave("figures/diversity_distance_economiconly.png", width =30, height = 30, un
 # Perhaps the most interesting now.. diversity against density
 
 density_dz <- read_csv("data/derived/population_density_by_2001_dz.csv")
-diversity_H <- read_csv("data/derived/p_all_H.csv")
 
-dens_h_dist <- diversity_H %>% 
-    gather(key = "category", value = "H", tenure:land_bus) %>% 
+
+dens_h_dist <- all_diversities %>% 
     left_join(density_dz, by = c("datazone" = "dz_2001")) %>% 
-    select(datazone, period, population_density, category, H)    
+    select(datazone, year, population_density, category, simpson)    
 
 
 dens_h_dist <- dens_h_dist %>% filter(category !="land_bus") %>% 
@@ -261,15 +262,20 @@ dens_h_dist <- dens_h_dist %>% filter(category !="land_bus") %>%
     ))
 
 dens_h_dist %>% 
-    ggplot(., aes(x = population_density, y = H, group = period, colour = period)) +
+    filter(year %in% c(2001, 2011)) %>% 
+    filter(population_density < quantile(population_density, 0.99, na.rm =T)) %>% 
+    mutate(year = factor(year)) %>% 
+    ggplot(., aes(x = population_density, y = simpson, group = year, colour = year)) +
     geom_point(alpha = 0.1) +
     stat_smooth() + 
     facet_wrap(~category, scale = "free_y") 
 
 
 dens_h_dist %>% 
-    ggplot(., aes(x = population_density, y = H, group = period, linetype = period)) +
-    geom_point(aes(colour = period, shape = period), alpha = 0.1) +
+    filter(year %in% c(2001, 2011)) %>% 
+    mutate(year = factor(year)) %>% 
+    ggplot(., aes(x = population_density, y = simpson, group = year, linetype = year)) +
+    geom_point(aes(colour = year, shape = year), alpha = 0.1) +
     stat_smooth(colour = "black") +
     facet_wrap(~category, scale = "free_y") + 
     scale_x_log10(
