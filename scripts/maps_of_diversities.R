@@ -258,23 +258,43 @@ save_tmap(map_gg_ur_healthboard,
 # Produce maps of diversities  --------------------------------------------------------------------
 
 
+dzs_in_gg <- read_csv("data/geographies/dzs_in_greater_glasgow.csv")
 
-diversity_H <- read_csv("data/derived/p_all_H.csv")
+all_diversities <- read_csv("data/derived/all_diversities.csv")
+
+all_diversities %>% 
+    filter(!is.na(year)) %>% 
+    group_by(category) %>% 
+    mutate(
+        nr_2001 = abs(year - 2001),
+        nr_2011 = abs(year - 2011),
+        
+        mn_2001 = nr_2001 == min(nr_2001),
+        mn_2011 = nr_2011 == min(nr_2011),
+        
+        period = ifelse(mn_2001, "t1", ifelse(mn_2011, "t2", NA))
+    ) %>% 
+    select(-nr_2001, -nr_2011, -mn_2001, -mn_2011) %>% 
+    ungroup() -> tidied_diversities 
 
 
-dta <- diversity_H %>% select(-land_bus) %>% gather(key = "category", value = "h", tenure:land_vacant) 
+
+dta <- tidied_diversities %>% filter(category != "land_bus") 
+
 shp <- read_shape(file = "data/shp/scotland_2001_datazones/scotland_dz_2001.shp")
-shp_cart <- read_shape(file = "data/cartogram/Scotland_2001_population_cartogram.shp")
+shp_cart <- read_shape(file = "data/cartogram/Scotland_2001_population_cartogram.shp", current.projection = "longlat")
+
 # Let's try nesting this 
 
-dta_nested <- dta %>% group_by(period, category) %>% nest()
+dta_nested <- dta %>% filter(!is.na(period)) %>% group_by(period, category) %>% nest()
 
 fn <- function(DTA, SHP){
-    
+    DTA %>% select(datazone, simpson) -> DTA 
     out <- append_data(SHP, DTA, key.shp = "zonecode", key.data = "datazone") 
-    out <- out[!is.na(out$h),]
+    out <- out[!is.na(out$simpson),]
     return(out)
 }
+
 
 dta_nested <- dta_nested %>% 
     mutate(
@@ -290,12 +310,14 @@ fn <- function(TITLE, SHP){
             title.bg.color = "lightgrey"
         ) +  
         tm_fill(
-            "h", 
+            "simpson", 
             n = 5,
             max_categories = 10,
             palette = "Spectral", 
             title = "Diversity Scores", 
-            legend.hist = T
+            legend.hist = T,
+            style = "fixed",
+            breaks = 0:10/10
             ) + 
         tm_shape(shp_gg_only) + 
         tm_borders(lwd = 2)
@@ -326,7 +348,7 @@ fn <- function(FILENAME, MAP){
 # doesn't return anything... 
 
 dta_nested %>% 
-    select(-tmp1) %>% 
+    filter(!is.na(period)) %>% 
     mutate(filenm = paste0(category, "_", period)) %>% 
     mutate(walk2(filenm, this_map, fn))
 
@@ -336,9 +358,9 @@ dta_nested %>%
 
 
 fn <- function(DTA, SHP){
-    
+    DTA %>% select(datazone, simpson) -> DTA 
     out <- append_data(SHP, DTA, key.shp = "zonecode", key.data = "datazone") 
-    out <- out[!is.na(out$h),]
+    out <- out[!is.na(out$simpson),]
     return(out)
 }
 
@@ -352,12 +374,14 @@ dta_nested <- dta_nested %>%
 fn <- function(TITLE, SHP){
     this_map <- tm_shape(SHP, projection = "longlat") + 
         tm_fill(
-            "h", 
+            "simpson", 
             n = 5,
             max_categories = 10,
             palette = "Spectral", 
             title = "Diversity Scores", 
-            legend.hist = T
+            legend.hist = T,
+            style = "fixed",
+            breaks = 0:10/10
         ) +
         tm_layout(
             title = TITLE, 

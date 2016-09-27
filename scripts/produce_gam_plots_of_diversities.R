@@ -592,6 +592,60 @@ ggsave("figures/diversity_by_geographicaccess_deprivation.png", height = 20, wid
 
 
 
+# decile tables  --------------------------------------------------------
+
+# distance to city centre
+div_dist  %>% 
+    mutate(dist_decile = factor(ntile(distance_to_centre, 10)))  %>% 
+    filter(!is.na(dist_decile)) %>% 
+    group_by(period, category, dist_decile)  %>% 
+    summarise(
+        mean_s = mean(simpson)
+              )  %>%  
+    ggplot(., 
+           aes(x = dist_decile, y= mean_s, shape = period, group = period, linetype = period)
+           ) + 
+    facet_wrap(~category) + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of distance from city centre (1 = nearest)", y = "Mean Diversity score")
+ggsave("figures/decile_diversity_distance.png", height = 20, width = 20, units = "cm", dpi = 300)
+
+
+# density 
+
+dens_dist %>% 
+    mutate(dens_decile = factor(ntile(population_density, 10))) %>% 
+    filter(!is.na(dens_decile)) %>% 
+    group_by(period, category, dens_decile) %>% 
+    summarise(mean_s = mean(simpson)) %>% 
+    ggplot(., 
+           aes(x = dens_decile, y= mean_s, shape = period, group = period, linetype = period)
+    ) + 
+    facet_wrap(~category) + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of density from city centre (1 = least dense)", y = "Mean Diversity score")
+ggsave("figures/decile_diversity_density.png", height = 20, width = 20, units = "cm", dpi = 300)
+
+
+# Simd diversity 
+
+simd_diversity %>% 
+    mutate(simd_decile = factor(ntile(simd_score, 10))) %>% 
+    filter(!is.na(simd_decile)) %>% 
+    group_by(period, category, simd_decile) %>% 
+    summarise(mean_s = mean(simpson, na.rm = T)) %>% 
+    ggplot(., 
+           aes(x = simd_decile, y= mean_s, shape = period, group = period, linetype = period)
+    ) + 
+    facet_wrap(~category) + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of SIMD deprivation from city centre (1 = least deprived)", y = "Mean Diversity score")
+ggsave("figures/decile_diversity_deprivation.png", height = 20, width = 20, units = "cm", dpi = 300)
+
+
 
 
 
