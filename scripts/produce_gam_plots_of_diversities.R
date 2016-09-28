@@ -37,14 +37,21 @@ ur_class <- read_csv("data/derived/dz_2001_by_ur_6fold_class.csv")
 #diversity_H <- read_csv("data/derived/p_all_H.csv")
 div_ur <- tidied_diversities %>%
     left_join(ur_class, by = c("datazone" = "dz_2001")) %>% 
-    select(datazone, period, category, ur_class, simpson)
+    select(datazone, period, category, ur_class, simpson) %>% 
+    mutate(ur_label = factor(
+        ur_class, 
+        levels = c(1, 2, 3, 5, 6), 
+        labels = c("Large Urban", "Other Urban", "Accessible Small Towns", "Accessible Rural", "Remote Rural")
+    )
+    )
 
 
 # Table of diversities by urban-rural class
 div_ur_summaries <- div_ur  %>% 
     group_by(period, ur_class, category)   %>% 
     summarise(
-        n_missing = length(is.na(simpson)), 
+        n_missing = length(is.na(simpson)),
+        n_obs = length(simpson),
         min_H = min(simpson, na.rm =T),
         med_H = median(simpson, na.rm = T), 
         max_H = max(simpson, na.rm = T), 
@@ -600,53 +607,107 @@ div_dist  %>%
     filter(!is.na(dist_decile)) %>% 
     group_by(period, category, dist_decile)  %>% 
     summarise(
-        mean_s = mean(simpson)
+        median_s = median(simpson)
               )  %>%  
     ggplot(., 
-           aes(x = dist_decile, y= mean_s, shape = period, group = period, linetype = period)
+           aes(x = dist_decile, y= median_s, shape = period, group = period, linetype = period)
            ) + 
     facet_wrap(~category) + 
     geom_point() + 
     geom_line() + 
-    labs(x = "Decile of distance from city centre (1 = nearest)", y = "Mean Diversity score")
+    labs(x = "Decile of distance from city centre (1 = nearest)", y = "Median Diversity score")
 ggsave("figures/decile_diversity_distance.png", height = 20, width = 20, units = "cm", dpi = 300)
 
-
+# distance to city centre
+div_dist  %>% 
+    mutate(dist_decile = factor(ntile(distance_to_centre, 10)))  %>% 
+    filter(!is.na(dist_decile)) %>% 
+    group_by(period, category, dist_decile)  %>% 
+    summarise(
+        median_s = median(simpson)
+    )  %>%  
+    ggplot(., 
+           aes(x = dist_decile, y= median_s, shape = period, group = period, linetype = period)
+    ) + 
+    facet_wrap(~category, scale = "free_y") + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of distance from city centre (1 = nearest)", y = "Median Diversity score")
+ggsave("figures/decile_diversity_distance_free_y.png", height = 20, width = 25, units = "cm", dpi = 300)
 # density 
 
 dens_dist %>% 
     mutate(dens_decile = factor(ntile(population_density, 10))) %>% 
     filter(!is.na(dens_decile)) %>% 
     group_by(period, category, dens_decile) %>% 
-    summarise(mean_s = mean(simpson)) %>% 
+    summarise(median_s = median(simpson)) %>% 
     ggplot(., 
-           aes(x = dens_decile, y= mean_s, shape = period, group = period, linetype = period)
+           aes(x = dens_decile, y= median_s, shape = period, group = period, linetype = period)
     ) + 
     facet_wrap(~category) + 
     geom_point() + 
     geom_line() + 
-    labs(x = "Decile of density from city centre (1 = least dense)", y = "Mean Diversity score")
+    labs(x = "Decile of density from city centre (1 = least dense)", y = "Median Diversity score")
 ggsave("figures/decile_diversity_density.png", height = 20, width = 20, units = "cm", dpi = 300)
 
+dens_dist %>% 
+    mutate(dens_decile = factor(ntile(population_density, 10))) %>% 
+    filter(!is.na(dens_decile)) %>% 
+    group_by(period, category, dens_decile) %>% 
+    summarise(median_s = median(simpson)) %>% 
+    ggplot(., 
+           aes(x = dens_decile, y= median_s, shape = period, group = period, linetype = period)
+    ) + 
+    facet_wrap(~category, scale = "free_y") + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of density from city centre (1 = least dense)", y = "Median Diversity score")
+ggsave("figures/decile_diversity_density_free_y.png", height = 20, width = 25, units = "cm", dpi = 300)
 
 # Simd diversity 
+simd_diversity %>% 
+    mutate(simd_decile = factor(ntile(simd_score, 10))) %>% 
+    filter(!is.na(simd_decile)) %>% 
+    group_by(period, category, simd_decile) %>% 
+    summarise(median_s = median(simpson, na.rm = T)) %>% 
+    ggplot(., 
+           aes(x = simd_decile, y= median_s, shape = period, group = period, linetype = period)
+    ) + 
+    facet_wrap(~category) + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of SIMD deprivation from city centre (1 = least deprived)", y = "Median Diversity score")
+ggsave("figures/decile_diversity_deprivation.png", height = 20, width = 20, units = "cm", dpi = 300)
+
 
 simd_diversity %>% 
     mutate(simd_decile = factor(ntile(simd_score, 10))) %>% 
     filter(!is.na(simd_decile)) %>% 
     group_by(period, category, simd_decile) %>% 
-    summarise(mean_s = mean(simpson, na.rm = T)) %>% 
+    summarise(median_s = median(simpson, na.rm = T)) %>% 
     ggplot(., 
-           aes(x = simd_decile, y= mean_s, shape = period, group = period, linetype = period)
+           aes(x = simd_decile, y= median_s, shape = period, group = period, linetype = period)
     ) + 
-    facet_wrap(~category) + 
+    facet_wrap(~category, scale ="free_y") + 
     geom_point() + 
     geom_line() + 
-    labs(x = "Decile of SIMD deprivation from city centre (1 = least deprived)", y = "Mean Diversity score")
-ggsave("figures/decile_diversity_deprivation.png", height = 20, width = 20, units = "cm", dpi = 300)
+    labs(x = "Decile of SIMD deprivation from city centre (1 = least deprived)", y = "Median Diversity score")
+ggsave("figures/decile_diversity_deprivation_free_y.png", height = 20, width = 25, units = "cm", dpi = 300)
 
 
 
+# Other descriptive stats -------------------------------------------------
 
 
+# Correlation between density and distance from city centre
+
+dd_dz <- inner_join(distance_dz, density_d)
+dz_gg <- read_csv("data/geographies/dzs_in_greater_glasgow.csv")
+dd_dz <- inner_join(dd_dz, dz_gg)
+ggplot(dd_dz, aes(x = log(distance_to_centre), y = log(population_density))) + 
+    geom_point(alpha = 0.05) + 
+    stat_smooth() + 
+    stat_smooth(method = "lm", colour = "red")
+
+ggsave("figures/log_dens_log_dist.png", width = 8, height = 8, dpi = 300, units = "cm")
 
