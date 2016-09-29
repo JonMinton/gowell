@@ -676,7 +676,7 @@ simd_diversity %>%
     facet_wrap(~category) + 
     geom_point() + 
     geom_line() + 
-    labs(x = "Decile of SIMD deprivation from city centre (1 = least deprived)", y = "Median Diversity score")
+    labs(x = "Decile of SIMD deprivation (1 = least deprived)", y = "Median Diversity score")
 ggsave("figures/decile_diversity_deprivation.png", height = 20, width = 20, units = "cm", dpi = 300)
 
 
@@ -691,9 +691,24 @@ simd_diversity %>%
     facet_wrap(~category, scale ="free_y") + 
     geom_point() + 
     geom_line() + 
-    labs(x = "Decile of SIMD deprivation from city centre (1 = least deprived)", y = "Median Diversity score")
+    labs(x = "Decile of SIMD deprivation (1 = least deprived)", y = "Median Diversity score")
 ggsave("figures/decile_diversity_deprivation_free_y.png", height = 20, width = 25, units = "cm", dpi = 300)
 
+
+
+simd_geog_diversity %>% 
+    mutate(simd_decile = factor(ntile(simd_score, 10))) %>% 
+    filter(!is.na(simd_decile)) %>% 
+    group_by(period, category, simd_decile) %>% 
+    summarise(median_s = median(simpson, na.rm = T)) %>% 
+    ggplot(., 
+           aes(x = simd_decile, y= median_s, shape = period, group = period, linetype = period)
+    ) + 
+    facet_wrap(~category, scale ="free_y") + 
+    geom_point() + 
+    geom_line() + 
+    labs(x = "Decile of SIMD geographic access deprivation (1 = least deprived)", y = "Median Diversity score")
+ggsave("figures/decile_diversity__geog_deprivation_free_y.png", height = 20, width = 25, units = "cm", dpi = 300)
 
 
 # Other descriptive stats -------------------------------------------------
